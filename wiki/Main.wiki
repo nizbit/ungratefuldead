@@ -1,5 +1,1 @@
-#sidebar TableOfContents
-
-= Introduction =
-----
-To create an open source 2-d platorm zombie killing game using python and pygame
+The aim of this project is to create a fun platform game written in Python and using the Pygame API. As alluded to by the title of this project, we hope to create a game where the player kills zombies. The gameplay will be similar to Contra and Megaman, i.e. it is a 2-d side-scrolling shooter where the player can collect weapons and will face an end boss at the end of the level. The project will designed using the Unified Process.
