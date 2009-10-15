@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#The main page of the wiki
 
 = Introduction =
 ----
