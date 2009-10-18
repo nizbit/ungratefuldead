@@ -21,6 +21,9 @@ phantom = phantom.Phantom((604, 430), world)
 group = pygame.sprite.Group()
 group.add(phantom)
 
+music = pygame.mixer.Sound("music.ogg")
+music.play()
+
 vpposition = 0
 MAX_X = 575
 MIN_X = 545
