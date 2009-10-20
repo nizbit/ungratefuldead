@@ -69,30 +69,10 @@ class Game(object):
         self.bckMusic.set_volume(.25)
         self.bckMusic.play()
     def handleEnemies(self, event):
-        self.phantom.handle_event(event)
-        self.phantom.handle_animation()
-        self.phantom2.handle_event(event)
-        self.phantom2.handle_animation()
-        self.phantom3.handle_event(event)
-        self.phantom3.handle_animation()
-        self.phantom4.handle_event(event)
-        self.phantom4.handle_animation()
-        self.phantom5.handle_event(event)
-        self.phantom5.handle_animation()
-        self.phantom6.handle_event(event)
-        self.phantom6.handle_animation()
-        self.phantom7.handle_event(event)
-        self.phantom7.handle_animation()
-        self.phantom8.handle_event(event)
-        self.phantom8.handle_animation()
-        self.phantom9.handle_event(event)
-        self.phantom9.handle_animation()
-        self.phantom10.handle_event(event)
-        self.phantom10.handle_animation()
-        self.phantom11.handle_event(event)
-        self.phantom11.handle_animation()
-        self.phantom12.handle_event(event)
-        self.phantom12.handle_animation()
+        for enemy in self.enemies:
+            enemy.handle_event(event)
+            enemy.handle_animation()
+
     def update(self):
 
         #print "player velocity: ", self.player.x_velocity
@@ -142,6 +122,9 @@ class Game(object):
                         self.killSound.play()
                         self.enemies.remove(enemy)
                         enemy = None
+                    elif pygame.sprite.collide_rect(self.player,enemy):
+                        self.player.HP -= 1
+                        print "player hp: ", self.player.HP
                 else:
                     self.handleEnemies(event)
                     
