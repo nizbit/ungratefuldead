@@ -20,7 +20,8 @@ class Morris(pygame.sprite.Sprite):
         self.y_velocity = 0
         self.max_y_velocity = -16
         self.x_velocity = 0
-        self.max_x_velocity = 6    
+        self.max_x_velocity = 6
+        self.HP = 30
             
         """rectangle to be used in collision detection"""
         self.rect = self.spriterect
@@ -87,7 +88,7 @@ class Morris(pygame.sprite.Sprite):
     """just calls the states handel_event, otherwise no_event"""
     def checkIfFalling(self):
         for rect in self.world.solids:
-            print rect
+
             if self.rect.bottom >= rect[2] and \
             self.rect.right > rect[0] and \
             self.rect.left < rect[1]:
