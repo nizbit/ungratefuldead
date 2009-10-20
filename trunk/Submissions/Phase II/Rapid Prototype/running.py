@@ -42,7 +42,6 @@ class Running(state.State):
  
     """set velocity back to 0 and stand"""
     def no_event(self):
-        print self.slowingDown
         if self.character.x_velocity  <= 1 and self.character.x_velocity >= -1:
             self.character.x_velocity = 0
             self.slowingDown = False
@@ -53,9 +52,9 @@ class Running(state.State):
     """manipulate the velocity vars to give the appearance of sliding.
        cycle through the sprites"""
     def run(self):
-        print "I should be running"
+       
         if self.slowingDown == True:
-            print "slowing down"
+           
             if self.character.x_velocity > 1:
                 self.character.x_velocity -= 1
                 self.character.spriterect.move_ip(self.character.x_velocity, 0)
@@ -65,7 +64,6 @@ class Running(state.State):
             else:
                 self.character.state = self.character.standing_state
         else:
-            print "not slowing down"
             if self.character.direction == "left":
                 if self.character.x_velocity > -self.character.max_x_velocity:
                     self.character.x_velocity -= 2

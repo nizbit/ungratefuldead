@@ -119,7 +119,7 @@ class Morris(pygame.sprite.Sprite):
             if self.checkIfFalling():
                 self.state = self.falling_state
         
-        print self.state
+        
         if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
             self.action = self.state.handle_event(event)
         else:

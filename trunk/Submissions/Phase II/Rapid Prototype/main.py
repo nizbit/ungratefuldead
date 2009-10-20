@@ -3,6 +3,7 @@ import morris
 import phantom
 import world
 import viewport
+import coin
 import sys
 from  pygame.locals import *
 
@@ -60,14 +61,28 @@ class Game(object):
                        self.phantom10,
                        self.phantom11,
                        self.phantom12]
+        self.coins = []
+        for x in range(0, 60, 1):
+            self.coins.append(coin.Coin('Images/copperCoin.png', 50 * x, 330))
+            
+            
+        
         self.heartSound = pygame.mixer.Sound("Sounds/heart.wav")
         self.hurtSound = pygame.mixer.Sound("Sounds/hit.wav")
         self.killSound = pygame.mixer.Sound("Sounds/killSound.wav")
+        
+        self.coinSound = pygame.mixer.Sound("Sounds/coinSound.wav")
+        self.coinSound.set_volume(.05)
         self.killSound.set_volume(.25)
         self.bckMusic = pygame.mixer.music 
         self.bckMusic.load("Sounds/music.ogg")
         self.bckMusic.set_volume(.25)
         self.bckMusic.play()
+        
+        self.font = pygame.font.Font(None, 100)
+        self.winText = self.font.render("YOU WIN!!!", 1, (255,255,255))
+        self.gameOverText = self.font.render("GAME OVER", 1, (255,255,255))
+        self.HPText = self.font.render("HP: ", 1, (255,255,255))
     def handleEnemies(self, event):
         for enemy in self.enemies:
             enemy.handle_event(event)
@@ -90,27 +105,34 @@ class Game(object):
         self.level.image.blit(self.tempvp,self.vp.rect,self.vp.rect)
         self.level.image.blit(self.player.image,self.player.rect,self.player.area)
         for enemy in self.enemies:
-            if enemy != None:
-                self.level.image.blit(enemy.image, enemy.rect, enemy.area)
-        
+            self.level.image.blit(enemy.image, enemy.rect, enemy.area)
+        for coin in self.coins:
+            self.level.image.blit(coin.image, coin.rect)
         self.screen.blit(self.level.image.subsurface(self.vp.rect),(0,0))        
-        if self.enemies == []:
-            self.font = pygame.font.Font(None, 100)
-            self.text = self.font.render("YOU WIN!!!!!", 1, (255,255,255))
-            self.textRect = self.text.get_rect()
-            self.textRect.centerx = self.vp.rect.centerx
-            self.screen.blit(self.text,(0,0))
+        if self.player.HP <= 0:
+            self.screen.blit(self.HPText, (0,0))
+            self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
+            self.screen.blit(self.tempText, (125, 0))
+            self.screen.blit(self.gameOverText, (100,250))
+        else:
+            self.screen.blit(self.HPText, (0,0))
+            self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
+            
+            self.screen.blit(self.tempText, (125, 0))
+        if self.enemies == [] and self.player.HP > 0:
+            self.screen.blit(self.winText,(100,250))
         pygame.display.flip()
         
+        
     def run(self):
-        running = True
-        while running:
+        self.running = True
+        while self.running:
             """loop through the events"""
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    running = False
+                    self.running = False
             #print event
             """handle the events and animation"""
             self.player.handle_event(event)
@@ -123,14 +145,18 @@ class Game(object):
                         self.enemies.remove(enemy)
                         enemy = None
                     elif pygame.sprite.collide_rect(self.player,enemy):
-                        self.player.HP -= 1
-                        print "player hp: ", self.player.HP
+                        if self.player.HP > 0:
+                            self.player.HP -= 1            
                 else:
                     self.handleEnemies(event)
-                    
+            for coin in self.coins:
+                if pygame.sprite.collide_rect(self.player, coin):
+                    self.coinSound.play()
+                    self.coins.remove(coin)
+                    coin = None         
             self.update()
             self.render()
-            self.clock.tick(60)
+            self.clock.tick(40)
             
 if __name__ == "__main__":
     while True:
