@@ -21,7 +21,7 @@ class Morris(pygame.sprite.Sprite):
         self.max_y_velocity = -16
         self.x_velocity = 0
         self.max_x_velocity = 6
-        self.HP = 30
+        self.HP = 100
             
         """rectangle to be used in collision detection"""
         self.rect = self.spriterect
