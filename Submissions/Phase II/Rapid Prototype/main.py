@@ -124,6 +124,11 @@ class Game(object):
             self.screen.blit(self.HPText, (0,0))
             self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
             self.screen.blit(self.tempText, (125, 0))
+            
+            self.screen.blit(self.scoreText, (0,25))
+            self.tempText = self.font.render(str(self.score), 1, (255,255,255))
+            self.screen.blit(self.tempText, (75, 25))
+            
             self.screen.blit(self.gameOverText, (250,250))
         else:
             self.screen.blit(self.HPText, (0,0))
