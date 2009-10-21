@@ -21,7 +21,7 @@ class Game(object):
         self.vp = viewport.Viewport(pygame.Rect(0,0,640,480))
         #MAY BE OVERKILL
         self.tempvp = pygame.image.load("Images/bck.png")
-        self.player = morris.Morris((10, 350), world)
+        self.player = morris.Morris((10, 400), world)
         #self.prevPlayerRect = pygame.Rect()
         self.phantom = phantom.Phantom((604, 430), world)
         self.phantom2 = phantom.Phantom((804, 430), world)
@@ -79,10 +79,13 @@ class Game(object):
         self.bckMusic.set_volume(.25)
         self.bckMusic.play()
         
-        self.font = pygame.font.Font(None, 100)
+        self.score = 0
+        self.font = pygame.font.Font(None, 30)
         self.winText = self.font.render("YOU WIN!!!", 1, (255,255,255))
         self.gameOverText = self.font.render("GAME OVER", 1, (255,255,255))
         self.HPText = self.font.render("HP: ", 1, (255,255,255))
+        self.scoreText = self.font.render("Score: ", 1, (255,255,255))
+        
     def handleEnemies(self, event):
         for enemy in self.enemies:
             enemy.handle_event(event)
@@ -99,6 +102,14 @@ class Game(object):
         if self.vp.rect.right > 3800:
             self.vp.rect.right = 3800
             
+        for coin in self.coins:
+            if pygame.sprite.collide_rect(self.player, coin):
+                self.coinSound.play()
+                self.coins.remove(coin)
+                self.score += self.player.HP
+                coin = None
+        
+            
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
@@ -113,14 +124,17 @@ class Game(object):
             self.screen.blit(self.HPText, (0,0))
             self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
             self.screen.blit(self.tempText, (125, 0))
-            self.screen.blit(self.gameOverText, (100,250))
+            self.screen.blit(self.gameOverText, (250,250))
         else:
             self.screen.blit(self.HPText, (0,0))
             self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
+            self.screen.blit(self.tempText, (50, 0))
             
-            self.screen.blit(self.tempText, (125, 0))
+            self.screen.blit(self.scoreText, (0,25))
+            self.tempText = self.font.render(str(self.score), 1, (255,255,255))
+            self.screen.blit(self.tempText, (75, 25))
         if self.enemies == [] and self.player.HP > 0:
-            self.screen.blit(self.winText,(100,250))
+            self.screen.blit(self.winText,(250,250))
         pygame.display.flip()
         
         
@@ -143,17 +157,14 @@ class Game(object):
                     self.player.state == self.player.attacking_state:
                         self.killSound.play()
                         self.enemies.remove(enemy)
+                        self.score += self.player.HP
                         enemy = None
                     elif pygame.sprite.collide_rect(self.player,enemy):
                         if self.player.HP > 0:
                             self.player.HP -= 1            
                 else:
                     self.handleEnemies(event)
-            for coin in self.coins:
-                if pygame.sprite.collide_rect(self.player, coin):
-                    self.coinSound.play()
-                    self.coins.remove(coin)
-                    coin = None         
+                     
             self.update()
             self.render()
             self.clock.tick(40)
