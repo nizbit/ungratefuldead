@@ -29,7 +29,7 @@ Requirements:
 	
 	At least one power up:
 		
-		Sixty coins included in level
+		Sixty coins included in level, where each coin adds to the player score
 		
 	At least one NPC:
 		
@@ -38,5 +38,6 @@ Requirements:
 	A way to see how the player is doing:
 		
 		Score and HP value are blit to the screen
-	
-	
+		
+All images and music are the works of others and Kernel Panic does not claim
+credit for their work
