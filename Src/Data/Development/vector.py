@@ -28,3 +28,4 @@ class Vector(object):
         i = self.componentX*((self.componentY*v.componentZ)-(self.componentZ*v.componentY))
         j = -(self.componentY*((self.componentX*v.componentZ)-(self.componentZ*v.componentX)))
         k = self.componentZ*((self.componentX*v.componentY)-(self.componentY*v.componentX))
+        return Vector(i, j, k)
