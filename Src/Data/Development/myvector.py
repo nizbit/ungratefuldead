@@ -14,13 +14,17 @@ class Vector(object):
     
     def getLength(self):
         return math.sqrt(self.x * self.x + self.y * self.y)
+    
+    def normal(self):
+        return (self.x / self.getLength(), self.y / self.getLength())
 
 def main():
     A = (10, 30)
     B = (20, 40)
     Vector.AB = Vector.makeVect(A, B)
     print Vector.AB
-    print Vector.getLength(Vector.AB)   
+    print Vector.getLength(Vector.AB)
+    print Vector.normal(Vector.AB)   
     
 if __name__ == "__main__":
     main()
