@@ -25,7 +25,7 @@ class Vector(object):
     
     '''CROSS product ==> vector (we can fabricate an operator later if need be)'''
     def cross(self, v):
-        i = self.componentX*((self.componentY*v.componentZ)-(self.componentZ*v.componentY))
-        j = -(self.componentY*((self.componentX*v.componentZ)-(self.componentZ*v.componentX)))
-        k = self.componentZ*((self.componentX*v.componentY)-(self.componentY*v.componentX))
+        i = ((self.componentY*v.componentZ)-(self.componentZ*v.componentY))
+        j = -((self.componentX*v.componentZ)-(self.componentZ*v.componentX))
+        k = ((self.componentX*v.componentY)-(self.componentY*v.componentX))
         return Vector(i, j, k)
