@@ -3,7 +3,7 @@ from pygame.locals import *
 
 class menu():
     def __init__(self, name):
-        self.image = pygame.image.load(name).convert_alpha()
+        self.image = pygame.image.load(name).convert()
         self.rect = self.image.get_rect()
         self.font = pygame.font.Font("Images/murder.ttf", 30)
         
