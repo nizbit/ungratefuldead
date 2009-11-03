@@ -177,8 +177,9 @@ class Game(object):
             
 if __name__ == "__main__":
     while True:
-        menu = menu.menu('Images/967.jpg')
-        menu.displayText()
+        pygame.init()
+        menu = menu.menu('Images/967.png','Images/com.png')
+        menu.handle_event()
         game = Game()
         game.run()
             
