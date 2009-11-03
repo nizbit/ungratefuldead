@@ -5,6 +5,7 @@ import world
 import viewport
 import coin
 import sys
+import menu
 from  pygame.locals import *
 
 class Game(object):
