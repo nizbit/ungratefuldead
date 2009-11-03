@@ -177,7 +177,7 @@ class Game(object):
             
 if __name__ == "__main__":
     while True:
-        menu = menu.Menu('Images/967.jpg')
+        menu = menu.menu('Images/967.jpg')
         menu.displayText()
         game = Game()
         game.run()
