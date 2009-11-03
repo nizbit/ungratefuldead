@@ -11,6 +11,7 @@ from pygame.locals import *
 
 import vector2D
 import character
+import states
 
 class StateMachine(Object):
     def __init__(self, character):
@@ -19,14 +20,29 @@ class StateMachine(Object):
         all states to be used and assign those states to class variables. Set
         __currentState to the standing state
         """
-        pass
+        '''current character context'''
+        self.__character = character
+        
+        '''initialize all states fields'''
+        self.__standingState = states.StandingState(character)
+        self.__runningState = states.RunningState(character)
+        self.__jumpingState = states.JumpingState(character)
+        self.__fallingState = states.FallingState(character)
+        self.__attackingState = states.AttackingState(character)
+        self.__powerupState = states.PowerupState(character)
+        self.__deadState = states.DeadState(character)
+        self.__talkingState = states.TalkingState(character)
+        
+        '''initialize current state to the base class and set to standing'''
+        self.__currentState = states.State(character)
+        self.__currentState = self.__standingState
     
     def handleAnimation(self):
         """
         Checks __character's dictionary of sprites and cycles through the
         dictionary with each call
         """
-        pass
+        return self.__currentState.getFrame()
     
     def handleCollision(self, collisionBoundary):
         """
@@ -35,18 +51,19 @@ class StateMachine(Object):
         new state's act() method is then called.
         """
         pass
+    
     def noEvent(self):
         """
         Call the current state's act method
         """
-        pass
+        self.__currentState.act()
     
 class PlayerStateMachine(StateMachine):
     def __init__(self, character):
         """
         Call the parent class' __init__
         """
-        pass
+        super(PlayerStateMachine, self).__init__(character)
     
     def handleEvent(self, event):
         """
@@ -65,7 +82,7 @@ class EnemyStateMachine(StateMachine):
         
         Call the parent class' __init__
         """
-        pass
+        super(EnemyStateMachine, self).__init__(character)
     
     def think(self):
         """
