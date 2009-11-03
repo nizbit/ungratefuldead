@@ -13,5 +13,6 @@ class menu():
         self.level1 = self.font.render("Level 1", 1, (123,30,30))
         self.level2 = self.font.render("Level 2", 1, (123,30,30))
         self.quit = self.font.render("Quit", 1, (123,30,30))
+        self.screen.blit(self.image, (640,480))
         self.screen.blit(self.title, (300,35))
         self.screen.blit(self.start, (25,135))
