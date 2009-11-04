@@ -11,8 +11,7 @@ class menu():
         self.colorkey = [0,0,0]
         self.marker.set_colorkey(self.colorkey)
         self.xcord = 0
-        self.ycord = 135
-
+        self.ycord = 160
         
     def displayText(self):
             self.screen.blit(self.bck, (0,0))
@@ -25,34 +24,37 @@ class menu():
             textpos.centerx = self.rect.centerx
             self.screen.blit(self.title, textpos)
             self.screen.blit(self.start, (25,130))
-            self.screen.blit(self.quit, (25,290))
+            self.screen.blit(self.level1, (25, 160))
+            self.screen.blit(self.level2, (25, 190))
+            self.screen.blit(self.quit, (25,220))
             self.screen.blit(self.marker, (self.xcord, self.ycord))
             pygame.display.flip()
             
     def handle_event(self):
         self.running = True
         while self.running:
-            print self.ycord
             """loop through the events"""
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                    
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_DOWN:
-                        if self.ycord >= 290:
-                            self.ycord = 130
-                        else:
-                            self.ycord += 30
-
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.running = False
+                    elif event.key == pygame.K_DOWN:
+                        self.ycord += 30
                     elif event.key == pygame.K_UP:
-                        if self.ycord <= 130:
-                            self.ycord = 290
-                        else:
-                            self.ycord -= 30
-                
-                    elif event.key == pygame.K_ESCAPE:
-                        sys.exit(0)
+                        self.ycord -= 30
+                    elif event.key == pygame.K_RETURN:
+                        if self.ycord == 160:
+                            return 1
+                        elif self.ycord == 190:
+                            return 2
+                        elif self.ycord == 220:
+                            return 0
+            if self.ycord >= 250:
+                self.ycord = 160
+            if self.ycord <= 130:
+                self.ycord = 220
             
             self.displayText()
                     
