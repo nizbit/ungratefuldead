@@ -34,12 +34,18 @@ class State(Object):
         
         self.__frameNum = 0
     
-    def getFrame(self):
+    def getFrame(self, frameSet):
         """
-        Return the string that corresponds to a string in a character's sprite
-        dictionary that is enumerated in the class
+        Return the string that corresponds to a key in the character's sprite
+        dictionary to retrieve a frame for animation. __frameNum is used to
+        cycle through the appropriate frame set for animation. The frameSet is
+        a collection of strings which will be used as keys in the sprite
+        dictionary
         """
-        pass
+        self.__frameNum += 1
+        if self.__frameNum > (len(frameSet) - 1):
+            self.__frameNum = 0
+        return frameSet[self.__frameNum]
     
     def getFrameNum(self):
         """
