@@ -9,11 +9,11 @@ import sys
 import pygame
 from pygame.locals import *
 
-import vector2D
+import vector2d
 import character
 import states
 
-class StateMachine(Object):
+class StateMachine(object):
     def __init__(self, character):
         """
         Sets __character to the passed argument character. Create instances of
@@ -21,28 +21,27 @@ class StateMachine(Object):
         __currentState to the standing state
         """
         '''current character context'''
-        self.__character = character
+        self._character = character
         
         '''initialize all states fields'''
-        self.__standingState = states.StandingState(character)
-        self.__runningState = states.RunningState(character)
-        self.__jumpingState = states.JumpingState(character)
-        self.__fallingState = states.FallingState(character)
-        self.__attackingState = states.AttackingState(character)
-        self.__powerupState = states.PowerupState(character)
-        self.__deadState = states.DeadState(character)
-        self.__talkingState = states.TalkingState(character)
+        self._standingState = states.StandingState(character)
+        self._runningState = states.RunningState(character)
+        self._jumpingState = states.JumpingState(character)
+        self._fallingState = states.FallingState(character)
+        self._attackingState = states.AttackingState(character)
+        self._powerupState = states.PowerupState(character)
+        self._deadState = states.DeadState(character)
+        self._talkingState = states.TalkingState(character)
         
         '''initialize current state to the base class and set to standing'''
-        self.__currentState = states.State(character)
-        self.__currentState = self.__standingState
-    
+        #self.__currentState = states.State(character)
+        self._currentState = self._standingState
     def handleAnimation(self):
         """
         Checks __character's dictionary of sprites and cycles through the
         dictionary with each call
         """
-        return self.__currentState.getFrame()
+        return self._currentState.getFrame()
     
     def handleCollision(self, collisionBoundary):
         """
@@ -54,9 +53,18 @@ class StateMachine(Object):
     
     def noEvent(self):
         """
-        Call the current state's act method
         """
-        self.__currentState.act()
+        if self._currentState == self._standingState:
+            pass
+        elif self._currentState == self._runningState:
+            self._currentState.act()
+                
+        elif self._currentState == self._jumpingState:
+            if self._character.velocity.y == 0:
+                self._currentState = self._fallingState
+        elif self._currentState == self._fallingState:
+            pass
+        
     
 class PlayerStateMachine(StateMachine):
     def __init__(self, character):
@@ -65,11 +73,71 @@ class PlayerStateMachine(StateMachine):
         """
         super(PlayerStateMachine, self).__init__(character)
     
-    def handleEvent(self, event):
+    def handleEvent(self, events):
         """
         Based on the event, set currentState and call act()
         """
-        pass
+        
+        if events == []:
+            self.noEvent()
+        for event in events:
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    if self._character.getDirection() == "left":
+                        self._character.changeDirection()
+                    if self._currentState == self._standingState:
+                        
+                        self._currentState = self._runningState
+                        
+                    elif self._currentState == self._jumpingState or \
+                    self._currentState == self._fallingState or \
+                    self._currentState == self._attackingState or \
+                    self._currentState == self._powerupState:
+                        temp = self._currentState
+                        self._currentState = self._runningState
+                        self._currentState.act()
+                        self._currentState = temp
+                if event.key == pygame.K_LEFT:
+                    if self._character.getDirection() == "right":
+                        self._character.changeDirection()
+                    if self._currentState == self._standingState:
+                        
+                        self._currentState = self._runningState
+                        
+                    elif self._currentState == self._jumpingState or \
+                    self._currentState == self._fallingState or \
+                    self._currentState == self._attackingState or \
+                    self._currentState == self._powerupState:
+                        temp = self._currentState
+                        self._currentState = self._runningState
+                        self._currentState.act()
+                        self._currentState = temp
+                        
+                elif event.key == pygame.K_SPACE:
+                    if self._currentState != self._jumpingState:
+                        self._currentState = self._jumpingState
+                elif event.key == pygame.K_LSHIFT:
+                    self._currentState = self._attackingState
+                    
+                self._currentState.act()
+                
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT:
+                    if self._currentState == self._runningState:
+                        self._currentState = self._standingState
+                elif event.key == pygame.K_LEFT:
+                    if self._currentState == self._runningState:
+                        self._currentState = self._standingState
+                elif event.key == pygame.K_SPACE:
+                    pass
+                elif event.key == pygame.K_f:
+                    pass
+                elif event.key == pygame.K_SPACE:
+                    pass
+            print event
+        print self._currentState
     
 class EnemyStateMachine(StateMachine):
     def __init__(self, character):
@@ -90,3 +158,6 @@ class EnemyStateMachine(StateMachine):
         change currentState to a different state
         """
         pass
+
+if __name__ == "__main__":
+    pass
