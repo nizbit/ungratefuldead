@@ -2,9 +2,6 @@ import pygame
 import sys
 import os
 
-
-
-
 class game(object):
     def __init__(self):
         pygame.init()
