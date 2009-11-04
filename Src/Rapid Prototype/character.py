@@ -160,6 +160,10 @@ class Character(object):
         Set __stateMachine to stateMachine
         """
         self._stateMachine = stateMachine
+    
+    def getStateMachine(self):
+        return self._stateMachine
+    
     def update(self):
         """
         This method will be overridden by its derived classes. The update
@@ -183,35 +187,38 @@ class Player(Character):
         current weapon to none
         """
         super(Player, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
-        self.__weapons = {}
-        self.__currentWeapon = None
-        self.__stateMachine = stateMachine.PlayerStateMachine(self)
+        self._weapons = {}
+        self._currentWeapon = None
+        self._stateMachine = stateMachine.PlayerStateMachine(self, sprites)
     def getCurrentWeapon(self):
         """
         Return __currentWeapon
         """
-        return self.__currentWeapon
+        return self._currentWeapon
     
     def setCurrentWeapon(self, key):
         """
         set __currentWeapon to the value corresponding to key in __weapons
         """
-        self.__currentWeapon = self.__weapons[key]
+        self._currentWeapon = self._weapons[key]
     
     def addWeapon(self,key, weapon):
         """
         Add weapon and through key to the weapons dictionary
         """
-        self.__weapons[key] = weapon
+        self._weapons[key] = weapon
     
     def removeWeapon(self, key):
         """
         Delete weapon from the weapons dictionary using the key
         """
-        del self.__weapons[key]
+        del self._weapons[key]
     
     def update(self):
-        self.__stateMachine.handleEvent(pygame.event.get())
+        self._stateMachine.handleEvent(pygame.event.get())
+    
+    def handleCollision(self, type, collideable):
+        self._stateMachine.handleCollision(type, collideable)
         
 class NPC(Character):
     def __init__(self, spriteSheet, sprites, MAX_VELOCITY, type, speechFile, item):
@@ -261,10 +268,11 @@ class NPC(Character):
         self.__stateMachine.think()
         
 if __name__ == "__main__":
+    
     pygame.init()
     screen = pygame.display.set_mode((640,480))
     spriteSheet = pygame.image.load('Images/johnmorris.png')
-    actions = {"right": (15, 15, 35, 45),              
+    action = {"right": (15, 15, 35, 45),              
                "left": (265, 20, 35, 45),
                "right-run1": (15, 70, 35, 45),
                "right-run2": (60, 70, 35, 45),
@@ -290,14 +298,54 @@ if __name__ == "__main__":
                "left-attack4": (508, 121, 67, 45),
                "left-attack5": (459, 120, 42, 45),
                "left-attack6": (377, 127, 76, 45), }
-    velocity = vector2d.Vector2D(5,10)
+    actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
+              "left": {"left": pygame.Rect(265, 20, 35, 45)},
+              "run-right": {"right-run1": pygame.Rect(15, 70, 35, 45),
+                            "right-run2": pygame.Rect(60, 70, 35, 45),
+                            "right-run3": pygame.Rect(100, 70, 35, 45),
+                            "right-run4": pygame.Rect(135, 70, 35, 45),
+                            "right-run5": pygame.Rect(175, 70, 35, 45),
+                            "right-run6": pygame.Rect(225, 70, 35, 45)},
+              "run-left": {"left-run1": pygame.Rect(265, 70, 26, 45),
+                           "left-run2": pygame.Rect(298, 70, 26, 45),
+                           "left-run3": pygame.Rect(330, 70, 26, 45),
+                           "left-run4": pygame.Rect(360, 70, 26, 45),
+                           "left-run5": pygame.Rect(395, 59, 26, 45),
+                           "left-run6": pygame.Rect(433, 59, 32, 45)},
+              "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
+                               "right-attack2": pygame.Rect(52, 130, 44, 45),
+                               "right-attack3": pygame.Rect(100, 130, 50, 45),
+                               "right-attack4": pygame.Rect(160, 130, 67, 45),
+                               "right-attack5": pygame.Rect(238, 130, 42, 45),
+                               "right-attack6": pygame.Rect(295, 130, 76, 45)},
+              "attack-left": {"left-attack1": pygame.Rect(577, 73, 22, 45),
+                              "left-attack2": pygame.Rect(526, 62, 44, 45),
+                              "left-attack3": pygame.Rect(471, 62, 50, 45),
+                              "left-attack4": pygame.Rect(508, 121, 67, 45),
+                              "left-attack5": pygame.Rect(459, 120, 42, 45),
+                              "left-attack6": pygame.Rect(377, 127, 76, 45)}}
+    velocity = vector2d.Vector2D(5,8)
     player = Player(spriteSheet, actions, velocity)
-    player.setSpriteSheetCoord(actions["right"])
-    player.setRect((0,400))
+    player.setSpriteSheetCoord(actions["right"]["right"])
+    player.setRect((0,300))
+    platform  = pygame.Rect(0,400,600,10)
     clock = pygame.time.Clock()
+    #print player.getRect().bottom
+    #print platform.top
+    #print platform.bottom
     while(1):
+        #print "I got here"
+        #print player.getRect().bottom
+        #print platform.top
+        #print platform.bottom
+        if player.getRect().bottom > platform.top and \
+        player.getRect().bottom < platform.bottom:# and \
+        #player.getStateMachine().getCurrentState() is "FallingState":
+            player.handleCollision("platform", platform)
+        player.getStateMachine().handleAnimation()
         player.update()
-        clock.tick(50)
+        clock.tick(20)
         screen.fill((0,0,0))
+        print type(player.getSpriteSheetCoord())
         screen.blit(spriteSheet, player.getRect(), player.getSpriteSheetCoord())
         pygame.display.flip()
