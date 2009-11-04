@@ -14,7 +14,7 @@ import character
 import states
 
 class StateMachine(object):
-    def __init__(self, character):
+    def __init__(self, character, sprites):
         """
         Sets __character to the passed argument character. Create instances of
         all states to be used and assign those states to class variables. Set
@@ -22,35 +22,61 @@ class StateMachine(object):
         """
         '''current character context'''
         self._character = character
-        
+        self._sprites = sprites
         '''initialize all states fields'''
-        self._standingState = states.StandingState(character)
-        self._runningState = states.RunningState(character)
-        self._jumpingState = states.JumpingState(character)
-        self._fallingState = states.FallingState(character)
-        self._attackingState = states.AttackingState(character)
-        self._powerupState = states.PowerupState(character)
-        self._deadState = states.DeadState(character)
-        self._talkingState = states.TalkingState(character)
+        self._standingState = states.StandingState(character, sprites["right"].keys(),\
+                                                   sprites["left"].keys())
+        self._runningState = states.RunningState(character, sprites["run-right"].keys(),\
+                                                   sprites["run-left"].keys())
+        self._jumpingState = states.JumpingState(character, sprites["right"].keys(),\
+                                                   sprites["left"].keys())
+        self._fallingState = states.FallingState(character, sprites["right"].keys(),\
+                                                   sprites["left"].keys())
+        self._attackingState = states.AttackingState(character, sprites["attack-right"].keys(),\
+                                                   sprites["attack-left"].keys())
+        self._powerupState = states.PowerupState(character, sprites["right"].keys(),\
+                                                   sprites["left"].keys())
+        self._deadState = states.DeadState(character, sprites["right"].keys(),\
+                                                   sprites["left"].keys())
+        self._talkingState = states.TalkingState(character, sprites["right"].keys(),\
+                                                   sprites["left"].keys())
         
         '''initialize current state to the base class and set to standing'''
         #self.__currentState = states.State(character)
         self._currentState = self._standingState
+        
+        self._actions = {}
+        
+    def getCurrentState(self):
+        return self._currentState
+    
     def handleAnimation(self):
         """
         Checks __character's dictionary of sprites and cycles through the
         dictionary with each call
         """
-        return self._currentState.getFrame()
+        if self._actions.has_key("attack"):
+            for state in self._actions:
+                if self._actions[state].__str__() != "AttackingState":
+                    self._actions[state].setFrameNum(0)
+                    
+            temp = self._actions["attack"].getFrame("right")
+            temp = self._sprites["attack-right"][temp]
+            self._character.setSpriteSheetCoord(temp)   
+        #return self._currentState.getFrame()
     
-    def handleCollision(self, collisionBoundary):
+    def handleCollision(self, type, thing):
         """
         Sets __currentState based on collisionBoundary which would be either
         "character", "item", or "solids" and changes the state accordingly. The
         new state's act() method is then called.
         """
-        pass
-    
+        if type == "platform":
+            if self._actions.has_key("falling"):
+                del self._actions["falling"]
+                self._character.velocity.y = 0
+            
+        
     def noEvent(self):
         """
         """
@@ -62,16 +88,17 @@ class StateMachine(object):
         elif self._currentState == self._jumpingState:
             if self._character.velocity.y == 0:
                 self._currentState = self._fallingState
+            self._currentState.act()
         elif self._currentState == self._fallingState:
-            pass
+            self._currentState.act()
         
     
 class PlayerStateMachine(StateMachine):
-    def __init__(self, character):
+    def __init__(self, character, sprites):
         """
         Call the parent class' __init__
         """
-        super(PlayerStateMachine, self).__init__(character)
+        super(PlayerStateMachine, self).__init__(character, sprites)
     
     def handleEvent(self, events):
         """
@@ -85,62 +112,40 @@ class PlayerStateMachine(StateMachine):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    if self._character.getDirection() == "left":
-                        self._character.changeDirection()
-                    if self._currentState == self._standingState:
-                        
-                        self._currentState = self._runningState
-                        
-                    elif self._currentState == self._jumpingState or \
-                    self._currentState == self._fallingState or \
-                    self._currentState == self._attackingState or \
-                    self._currentState == self._powerupState:
-                        temp = self._currentState
-                        self._currentState = self._runningState
-                        self._currentState.act()
-                        self._currentState = temp
+                    self._character.setDirection("right")
+                    self._actions["right"] = self._runningState
+                    
                 if event.key == pygame.K_LEFT:
-                    if self._character.getDirection() == "right":
-                        self._character.changeDirection()
-                    if self._currentState == self._standingState:
-                        
-                        self._currentState = self._runningState
-                        
-                    elif self._currentState == self._jumpingState or \
-                    self._currentState == self._fallingState or \
-                    self._currentState == self._attackingState or \
-                    self._currentState == self._powerupState:
-                        temp = self._currentState
-                        self._currentState = self._runningState
-                        self._currentState.act()
-                        self._currentState = temp
+                    self._character.setDirection("left")
+                    self._actions["left"] = self._runningState
                         
                 elif event.key == pygame.K_SPACE:
-                    if self._currentState != self._jumpingState:
-                        self._currentState = self._jumpingState
+                    if not self._actions.has_key("falling"):
+                        self._actions["jump"] = self._jumpingState
                 elif event.key == pygame.K_LSHIFT:
-                    self._currentState = self._attackingState
-                    
-                self._currentState.act()
+                    self._actions["attack"] = self._attackingState
                 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT:
-                    if self._currentState == self._runningState:
-                        self._currentState = self._standingState
+                    del self._actions["right"]
                 elif event.key == pygame.K_LEFT:
-                    if self._currentState == self._runningState:
-                        self._currentState = self._standingState
-                elif event.key == pygame.K_SPACE:
-                    pass
-                elif event.key == pygame.K_f:
-                    pass
-                elif event.key == pygame.K_SPACE:
-                    pass
-            print event
-        print self._currentState
+                    del self._actions["left"]
+                #elif event.key == pygame.K_SPACE:
+                #    del self._actions["space"]
+                elif event.key == pygame.K_LSHIFT:
+                    self._actions["attack"].setFrameNum(0)
+                    self.handleAnimation()
+                    del self._actions["attack"]
+        for item in self._actions.items():
+            if item[0] == "jump" and \
+            self._character.velocity.y == 0:
+                del self._actions["jump"]
+                self._actions["falling"] = self._fallingState
+            item[1].act()
+        #print self._currentState
     
 class EnemyStateMachine(StateMachine):
-    def __init__(self, character):
+    def __init__(self, character, sprites):
         """
         
         ***NOTE***
@@ -150,7 +155,7 @@ class EnemyStateMachine(StateMachine):
         
         Call the parent class' __init__
         """
-        super(EnemyStateMachine, self).__init__(character)
+        super(EnemyStateMachine, self).__init__(character, sprites)
     
     def think(self):
         """
