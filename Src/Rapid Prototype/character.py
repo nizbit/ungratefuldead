@@ -27,7 +27,7 @@ class Character(object):
         self._spriteSheetRect = self._spriteSheet.get_rect()
         self._rect = pygame.Rect(0,0,0,0)
         self._spriteSheetCoord = pygame.Rect(0,0,0,0)
-        
+        self.colRect = pygame.Rect(0,0,0,0)
         
         self._sprites = sprites
         
@@ -77,6 +77,8 @@ class Character(object):
         Set __spriteSheetCoord to input argument, rect
         """
         self._spriteSheetCoord = rect
+        self._rect.size = self._spriteSheetCoord.size
+        self.colRect = self._rect.inflate(-10,-1)
     
     def getSpriteSheetCoord(self):
         """
@@ -174,6 +176,9 @@ class Character(object):
     def render(self, surface):
         surface.blit(self._spriteSheet, self._spriteSheetRect, self._spriteSheetCoord)
     
+    def handleCollision(self, type, collideable):
+        self._stateMachine.handleCollision(type, collideable)
+        
 class Player(Character):
     
     def __init__(self, spriteSheet, sprites, MAX_VELOCITY):
@@ -216,24 +221,23 @@ class Player(Character):
     
     def update(self):
         self._stateMachine.handleEvent(pygame.event.get())
-    
-    def handleCollision(self, type, collideable):
-        self._stateMachine.handleCollision(type, collideable)
+        self._stateMachine.handleAnimation()
+        self._stateMachine.move()
         
 class NPC(Character):
-    def __init__(self, spriteSheet, sprites, MAX_VELOCITY, type, speechFile, item):
+    def __init__(self, spriteSheet, sprites, MAX_VELOCITY, type, item,speechFile = None):
                  
         """
         Call base class' __init__. Set class variables to corresponding
         arguments. Call loadSpeech(speechFile).
         """
-        super(NPC, self).__init__(spriteSheet, sprites, MAX_VELOCITY, \
-                                  stateMachine)
-        self.__type = type
-        self.__item = item
+        super(NPC, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
+        self._type = type
+        self._item = item
         self.file = None
-        self.loadSpeech(speechFile)
-        self.__stateMachine = stateMachine.EnemyStateMachine(self)
+        if speechFile is not None:
+            self.loadSpeech(speechFile)
+        self._stateMachine = stateMachine.EnemyStateMachine(self, sprites)
     def loadSpeech(self, speechFile):
         """
         Load textual information from given argument file name. If the file
@@ -250,13 +254,13 @@ class NPC(Character):
         """
         Return __type
         """
-        return self.__type
+        return self._type
     
     def setItem(self,item):
         """
         Set __item to item.
         """
-        self.__item = item
+        self._item = item
     
     def getItem(self):
         """
@@ -265,87 +269,119 @@ class NPC(Character):
         return self.__item
     
     def update(self):
-        self.__stateMachine.think()
+        self._stateMachine.think()
         
 if __name__ == "__main__":
-    
-    pygame.init()
-    screen = pygame.display.set_mode((640,480))
-    spriteSheet = pygame.image.load('Images/johnmorris.png')
-    action = {"right": (15, 15, 35, 45),              
-               "left": (265, 20, 35, 45),
-               "right-run1": (15, 70, 35, 45),
-               "right-run2": (60, 70, 35, 45),
-               "right-run3": (100, 70, 35, 45),
-               "right-run4": (135, 70, 35, 45),
-               "right-run5": (175, 70, 35, 45),
-               "right-run6": (225, 70, 35, 45),
-               "left-run1": (265, 70, 26, 45),
-               "left-run2": (298, 70, 26, 45),
-               "left-run3": (330, 70, 26, 45),
-               "left-run4": (360, 70, 26, 45),
-               "left-run5": (395, 59, 26, 45),
-               "left-run6": (433, 59, 32, 45),
-               "right-attack1": (15, 130, 22, 45),
-               "right-attack2": (52, 130, 44, 45),
-               "right-attack3": (100, 130, 50, 45),
-               "right-attack4": (160, 130, 67, 45),
-               "right-attack5": (238, 130, 42, 45),
-               "right-attack6": (295, 130, 76, 45),
-               "left-attack1": (577, 73, 22, 45),
-               "left-attack2": (526, 62, 44, 45),
-               "left-attack3": (471, 62, 50, 45),
-               "left-attack4": (508, 121, 67, 45),
-               "left-attack5": (459, 120, 42, 45),
-               "left-attack6": (377, 127, 76, 45), }
-    actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
-              "left": {"left": pygame.Rect(265, 20, 35, 45)},
-              "run-right": {"right-run1": pygame.Rect(15, 70, 35, 45),
-                            "right-run2": pygame.Rect(60, 70, 35, 45),
-                            "right-run3": pygame.Rect(100, 70, 35, 45),
-                            "right-run4": pygame.Rect(135, 70, 35, 45),
-                            "right-run5": pygame.Rect(175, 70, 35, 45),
-                            "right-run6": pygame.Rect(225, 70, 35, 45)},
-              "run-left": {"left-run1": pygame.Rect(265, 70, 26, 45),
-                           "left-run2": pygame.Rect(298, 70, 26, 45),
-                           "left-run3": pygame.Rect(330, 70, 26, 45),
-                           "left-run4": pygame.Rect(360, 70, 26, 45),
-                           "left-run5": pygame.Rect(395, 59, 26, 45),
-                           "left-run6": pygame.Rect(433, 59, 32, 45)},
-              "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
-                               "right-attack2": pygame.Rect(52, 130, 44, 45),
-                               "right-attack3": pygame.Rect(100, 130, 50, 45),
-                               "right-attack4": pygame.Rect(160, 130, 67, 45),
-                               "right-attack5": pygame.Rect(238, 130, 42, 45),
-                               "right-attack6": pygame.Rect(295, 130, 76, 45)},
-              "attack-left": {"left-attack1": pygame.Rect(577, 73, 22, 45),
-                              "left-attack2": pygame.Rect(526, 62, 44, 45),
-                              "left-attack3": pygame.Rect(471, 62, 50, 45),
-                              "left-attack4": pygame.Rect(508, 121, 67, 45),
-                              "left-attack5": pygame.Rect(459, 120, 42, 45),
-                              "left-attack6": pygame.Rect(377, 127, 76, 45)}}
-    velocity = vector2d.Vector2D(5,8)
-    player = Player(spriteSheet, actions, velocity)
-    player.setSpriteSheetCoord(actions["right"]["right"])
-    player.setRect((0,300))
-    platform  = pygame.Rect(0,400,600,10)
-    clock = pygame.time.Clock()
-    #print player.getRect().bottom
-    #print platform.top
-    #print platform.bottom
-    while(1):
-        #print "I got here"
-        #print player.getRect().bottom
-        #print platform.top
-        #print platform.bottom
-        if player.getRect().bottom > platform.top and \
-        player.getRect().bottom < platform.bottom:# and \
-        #player.getStateMachine().getCurrentState() is "FallingState":
-            player.handleCollision("platform", platform)
-        player.getStateMachine().handleAnimation()
-        player.update()
-        clock.tick(20)
-        screen.fill((0,0,0))
-        print type(player.getSpriteSheetCoord())
-        screen.blit(spriteSheet, player.getRect(), player.getSpriteSheetCoord())
-        pygame.display.flip()
+    while(True):
+        pygame.init()
+        screen = pygame.display.set_mode((640,480))
+        spriteSheet = pygame.image.load('Images/johnmorris.png')
+        action = {"right": (15, 15, 35, 45),              
+                   "left": (265, 20, 35, 45),
+                   "right-run1": (15, 70, 35, 45),
+                   "right-run2": (60, 70, 35, 45),
+                   "right-run3": (100, 70, 35, 45),
+                   "right-run4": (135, 70, 35, 45),
+                   "right-run5": (175, 70, 35, 45),
+                   "right-run6": (225, 70, 35, 45),
+                   "left-run1": (265, 70, 26, 45),
+                   "left-run2": (298, 70, 26, 45),
+                   "left-run3": (330, 70, 26, 45),
+                   "left-run4": (360, 70, 26, 45),
+                   "left-run5": (395, 59, 26, 45),
+                   "left-run6": (433, 59, 32, 45),
+                   "right-attack1": (15, 130, 22, 45),
+                   "right-attack2": (52, 130, 44, 45),
+                   "right-attack3": (100, 130, 50, 45),
+                   "right-attack4": (160, 130, 67, 45),
+                   "right-attack5": (238, 130, 42, 45),
+                   "right-attack6": (295, 130, 76, 45),
+                   "left-attack1": (577, 73, 22, 45),
+                   "left-attack2": (526, 62, 44, 45),
+                   "left-attack3": (471, 62, 50, 45),
+                   "left-attack4": (508, 121, 67, 45),
+                   "left-attack5": (459, 120, 42, 45),
+                   "left-attack6": (377, 127, 76, 45), }
+        actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
+                  "left": {"left": pygame.Rect(265, 20, 35, 45)},
+                  "run-right": {"right-run1": pygame.Rect(15, 70, 35, 45),
+                                "right-run2": pygame.Rect(60, 70, 35, 45),
+                                "right-run3": pygame.Rect(100, 70, 35, 45),
+                                "right-run4": pygame.Rect(135, 70, 35, 45),
+                                "right-run5": pygame.Rect(175, 70, 35, 45),
+                                "right-run6": pygame.Rect(225, 70, 35, 45)},
+                  "run-left": {"left-run1": pygame.Rect(265, 70, 26, 45),
+                               "left-run2": pygame.Rect(298, 70, 26, 45),
+                               "left-run3": pygame.Rect(330, 70, 26, 45),
+                               "left-run4": pygame.Rect(360, 70, 26, 45),
+                               "left-run5": pygame.Rect(395, 59, 26, 45),
+                               "left-run6": pygame.Rect(433, 59, 32, 45)},
+                  "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
+                                   "right-attack2": pygame.Rect(52, 130, 44, 45),
+                                   "right-attack3": pygame.Rect(100, 130, 50, 45),
+                                   "right-attack4": pygame.Rect(160, 130, 67, 45),
+                                   "right-attack5": pygame.Rect(238, 130, 42, 45),
+                                   "right-attack6": pygame.Rect(295, 130, 76, 45)},
+                  "attack-left": {"left-attack1": pygame.Rect(577, 73, 22, 45),
+                                  "left-attack2": pygame.Rect(526, 62, 44, 45),
+                                  "left-attack3": pygame.Rect(471, 62, 50, 45),
+                                  "left-attack4": pygame.Rect(508, 121, 67, 45),
+                                  "left-attack5": pygame.Rect(459, 120, 42, 45),
+                                  "left-attack6": pygame.Rect(377, 127, 76, 45)}}
+        velocity = vector2d.Vector2D(5,15)
+        #player = NPC(spriteSheet, actions, velocity, "blah", "b")
+        player = Player(spriteSheet, actions, velocity)
+        player.setSpriteSheetCoord(actions["right"]["right"])
+        player.setRect((0,50))
+        
+        platform  = pygame.Rect(0,400, 600,50)
+        platform2 = pygame.Rect(100,300, 50,50)
+        platform3  = pygame.Rect(100,100, 50,50)
+        
+        platform5 = pygame.Rect(200,100, 50,50)
+        platform6 = pygame.Rect(300,300, 50,100)
+        platform7 = pygame.Rect(300,100, 50,50)
+        platform8 = pygame.Rect(400,100, 50,50)
+        platform9 = pygame.Rect(100,350, 50,50)
+        platform10 = pygame.Rect(100,100, 50,50)
+        pList = [platform,    
+                 platform2,
+                 platform3,
+                 platform5,
+                 platform6,
+                 platform7,
+                 platform8,
+                 platform9,
+                 platform10]
+        
+        platform4 = pygame.Rect(200,300, 50,50)
+        enemy = pygame.Surface((50,50))
+        enemy.fill((55,55,55))
+        temp = pygame.Surface((640,480))
+        temp.fill((255,255,255))
+        
+                 
+        clock = pygame.time.Clock()
+        buf = 11
+        running = True
+        while(running):
+            player.update()
+            for platform in pList:
+                if player.getRect().colliderect(platform):
+                    player.handleCollision("object", platform)
+            if player.getRect().colliderect(platform4):
+                player.handleCollision("enemy", platform4)
+            
+            player.getStateMachine().handleAnimation()
+            
+            clock.tick(55)
+            screen.fill((0,0,0))
+            
+            for p in pList:
+                screen.blit(temp,p,p)
+            screen.blit(enemy,platform4)
+            screen.blit(spriteSheet, player.getRect(), player.getSpriteSheetCoord())
+            pygame.display.flip()
+            running = True
+            
+            

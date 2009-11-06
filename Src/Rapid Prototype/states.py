@@ -42,7 +42,6 @@ class State(object):
         a collection of strings which will be used as keys in the sprite
         dictionary
         """
-        print len(self._rightFrames)
         self._frameNum += 1
         if frameSet == "right":
             if self._frameNum > (len(self._rightFrames) - 1):
@@ -110,7 +109,7 @@ class RunningState(State):
             self._character.MAX_VELOCITY.x:
                 self._character.velocity.x += .5
                 
-            self._character.getRect().move_ip(self._character.velocity.x, 0)
+            #self._character.getRect().move_ip(self._character.velocity.x, 0)
                 
         else:
             if self._character.velocity.x > 0:
@@ -118,7 +117,7 @@ class RunningState(State):
             elif self._character.getVelocity().x > \
             (-1 * self._character.MAX_VELOCITY.x):
                 self._character.velocity.x -= .5
-            self._character.getRect().move_ip(self._character.velocity.x, 0)
+            #self._character.getRect().move_ip(self._character.velocity.x, 0)
 
     def __str__(self):
         return "RunningState"
@@ -136,13 +135,15 @@ class JumpingState(State):
         velocity is equal to zero. If the velocity equals zero, no calculations
         need to be performed so do nothing
         """
-        if self._character.velocity.y == 0:
-            self._character.velocity.y = -1 * self._character.MAX_VELOCITY.y
-            
+        #if self._character.velocity.y == 0:
+
+        self._character.velocity.y = -1 * self._character.MAX_VELOCITY.y
+        #self._character.getRect().move_ip(0, self._character.velocity.y)
+        """   
         if self._character.velocity.y < 0:
             self._character.velocity.y += .5
         self._character.getRect().move_ip(0, self._character.velocity.y)
-        
+        """
              
     def __str__(self):
         return "JumpingState"
@@ -160,7 +161,7 @@ class FallingState(State):
         
         if self._character.velocity.y < self._character.MAX_VELOCITY.y:
             self._character.velocity.y += .5
-        self._character.getRect().move_ip(0, self._character.velocity.y)
+        #self._character.getRect().move_ip(0, self._character.velocity.y)
     def __str__(self):
         return "FallingState"
 class AttackingState(State):
