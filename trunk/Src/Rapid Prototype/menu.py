@@ -10,26 +10,14 @@ class menu():
         self.font = pygame.font.Font("Images/murder.ttf", 30)
         self.colorkey = [0,0,0]
         self.marker.set_colorkey(self.colorkey)
-        self.xcord = 0
-        self.ycord = 160
+        self.xcord = 50
+        self.ycord = 150
         
-    def displayText(self):
-            self.screen.blit(self.bck, (0,0))
-            self.title = self.font.render("Ungreatful Dead", 1, (123,30,30))
-            self.start = self.font.render("Start game", 1, (123,30,30))
-            self.level1 = self.font.render("Level 1", 1, (123,30,30))
-            self.level2 = self.font.render("Level 2", 1, (123,30,30))
-            self.quit = self.font.render("Quit", 1, (123,30,30))
-            textpos = self.title.get_rect()
-            textpos.centerx = self.rect.centerx
-            self.screen.blit(self.title, textpos)
-            self.screen.blit(self.start, (25,130))
-            self.screen.blit(self.level1, (25, 160))
-            self.screen.blit(self.level2, (25, 190))
-            self.screen.blit(self.quit, (25,220))
-            self.screen.blit(self.marker, (self.xcord, self.ycord))
-            pygame.display.flip()
-            
+    def update(self):
+        self.screen.blit(self.bck, (0,0))
+        self.screen.blit(self.marker, (self.xcord, self.ycord))
+        pygame.display.flip()
+        
     def handle_event(self):
         self.running = True
         while self.running:
@@ -41,21 +29,31 @@ class menu():
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
                     elif event.key == pygame.K_DOWN:
-                        self.ycord += 30
+                        self.ycord += 25
                     elif event.key == pygame.K_UP:
-                        self.ycord -= 30
+                        self.ycord -= 25
                     elif event.key == pygame.K_RETURN:
-                        if self.ycord == 160:
+                        if self.ycord == 200:
                             return 1
-                        elif self.ycord == 190:
+                        elif self.ycord == 225:
                             return 2
-                        elif self.ycord == 220:
+                        elif self.ycord == 275:
                             return 0
-            if self.ycord >= 250:
-                self.ycord = 160
-            if self.ycord <= 130:
-                self.ycord = 220
+                print self.xcord
+                print self.ycord
+            if self.ycord >= 280:
+                self.xcord = 50
+                self.ycord = 200
+            if self.ycord <= 195:
+                self.xcord = 25
+                self.ycord = 275
+            if self.ycord > 225 and self.xcord == 50:
+                self.xcord = 25
+                self.ycord = 275
+            if self.ycord < 275 and self.xcord == 25:
+                self.xcord = 50
+                self.ycord = 225
             
-            self.displayText()
+            self.update()
                     
         
