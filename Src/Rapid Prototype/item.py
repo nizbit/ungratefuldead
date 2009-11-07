@@ -7,6 +7,7 @@ Contents:
     BoostHP
     Invincibility
     InstaKill
+    ********************test
 """
 
 class Item(object):
