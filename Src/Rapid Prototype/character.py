@@ -228,8 +228,8 @@ class Player(Character):
         """
         del self._weapons[key]
     
-    def update(self):
-        self._stateMachine.handleEvent(pygame.event.get())
+    def update(self, event):
+        self._stateMachine.handleEvent(event)
         self._stateMachine.handleAnimation()
         self._stateMachine.move()
         
@@ -380,7 +380,7 @@ if __name__ == "__main__":
         buf = 11
         running = True
         while(running):
-            player.update()
+            player.update(pygame.event.get())
             for platform in pList:
                 if player.getRect().colliderect(platform):
                     player.handleCollision("object", platform)
