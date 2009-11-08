@@ -6,7 +6,11 @@ class World(object):
         self.image = pygame.image.load("Images/bck.png")
         self.image = self.image.convert_alpha()
         self.rect = self.image.get_rect()
-        self.solids = pygame.Rect(0, 470, 3800, 10)
+        self.solids = [pygame.Rect(0, 0, 3800, 10),
+                       pygame.Rect(0, 470, 3800, 10),
+                       pygame.Rect(0, 0, 10, 470),
+                       pygame.Rect(3790, 0, 10, 470)]
+        
         self.platform = [pygame.Rect(410, 398,100, 20),
                          pygame.Rect(540, 382,100, 20),
                          pygame.Rect(934, 408,100, 20),
