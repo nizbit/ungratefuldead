@@ -189,7 +189,7 @@ class Game(object):
 if __name__ == "__main__":
     while True:
         pygame.init()
-        menu1 = menu.menu('Images/967.png','Images/com.png')
+        menu1 = menu.menu('Images/menu.png','Images/com.png')
         print "this is where you call level1 for 1 and level2 for 2 and quit the game if 0 " 
         test = menu1.handle_event()
         if test == 1:
