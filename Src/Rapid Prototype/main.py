@@ -70,16 +70,7 @@ class Game(object):
     def update(self):
 
         #print "player velocity: ", self.player.x_velocity
-        if self.player.getRect().left >= self.vp.rect.right - 300 and \
-        self.player.getRect().left + 300 <= 3800:
-            self.vp.rect.right += self.player.velocity.x#self.player.getRect().left + 300
-        if self.player.getRect().right <= self.vp.rect.left + 300 and \
-        self.player.getRect().right - 300 >= 0:
-            self.vp.rect.left += self.player.velocity.x#self.player.getRect().right - 300
-        if self.vp.rect.right > 3800:
-            self.vp.rect.right = 3800
-        if self.vp.rect.left < 0:
-            self.vp.rect.left = 0
+        
         
         """loop through the events"""
         temp = pygame.event.get()
@@ -92,13 +83,25 @@ class Game(object):
                 
                     
         self.player.update(temp)
-        if self.player.getRect().colliderect(self.level.solids):
-            self.player.handleCollision("object", self.level.solids)
+        for solid in self.level.solids:
+            if self.player.getRect().colliderect(solid):
+                self.player.handleCollision("object", solid)
         
         for platform in self.level.platform:
             if self.player.getRect().colliderect(platform):
                 self.player.handleCollision("object", platform)
-            
+        
+        if self.player.getRect().left >= self.vp.rect.right - 300 and \
+        self.player.getRect().left + 300 <= 3800:
+            self.vp.rect.right += self.player.velocity.x#self.player.getRect().left + 300
+        if self.player.getRect().right <= self.vp.rect.left + 300 and \
+        self.player.getRect().right - 300 >= 0:
+            self.vp.rect.left += self.player.velocity.x#self.player.getRect().right - 300
+        if self.vp.rect.right > 3800:
+            self.vp.rect.right = 3800
+        if self.vp.rect.left < 0:
+            self.vp.rect.left = 0
+                
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
