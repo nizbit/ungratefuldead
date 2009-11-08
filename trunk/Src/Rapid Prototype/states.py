@@ -34,7 +34,7 @@ class State(object):
         self._rightFrames = rightFrames
         
         self._frameNum = 0
-    
+        self._counter = 0
     def getFrame(self, frameSet):
         """
         Return the string that corresponds to a key in the character's sprite
@@ -43,7 +43,10 @@ class State(object):
         a collection of strings which will be used as keys in the sprite
         dictionary
         """
-        self._frameNum += 1
+        self._counter += 1
+        if self._counter > 20:
+            self._counter = 0
+            self._frameNum += 1
         if frameSet == "right":
             if self._frameNum > (len(self._rightFrames) - 1):
                 self._frameNum = 0
@@ -61,6 +64,9 @@ class State(object):
     
     def setFrameNum(self, num):
         self._frameNum = num
+    def resetFrames(self):
+        self._frameNum = 0
+        self._counter = 0
     def act(self):
         """
         This method is a pure virtual method to be overridden by derived
