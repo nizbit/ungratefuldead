@@ -58,7 +58,7 @@ class StateMachine(object):
             if self._actions.has_key("attack"):
                 for state in self._actions:
                     if self._actions[state].__str__() != "AttackingState":
-                        self._actions[state].setFrameNum(0)
+                        self._actions[state].resetFrames()
                         
                 temp = self._actions["attack"].getFrame("right")
                 temp = self._sprites["attack-right"][temp]
@@ -66,7 +66,7 @@ class StateMachine(object):
             elif self._actions.has_key("runRight"):
                 for state in self._actions:
                     if self._actions[state].__str__() != "RunningState":
-                        self._actions[state].setFrameNum(0)
+                        self._actions[state].resetFrames()
                 temp = self._actions["runRight"].getFrame("right")
                 temp = self._sprites["run-right"][temp]
                 self._character.setSpriteSheetCoord(temp)
@@ -75,7 +75,7 @@ class StateMachine(object):
             if self._actions.has_key("attack"):
                 for state in self._actions:
                     if self._actions[state].__str__() != "AttackingState":
-                        self._actions[state].setFrameNum(0)
+                        self._actions[state].resetFrames()
                         
                 temp = self._actions["attack"].getFrame("left")
                 temp2 = self._sprites["attack-left"][temp]
@@ -84,13 +84,13 @@ class StateMachine(object):
             elif self._actions.has_key("runLeft"):
                 for state in self._actions:
                     if self._actions[state].__str__() != "RunningState":
-                        self._actions[state].setFrameNum(0)
+                        self._actions[state].resetFrames()
                 temp = self._actions["runLeft"].getFrame("left")
                 temp = self._sprites["run-left"][temp]
                 self._character.setSpriteSheetCoord(temp)
         if len(self._actions.keys()) == 1 and self._actions.has_key("falling"):
             for state in self._actions:
-                self._actions[state].setFrameNum(0)
+                self._actions[state].resetFrames()
             
             if self._character.getDirection() == "right":
                 self._actions["right"] = self._standingState
@@ -236,7 +236,7 @@ class PlayerStateMachine(StateMachine):
                 #elif event.key == pygame.K_SPACE:
                 #    del self._actions["space"]
                 elif event.key == pygame.K_LSHIFT:
-                    self._actions["attack"].setFrameNum(0)
+                    self._actions["attack"].resetFrames()
                     self.handleAnimation()
                     del self._actions["attack"]
         self.act()

@@ -288,7 +288,7 @@ if __name__ == "__main__":
     while(True):
         pygame.init()
         screen = pygame.display.set_mode((640,480))
-        spriteSheet = pygame.image.load('Images/johnmorris.png')
+        spriteSheet = pygame.image.load('Images/zombie.png')
         action = {"right": (15, 15, 35, 45),              
                    "left": (265, 20, 35, 45),
                    "right-run1": (15, 70, 35, 45),
@@ -315,20 +315,22 @@ if __name__ == "__main__":
                    "left-attack4": (508, 121, 67, 45),
                    "left-attack5": (459, 120, 42, 45),
                    "left-attack6": (377, 127, 76, 45), }
-        actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
-                  "left": {"left": pygame.Rect(265, 20, 35, 45)},
-                  "run-right": {"right-run1": pygame.Rect(15, 70, 35, 45),
-                                "right-run2": pygame.Rect(60, 70, 35, 45),
-                                "right-run3": pygame.Rect(100, 70, 35, 45),
-                                "right-run4": pygame.Rect(135, 70, 35, 45),
-                                "right-run5": pygame.Rect(175, 70, 35, 45),
-                                "right-run6": pygame.Rect(225, 70, 35, 45)},
-                  "run-left": {"left-run1": pygame.Rect(265, 70, 26, 45),
-                               "left-run2": pygame.Rect(298, 70, 26, 45),
-                               "left-run3": pygame.Rect(330, 70, 26, 45),
-                               "left-run4": pygame.Rect(360, 70, 26, 45),
-                               "left-run5": pygame.Rect(395, 59, 26, 45),
-                               "left-run6": pygame.Rect(433, 59, 32, 45)},
+        actions = {"right": {"right": pygame.Rect(120, 4, 40, 80)},
+                  "left": {"left": pygame.Rect(838, 5, 40, 80)},
+                  "run-right": {"right-run1": pygame.Rect(163, 4, 45, 76),
+                                "right-run2": pygame.Rect(208, 4, 45, 76),
+                                "right-run3": pygame.Rect(257, 4, 50, 76),
+                                "right-run4": pygame.Rect(314, 4, 45, 76),
+                                "right-run5": pygame.Rect(365, 4, 40, 76),
+                                "right-run6": pygame.Rect(405, 4, 40, 76),
+                                "right-run7": pygame.Rect(450, 4, 40, 76)},
+                  "run-left": {"left-run1": pygame.Rect(793, 7, 45, 76),
+                               "left-run2": pygame.Rect(745, 7, 45, 76),
+                               "left-run3": pygame.Rect(688, 7, 50, 76),
+                               "left-run4": pygame.Rect(636, 7, 45, 76),
+                               "left-run5": pygame.Rect(594, 7, 40, 76),
+                               "left-run6": pygame.Rect(551, 7, 40, 76),
+                               "left-run7": pygame.Rect(508, 7, 40, 76)},
                   "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
                                    "right-attack2": pygame.Rect(52, 130, 44, 45),
                                    "right-attack3": pygame.Rect(100, 130, 50, 45),
@@ -389,7 +391,7 @@ if __name__ == "__main__":
             
             player.getStateMachine().handleAnimation()
             
-            clock.tick(55)
+            clock.tick(60)
             screen.fill((0,0,0))
             
             for p in pList:
