@@ -26,55 +26,12 @@ class Game(object):
         self.player = None
         self.loadPlayer()
         
-        #self.prevPlayerRect = pygame.Rect()
-        self.phantom = phantom.Phantom((604, 430), world)
-        self.phantom2 = phantom.Phantom((804, 430), world)
-        self.phantom3 = phantom.Phantom((1600, 377), world)
-        self.phantom4 = phantom.Phantom((1750, 371), world)
-        self.phantom5 = phantom.Phantom((3160, 430), world)
-        self.phantom6 = phantom.Phantom((1004, 430), world)
-        self.phantom7 = phantom.Phantom((604, 430), world)
-        self.phantom8 = phantom.Phantom((804, 430), world)
-        self.phantom9 = phantom.Phantom((1004, 430), world)
-        self.phantom10 = phantom.Phantom((904, 430), world)
-        self.phantom11 = phantom.Phantom((2204, 430), world)
-        self.phantom12 = phantom.Phantom((2504, 430), world)
-        """put the enemies in a group to check for collision later"""
-        self.group = pygame.sprite.Group()
-        self.group.add(self.phantom,
-                       self.phantom2,
-                       self.phantom3,
-                       self.phantom4,
-                       self.phantom5,
-                       self.phantom6,
-                       self.phantom7,
-                       self.phantom8,
-                       self.phantom9,
-                       self.phantom10,
-                       self.phantom11,
-                       self.phantom12)
-        self.enemies = [self.phantom,
-                       self.phantom2,
-                       self.phantom3,
-                       self.phantom4,
-                       self.phantom5,
-                       self.phantom6,
-                       self.phantom7,
-                       self.phantom8,
-                       self.phantom9,
-                       self.phantom10,
-                       self.phantom11,
-                       self.phantom12]
-        self.coins = []
-        for x in range(0, 60, 1):
-            self.coins.append(coin.Coin('Images/copperCoin.png', 50 * x, 330))
-            
-            
-        
+        """
+        Sounds
+        """
         self.heartSound = pygame.mixer.Sound("Sounds/heart.wav")
         self.hurtSound = pygame.mixer.Sound("Sounds/hit.wav")
         self.killSound = pygame.mixer.Sound("Sounds/killSound.wav")
-        
         self.coinSound = pygame.mixer.Sound("Sounds/coinSound.wav")
         self.coinSound.set_volume(.05)
         self.killSound.set_volume(.25)
@@ -83,6 +40,9 @@ class Game(object):
         self.bckMusic.set_volume(.25)
         self.bckMusic.play()
         
+        """
+        Text
+        """
         self.score = 0
         self.font = pygame.font.Font(None, 30)
         self.winText = self.font.render("YOU WIN!!!", 1, (255,255,255))
@@ -90,10 +50,9 @@ class Game(object):
         self.HPText = self.font.render("HP: ", 1, (255,255,255))
         self.scoreText = self.font.render("Score: ", 1, (255,255,255))
         self.running = True
+        
     def handleEnemies(self, event):
-        for enemy in self.enemies:
-            enemy.handle_event(event)
-            enemy.handle_animation()
+        pass
     
     def pause(self):
         loop = 1
@@ -111,22 +70,17 @@ class Game(object):
     def update(self):
 
         #print "player velocity: ", self.player.x_velocity
-        if self.player.getRect().left >= self.vp.rect.right - 300:
-            self.vp.rect.right = self.player.getRect().left + 300
-        elif self.player.getRect().right <= self.vp.rect.left + 300 and \
+        if self.player.getRect().left >= self.vp.rect.right - 300 and \
+        self.player.getRect().left + 300 <= 3800:
+            self.vp.rect.right += self.player.velocity.x#self.player.getRect().left + 300
+        if self.player.getRect().right <= self.vp.rect.left + 300 and \
         self.player.getRect().right - 300 >= 0:
-            self.vp.rect.left = self.player.getRect().right - 300
+            self.vp.rect.left += self.player.velocity.x#self.player.getRect().right - 300
         if self.vp.rect.right > 3800:
             self.vp.rect.right = 3800
-        """ 
-        for coin in self.coins:
-            if pygame.sprite.collide_rect(self.player, coin):
-                self.coinSound.play()
-                self.coins.remove(coin)
-                self.score += self.player.HP
-                coin = None
-        """
-       
+        if self.vp.rect.left < 0:
+            self.vp.rect.left = 0
+        
         """loop through the events"""
         temp = pygame.event.get()
         for event in temp:
@@ -141,17 +95,16 @@ class Game(object):
         if self.player.getRect().colliderect(self.level.solids):
             self.player.handleCollision("object", self.level.solids)
         
-       
+        for platform in self.level.platform:
+            if self.player.getRect().colliderect(platform):
+                self.player.handleCollision("object", platform)
             
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
         self.level.image.blit(self.tempvp,self.vp.rect,self.vp.rect)
         self.level.image.blit(self.player.getSpriteSheet(),self.player.getRect(),self.player.getSpriteSheetCoord())
-        for enemy in self.enemies:
-            self.level.image.blit(enemy.image, enemy.rect, enemy.area)
-        for coin in self.coins:
-            self.level.image.blit(coin.image, coin.rect)
+        
         self.screen.blit(self.level.image.subsurface(self.vp.rect),(0,0))        
         if self.player.HP <= 0:
             self.screen.blit(self.HPText, (0,0))
@@ -171,8 +124,7 @@ class Game(object):
             self.screen.blit(self.scoreText, (0,25))
             self.tempText = self.font.render(str(self.score), 1, (255,255,255))
             self.screen.blit(self.tempText, (75, 25))
-        if self.enemies == [] and self.player.HP > 0:
-            self.screen.blit(self.winText,(250,250))
+        
         pygame.display.flip()
         
         
@@ -182,24 +134,11 @@ class Game(object):
             
             #print event
             """handle the events and animation"""
-            """
-            if self.phantom != None:
-                for enemy in self.enemies:
-                    if pygame.sprite.collide_rect(self.player, enemy) and \
-                    self.player.state == self.player.attacking_state:
-                        self.killSound.play()
-                        self.enemies.remove(enemy)
-                        self.score += self.player.HP
-                        enemy = None
-                    elif pygame.sprite.collide_rect(self.player,enemy):
-                        if self.player.HP > 0:
-                            self.player.HP -= 1            
-                else:
-                    self.handleEnemies(event)
-            """         
+                     
             self.update()
             self.render()
-            self.clock.tick(40)
+            self.clock.tick(60)
+            
     def loadPlayer(self):
         actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
                   "left": {"left": pygame.Rect(265, 20, 35, 45)},
