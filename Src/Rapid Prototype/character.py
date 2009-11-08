@@ -11,6 +11,7 @@ import pygame
 from pygame.locals import *
 
 import vector2d
+import item
 import stateMachine
 
 class Character(object):
@@ -32,7 +33,7 @@ class Character(object):
         self._sprites = sprites
         
         #----Stats----
-        self.velocity = vector2d.Vector2D(0,0)
+        self._velocity = vector2d.Vector2D(0,0)
         self._HP = 100
         self._lives = 5
         
@@ -86,17 +87,19 @@ class Character(object):
         """
         return self._spriteSheetCoord
     
-    def setVelocity(self, velocity):
+    def setVelocity(self, v):
         """
         Set __velocity to argument, velocity
         """
-        self._velocity = velocity
+        self._velocity = v
     
     def getVelocity(self):
         """
         Return __velocity
         """
-        return self.velocity
+        return self._velocity
+    
+    velocity = property(getVelocity,setVelocity)
     
     def setHP(self, life):
         """
@@ -109,6 +112,8 @@ class Character(object):
         Return __HP
         """
         return self._HP
+    
+    HP = property(getHP, setHP)
     
     def setDirection(self, direction):
         """
@@ -156,6 +161,8 @@ class Character(object):
         Return __lives
         """
         return self._lives
+    
+    lives = property(getLives,setLives)
     
     def setStateMachine(self, stateMachine):
         """
@@ -207,6 +214,8 @@ class Player(Character):
         """
         self._currentWeapon = self._weapons[key]
     
+    currentWeapon = property(getCurrentWeapon, setCurrentWeapon)
+    
     def addWeapon(self,key, weapon):
         """
         Add weapon and through key to the weapons dictionary
@@ -225,7 +234,8 @@ class Player(Character):
         self._stateMachine.move()
         
 class NPC(Character):
-    def __init__(self, spriteSheet, sprites, MAX_VELOCITY, type, item,speechFile = None):
+    def __init__(self, spriteSheet, sprites, MAX_VELOCITY, type, item,\
+                 playerRect, topographyRects, speechFile = None):
                  
         """
         Call base class' __init__. Set class variables to corresponding
@@ -237,7 +247,8 @@ class NPC(Character):
         self.file = None
         if speechFile is not None:
             self.loadSpeech(speechFile)
-        self._stateMachine = stateMachine.EnemyStateMachine(self, sprites)
+        self._stateMachine = stateMachine.EnemyStateMachine(self, sprites, \
+                                                            playerRect, topographyRects)
     def loadSpeech(self, speechFile):
         """
         Load textual information from given argument file name. If the file
@@ -270,6 +281,8 @@ class NPC(Character):
     
     def update(self):
         self._stateMachine.think()
+        self._stateMachine.handleAnimation()
+        self._stateMachine.move()
         
 if __name__ == "__main__":
     while(True):
@@ -329,10 +342,7 @@ if __name__ == "__main__":
                                   "left-attack5": pygame.Rect(459, 120, 42, 45),
                                   "left-attack6": pygame.Rect(377, 127, 76, 45)}}
         velocity = vector2d.Vector2D(5,15)
-        #player = NPC(spriteSheet, actions, velocity, "blah", "b")
-        player = Player(spriteSheet, actions, velocity)
-        player.setSpriteSheetCoord(actions["right"]["right"])
-        player.setRect((0,50))
+        
         
         platform  = pygame.Rect(0,400, 600,50)
         platform2 = pygame.Rect(100,300, 50,50)
@@ -360,7 +370,12 @@ if __name__ == "__main__":
         temp = pygame.Surface((640,480))
         temp.fill((255,255,255))
         
-                 
+        #player = NPC(spriteSheet, actions, velocity, "blah", platform4, pList, "b")
+        #player.HP = 5
+        player = Player(spriteSheet, actions, velocity)
+        player.setSpriteSheetCoord(actions["right"]["right"])
+        player.setRect((50,200))
+               
         clock = pygame.time.Clock()
         buf = 11
         running = True

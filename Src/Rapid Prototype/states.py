@@ -16,6 +16,7 @@ import pygame
 from pygame.locals import *
 
 import vector2d
+import item
 import character
 
 class State(object):
@@ -164,6 +165,7 @@ class FallingState(State):
         #self._character.getRect().move_ip(0, self._character.velocity.y)
     def __str__(self):
         return "FallingState"
+    
 class AttackingState(State):
     def __init__(self, character, rightFrames, leftFrames):
         super(AttackingState,self).__init__(character, rightFrames, leftFrames)
@@ -186,8 +188,13 @@ class DeadState(State):
         """
         Take away a character life. Set x and y velocity to zero
         """
-        pass
-    
+        if self._character.getLives() > 1:
+            self._character.setLives(self._character.getLives() - 1)
+        else:
+            pass
+        self._character.velocity.x = 0
+        self._character.velocity.y = 0
+        
     def __str__(self):
         return "DeadState"
     
