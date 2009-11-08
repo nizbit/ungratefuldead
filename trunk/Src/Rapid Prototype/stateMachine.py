@@ -106,22 +106,10 @@ class StateMachine(object):
                 del self._actions["left"]
                     
     def handleCollision(self, type, rect):
-        """
-        Sets __currentState based on collisionBoundary which would be either
-        "character", "item", or "solids" and changes the state accordingly. The
-        new state's act() method is then called.
-        """
-        if type == "object":
-            self.translate(rect)
-        if type == "enemy":
-            self.translate(rect)
-            if self._character.getHP() >= 1:
-                self._character.setHP(self._character.getHP() -1)
-                print self._character.getHP()
-            else:
-                print "DEAD!"   
+        pass
+                  
     def translate(self, rect):
-        
+        typeOfColl = None
         bottom = self._character.getRect().bottom - rect.top
         top = self._character.getRect().top - rect.bottom
         
@@ -139,18 +127,22 @@ class StateMachine(object):
         if abs(miny) > abs(minx):
             if abs(left) < abs(right):
                 self._character.getRect().left = rect.right
+                typeOfColl = "left"
             else:
                 self._character.getRect().right = rect.left
+                typeOfColl = "right"
             self._character.velocity.x = 0
             
         else:
             if abs(bottom) < abs(top):
                 self._character.getRect().bottom = rect.top
                 self.isJumping = False
+                typeOfColl = "bottom"
             else:
                 self._character.getRect().top = rect.bottom
+                typeOfColl = "top"
             self._character.velocity.y = 0      
-    
+        return typeOfColl
     def act(self):
         for item in self._actions.items():
             item[1].act()
@@ -169,6 +161,25 @@ class PlayerStateMachine(StateMachine):
         Call the parent class' __init__
         """
         super(PlayerStateMachine, self).__init__(character, sprites)
+    
+    
+    def handleCollision(self, type, rect):
+        """
+        Sets __currentState based on collisionBoundary which would be either
+        "character", "item", or "solids" and changes the state accordingly. The
+        new state's act() method is then called.
+        """
+        if type == "object":
+            self.translate(rect)
+        if type == "enemy":
+            self.translate(rect)
+            if self._character.HP >= 1:
+                self._character.HP -= 1
+                print self._character.HP
+            else:
+                if self._character.lives >= 1:
+                    self._character.lives -= 1
+                print "DEAD!" 
     
     def handleEvent(self, events):
         """
@@ -231,7 +242,7 @@ class PlayerStateMachine(StateMachine):
         self.act()
     
 class EnemyStateMachine(StateMachine):
-    def __init__(self, character, sprites):
+    def __init__(self, character, sprites, playerRect, topographyRects):
         """
         
         ***NOTE***
@@ -242,13 +253,53 @@ class EnemyStateMachine(StateMachine):
         Call the parent class' __init__
         """
         super(EnemyStateMachine, self).__init__(character, sprites)
-    
+        self._actions["runRight"] = self._runningState
+        self.counter = 0
+    def handleCollision(self, type, rect):
+        if type == "object":
+            self.counter += 1
+            if self.counter % 17 == 0:
+                self._actions["jump"] = self._jumpingState
+            typeOfColl = self.translate(rect)
+            if typeOfColl == "right" or typeOfColl == "left":
+                self.turnAround()
+                
+        if type == "enemy":
+            self.counter += 1
+            if self._character.HP >= 1:
+                self._character.HP -= 1
+            else:
+                self._actions.clear()
+                self._actions["falling"] = self._fallingState
+                self._actions["dead"] = self._deadState
+
+            typeOfColl = self.translate(rect)
+            if typeOfColl == "right" or typeOfColl == "left":
+                self.turnAround()
+                
+    def turnAround(self):
+        if self._character.getDirection() == "right":
+            self._character.setDirection("left")
+            if self._actions.has_key("runRight"):
+                del self._actions["runRight"]
+            self._actions["runLeft"] = self._runningState
+        else:
+            self._character.setDirection("right")
+            if self._actions.has_key("runLeft"):
+                del self._actions["runLeft"]
+            self._actions["runRight"] = self._runningState
+        self._character.velocity.x = 0
+        
     def think(self):
         """
         Based on the character's type, currentState, and level topography,
         change currentState to a different state
         """
-        self.act()
-
+        for state in self._actions:
+            self._actions[state].act()
+        if self._actions.has_key("jump"):
+            del self._actions["jump"]
+        
+        
 if __name__ == "__main__":
     pass
