@@ -91,6 +91,16 @@ class Game(object):
         for enemy in self.enemies:
             enemy.handle_event(event)
             enemy.handle_animation()
+    
+    def pause(self):
+        loop = 1
+        menu2 = menu.menu('Images/menu.png','Images/com.png')
+        test = menu2.handle_event()
+        
+        while loop:
+            for e in pygame.event.get():
+                if e.type == pygame.KEYUP and e.key == pygame.K_ESCAPE:
+                    loop = 0
 
     def update(self):
 
@@ -151,8 +161,9 @@ class Game(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    self.running = False
+                if event.type == pygame.KEYDOWN:    
+                    if event.key == pygame.K_ESCAPE:
+                        self.pause()
             #print event
             """handle the events and animation"""
             self.player.handle_event(event)
@@ -178,9 +189,12 @@ class Game(object):
 if __name__ == "__main__":
     while True:
         pygame.init()
-        menu = menu.menu('Images/menu.png','Images/com.png')
+        menu1 = menu.menu('Images/967.png','Images/com.png')
         print "this is where you call level1 for 1 and level2 for 2 and quit the game if 0 " 
-        print menu.handle_event()
-        game = Game()
-        game.run()
+        test = menu1.handle_event()
+        if test == 1:
+            game = Game()
+            game.run()
+        elif test == 0:
+            sys.exit(0)
             
