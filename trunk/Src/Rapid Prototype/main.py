@@ -44,7 +44,7 @@ class Game(object):
         self.killSound.set_volume(.25)
         self.bckMusic = pygame.mixer.music 
         self.bckMusic.load("Sounds/music.ogg")
-        self.bckMusic.set_volume(.25)
+        self.bckMusic.set_volume(.35)
         self.bckMusic.play()
         
         """
@@ -140,7 +140,8 @@ class Game(object):
                     
                            pygame.Rect(3555, 280, 10, 40),
                            pygame.Rect(3655, 280, 10, 40)]
-            self.level = world.World("Images/bck.png", solids, platform, enemyBounds)    
+            self.level = world.World("Images/bck.png", solids, platform, enemyBounds)
+                
     def handleEnemies(self, event):
         pass
     
@@ -171,10 +172,7 @@ class Game(object):
                 sys.exit()
             if event.type == pygame.KEYDOWN:    
                 if event.key == pygame.K_ESCAPE:
-                    self.bckMusic.pause()
                     self.pause()
-                    self.bckMusic.unpause()
-                
                     
         self.player.update(temp)
         for solid in self.level.solids:
