@@ -104,7 +104,7 @@ class Game(object):
     
     def pause(self):
         loop = 1
-        menu2 = menu.menu('Images/menu.png','Images/com.png')
+        menu2 = inGameMenu.InGame('Images/ingamemenu.png','Images/dink.png')
         test = menu2.handle_event()
         
         while loop:
