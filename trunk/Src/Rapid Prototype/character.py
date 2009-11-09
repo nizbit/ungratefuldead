@@ -61,7 +61,8 @@ class Character(object):
         
         Set the class variable, __rect, to rect
         """
-        self._rect.topleft = rect
+        print type(rect)
+        self._rect = rect
     def getRect(self):
         """
         
@@ -71,15 +72,23 @@ class Character(object):
         
         Return the class variable, __rect
         """
+        
         return self._rect
+    #rect = property(getRect, setRect)
     
+    def setPosition(self, x, y):
+        self._rect.bottom = y
+        self._rect.left = x
+        
     def setSpriteSheetCoord(self, rect):
         """
         Set __spriteSheetCoord to input argument, rect
         """
+        
         self._spriteSheetCoord = rect
         self._rect.size = self._spriteSheetCoord.size
-        self.colRect = self._rect.inflate(-10,-1)
+        
+        #self.colRect = self._rect.inflate(-10,-1)
     
     def getSpriteSheetCoord(self):
         """
@@ -254,12 +263,13 @@ class NPC(Character):
         Load textual information from given argument file name. If the file
         fails to load, throw an exception
         """
-        try:
-            self.file = open(speechFile, r)
-        except IOError:
-            print "Could not open file. Exiting program"
-            sys.exit()
         
+        #try:
+        #    self.file = open(speechFile, 'r')
+        #except IOError:
+        #    print "Could not open file. Exiting program"
+        #    sys.exit()
+        pass
     
     def getType(self):
         """
@@ -288,7 +298,7 @@ if __name__ == "__main__":
     while(True):
         pygame.init()
         screen = pygame.display.set_mode((640,480))
-        spriteSheet = pygame.image.load('Images/zombie.png')
+        spriteSheet = pygame.image.load('Images/GR-Zombie.png')
         action = {"right": (15, 15, 35, 45),              
                    "left": (265, 20, 35, 45),
                    "right-run1": (15, 70, 35, 45),
@@ -315,34 +325,40 @@ if __name__ == "__main__":
                    "left-attack4": (508, 121, 67, 45),
                    "left-attack5": (459, 120, 42, 45),
                    "left-attack6": (377, 127, 76, 45), }
-        actions = {"right": {"right": pygame.Rect(120, 4, 40, 80)},
-                  "left": {"left": pygame.Rect(838, 5, 40, 80)},
-                  "run-right": {"right-run1": pygame.Rect(163, 4, 45, 76),
-                                "right-run2": pygame.Rect(208, 4, 45, 76),
-                                "right-run3": pygame.Rect(257, 4, 50, 76),
-                                "right-run4": pygame.Rect(314, 4, 45, 76),
-                                "right-run5": pygame.Rect(365, 4, 40, 76),
-                                "right-run6": pygame.Rect(405, 4, 40, 76),
-                                "right-run7": pygame.Rect(450, 4, 40, 76)},
-                  "run-left": {"left-run1": pygame.Rect(793, 7, 45, 76),
-                               "left-run2": pygame.Rect(745, 7, 45, 76),
-                               "left-run3": pygame.Rect(688, 7, 50, 76),
-                               "left-run4": pygame.Rect(636, 7, 45, 76),
-                               "left-run5": pygame.Rect(594, 7, 40, 76),
-                               "left-run6": pygame.Rect(551, 7, 40, 76),
-                               "left-run7": pygame.Rect(508, 7, 40, 76)},
-                  "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
-                                   "right-attack2": pygame.Rect(52, 130, 44, 45),
-                                   "right-attack3": pygame.Rect(100, 130, 50, 45),
-                                   "right-attack4": pygame.Rect(160, 130, 67, 45),
-                                   "right-attack5": pygame.Rect(238, 130, 42, 45),
-                                   "right-attack6": pygame.Rect(295, 130, 76, 45)},
-                  "attack-left": {"left-attack1": pygame.Rect(577, 73, 22, 45),
-                                  "left-attack2": pygame.Rect(526, 62, 44, 45),
-                                  "left-attack3": pygame.Rect(471, 62, 50, 45),
-                                  "left-attack4": pygame.Rect(508, 121, 67, 45),
-                                  "left-attack5": pygame.Rect(459, 120, 42, 45),
-                                  "left-attack6": pygame.Rect(377, 127, 76, 45)}}
+        actions = {"right": {"right": pygame.Rect(856,70,41,53)},
+                   "left" : {"left": pygame.Rect(264,70,41,53)},
+                   "run-right": {"right-run1": pygame.Rect(589,138,40,50),
+                                 "right-run2": pygame.Rect(639,138,50,51),
+                                 "right-run3": pygame.Rect(702,138,46,51),
+                                 "right-run4": pygame.Rect(766,138,42,51),
+                                 "right-run5": pygame.Rect(822,138,33,52),
+                                 "right-run6": pygame.Rect(869,138,43,51),
+                                 "right-run7": pygame.Rect(923,138,48,50),
+                                 "right-run8": pygame.Rect(981,138,48,53),
+                                 "right-run9": pygame.Rect(1044,138,41,53),
+                                 "right-run10": pygame.Rect(1104,138,38,51)},
+                    "run-left": {"left-run1": pygame.Rect(523,138,40,50),
+                                 "left-run2": pygame.Rect(461,138,50,51),
+                                 "left-run3": pygame.Rect(403,138,46,51),
+                                 "left-run4": pygame.Rect(345,138,42,51),
+                                 "left-run5": pygame.Rect(296,138,33,52),
+                                 "left-run6": pygame.Rect(240,138,43,51),
+                                 "left-run7": pygame.Rect(180,138,48,50),
+                                 "left-run8": pygame.Rect(122,138,48,53),
+                                 "left-run9": pygame.Rect(66,138,41,53),
+                                 "left-run10": pygame.Rect(9,138,38,51)},
+                    "attack-right": {"right-attack": pygame.Rect(813, 342, 32, 53),
+                                     "right-attack2": pygame.Rect(861, 342, 31, 54),
+                                     "right-attack3": pygame.Rect(914, 342, 32, 51),
+                                     "right-attack4": pygame.Rect(967,349,46,47),
+                                     "right-attack5": pygame.Rect(1028,353,51,43),
+                                     "right-attack6": pygame.Rect(1092,356,53,40)},
+                    "attack-left":{"left-attack": pygame.Rect(307, 342,32,53),
+                                   "left-attack2": pygame.Rect(259, 342,31,54),
+                                   "left-attack3": pygame.Rect(203, 342,32,51),
+                                   "left-attack4": pygame.Rect(139, 349,46,47),
+                                   "left-attack5": pygame.Rect(73, 353,51,43),
+                                   "left-attack6": pygame.Rect(7, 355 ,53,40)}}
         velocity = vector2d.Vector2D(5,15)
         
         
