@@ -388,17 +388,17 @@ if __name__ == "__main__":
         temp = pygame.Surface((640,480))
         temp.fill((255,255,255))
         
-        #player = NPC(spriteSheet, actions, velocity, "blah", platform4, pList, "b")
-        #player.HP = 5
-        player = Player(spriteSheet, actions, velocity)
+        player = NPC(spriteSheet, actions, velocity, "blah", "a", platform4, pList, "b")
+        player.HP = 5
+        #player = Player(spriteSheet, actions, velocity)
         player.setSpriteSheetCoord(actions["right"]["right"])
-        player.setRect((50,200))
+        player.setPosition(50,200)
                
         clock = pygame.time.Clock()
         buf = 11
         running = True
         while(running):
-            player.update(pygame.event.get())
+            player.update()#pygame.event.get())
             for platform in pList:
                 if player.getRect().colliderect(platform):
                     player.handleCollision("object", platform)
