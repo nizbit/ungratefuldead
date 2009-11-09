@@ -96,6 +96,7 @@ class StateMachine(object):
                 self._actions["right"] = self._standingState
                 temp = self._actions["right"].getFrame("right")
                 temp = self._sprites["right"][temp]
+                
                 self._character.setSpriteSheetCoord(temp)
                 del self._actions["right"]
             else:
@@ -254,7 +255,12 @@ class EnemyStateMachine(StateMachine):
         """
         super(EnemyStateMachine, self).__init__(character, sprites)
         self._actions["runRight"] = self._runningState
+        self._actions["falling"] = self._fallingState
         self.counter = 0
+        self.tRects = []
+        for rect in topographyRects:
+            self.tRects.append(rect)
+        
     def handleCollision(self, type, rect):
         if type == "object":
             self.counter += 1
@@ -299,7 +305,10 @@ class EnemyStateMachine(StateMachine):
             self._actions[state].act()
         if self._actions.has_key("jump"):
             del self._actions["jump"]
-        
+        for rect in self.tRects:
+            self.handleCollision("object", rect)
+        self._actions["falling"] = self._fallingState
+        self._actions["falling"].act()
         
 if __name__ == "__main__":
     pass
