@@ -302,13 +302,14 @@ class EnemyStateMachine(StateMachine):
         change currentState to a different state
         """
         for state in self._actions:
+            print state
             self._actions[state].act()
         if self._actions.has_key("jump"):
             del self._actions["jump"]
         for rect in self.tRects:
-            self.handleCollision("object", rect)
-        self._actions["falling"] = self._fallingState
-        self._actions["falling"].act()
+            if self._character.getRect().colliderect(rect):
+                self.handleCollision("object", rect)
+        
         
 if __name__ == "__main__":
     pass
