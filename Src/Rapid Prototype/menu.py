@@ -7,11 +7,11 @@ class Menu(object):
         self.bck = pygame.image.load(name1).convert()
         self.marker = pygame.image.load(name2).convert()
         self.rect = self.bck.get_rect()
-        self.font = pygame.font.Font("Images/murder.ttf", 30)
+        #self.font = pygame.font.Font("Images/murder.ttf", 30)
         #self.music = pygame.mixer.Sound("Sounds/zombie_nation")
-        self.bckMusic = pygame.mixer.music 
-        self.bckMusic.load("Sounds/zombie_nation.ogg")
-        self.bckMusic.set_volume(.25)
+        self.menuMusic = pygame.mixer.music 
+        self.menuMusic.load("Sounds/zombie_nation.ogg")
+        self.menuMusic.set_volume(.25)
         self.colorkey = [0,0,0]
         self.marker.set_colorkey(self.colorkey)
         self.xcord = 50
@@ -23,7 +23,7 @@ class Menu(object):
         pygame.display.flip()
         
     def handle_event(self):
-        self.bckMusic.play()
+        self.menuMusic.play()
         self.running = True
         while self.running:
             """loop through the events"""
