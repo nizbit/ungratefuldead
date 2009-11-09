@@ -76,8 +76,26 @@ class Game(object):
                         pygame.Rect(2141, 244,118, 23),
                         pygame.Rect(2487, 288, 116, 78),
                         pygame.Rect(2994,244, 118,23)]
-            
-            self.level = world.World("Images/level2.png", solids, platform)
+            enemyBounds = [pygame.Rect(910, 320, 10, 40),
+                           pygame.Rect(1150, 320, 10, 40),
+                           pygame.Rect(1900, 320, 10, 40),
+                           pygame.Rect(2190, 320, 10, 40),
+                           pygame.Rect(2715, 320, 1, 40),
+                           pygame.Rect(2770, 320, 1, 40),
+                           pygame.Rect(2890, 320, 10, 20),
+                           pygame.Rect(1872, 216, 10, 40),
+                           pygame.Rect(1975, 216, 10, 40),
+                           pygame.Rect(2140, 216, 10, 40),
+                           pygame.Rect(2250, 216, 10, 40),
+                           pygame.Rect(3000, 216, 10, 40),
+                           pygame.Rect(3104, 216, 10, 40),
+                           pygame.Rect(336, 300, 10, 40),
+                           pygame.Rect(452, 240, 10, 40),
+                           pygame.Rect(560, 240, 10, 40),
+                           pygame.Rect(1512, 240, 10, 40),
+                           pygame.Rect(2488, 240, 10, 40),
+                           pygame.Rect(2595, 216, 10, 40)]
+            self.level = world.World("Images/level2.png", solids, platform, enemyBounds)
         else:
             solids = [pygame.Rect(0, 0, 3800, 10),
                       pygame.Rect(0, 470, 3800, 10),
@@ -101,7 +119,28 @@ class Game(object):
                         pygame.Rect(3295,372, 100, 20),
                         pygame.Rect(3420,296, 100, 20),
                         pygame.Rect(3550,343, 100, 20)]
-            self.level = world.World("Images/bck.png", solids, platform)    
+            enemyBounds = [pygame.Rect(412, 360, 10, 40),
+                           pygame.Rect(505, 360, 10, 40),
+                           pygame.Rect(540, 340, 10, 40),
+                           pygame.Rect(640, 340, 10, 40),
+                           pygame.Rect(930, 360, 10, 40),
+                           pygame.Rect(1030, 360, 10, 40),
+                           pygame.Rect(1450, 355, 10, 40),
+                           pygame.Rect(1550, 355, 10, 40),
+                           pygame.Rect(1570, 330, 10, 40),
+                           pygame.Rect(1670, 330, 10, 40),
+                           pygame.Rect(1705, 330, 10, 40),
+                           pygame.Rect(1805, 330, 10, 40),       
+                           pygame.Rect(3160, 150, 10, 40),
+                           pygame.Rect(3260, 150, 10, 40),
+                           pygame.Rect(3290, 200, 10, 40),
+                           pygame.Rect(3390, 200, 10, 40),
+                           pygame.Rect(3425, 240, 10, 40),
+                           pygame.Rect(3525, 240, 10, 40),
+                    
+                           pygame.Rect(3555, 280, 10, 40),
+                           pygame.Rect(3655, 280, 10, 40)]
+            self.level = world.World("Images/bck.png", solids, platform, enemyBounds)    
     def handleEnemies(self, event):
         pass
     
@@ -302,7 +341,8 @@ class Game(object):
             tempWorldRects.append(platform)
         for platform in self.level.platform:
             tempWorldRects.append(platform)
-            
+        for platform in self.level.enemyBounds:
+            tempWorldRects.append(platform)    
         for x in range(0,10,1):
             self.enemies.append(character.NPC(zombieSpriteSheet,
                                               zombieActions,
@@ -328,56 +368,55 @@ class Game(object):
             self.enemies[x].setSpriteSheetCoord(zombieActions["right"]["right"])
         for x in range(10,20,1):
             self.enemies[x].setSpriteSheetCoord(zombieActions2["right"]["right"])
-            
-        if self.level == 0:
-            self.enemies[0].setPosition(50,300)
-            self.enemies[1].setPosition(388,340)
-            self.enemies[2].setPosition(752,368)
-            self.enemies[3].setPosition(788,352)
-            self.enemies[4].setPosition(1294,296)
-            self.enemies[5].setPosition(1400,352)
-            self.enemies[6].setPosition(1544,294)
-            self.enemies[7].setPosition(1600,276)
-            self.enemies[8].setPosition(1672,276)
-            self.enemies[9].setPosition(1924,240)
-            self.enemies[10].setPosition(2204,240)
-            self.enemies[11].setPosition(2248,368)
-            self.enemies[12].setPosition(2300,368)
-            self.enemies[13].setPosition(2508,288)
-            self.enemies[14].setPosition(2576,288)
-            self.enemies[15].setPosition(2948,360)
-            self.enemies[16].setPosition(3056,240)
-            self.enemies[17].setPosition(3056,360)
-            self.enemies[18].setPosition(3100,360)
-            self.enemies[19].setPosition(3200,360)
-            #self.enemies[21].setPosition(3300,360)
-            #self.enemies[22].setPosition(3400,360)
-            
+        
+        if level == 0:
+            pos = [(200,200),
+                   (388,300),
+                   (488,244),
+                   (594,296),
+                   (692,196),
+                   (1544,184),
+                   (1600,176),
+                   (1672,176),
+                   (1764,240),
+                   (2168,144),
+                   (2248,280),
+                   (2300,308),
+                   (2508,188),
+                   (2612,160),
+                   (2948,260),
+                   (3056,140),
+                   (3056,280),
+                   (3100,200),
+                   (3200,200),
+                   (300, 300)]
+            for x,y in zip(pos, self.enemies):
+                y.setPosition(x[0],x[1])
+        
         else:
-            self.enemies[0].setPosition(460,352)
-            self.enemies[1].setPosition(592,376)
-            self.enemies[2].setPosition(960,390)
-            self.enemies[3].setPosition(1500,390)
-            self.enemies[4].setPosition(1620,372)
-            self.enemies[5].setPosition(504,276)
-            self.enemies[6].setPosition(3596,324)
-            self.enemies[7].setPosition(3660,368)
-            self.enemies[8].setPosition(972,450)
-            self.enemies[9].setPosition(1020,450)
-            self.enemies[10].setPosition(1100,450)
-            self.enemies[11].setPosition(1250,450)
-            self.enemies[12].setPosition(2000,450)
-            self.enemies[13].setPosition(2200,450)
-            self.enemies[14].setPosition(2450,450)
-            self.enemies[15].setPosition(2600,450)
-            self.enemies[16].setPosition(2750,450)
-            self.enemies[17].setPosition(2800,450)
-            self.enemies[18].setPosition(3000,450)
-            self.enemies[19].setPosition(3300,450)
-            #self.enemies[21].setPosition(3460,450)
-            #self.enemies[22].setPosition(3530,450)
-            for enemy in self.enemies:
-                print enemy.getRect()
+            pos = [(460,352),
+                   (592,376),
+                   (960,390),
+                   (1500,390),
+                   (1620,372),
+                   (504,276),
+                   (3596,324),
+                   (3660,368),
+                   (972,450),
+                   (1020,350),
+                   (1100,350),
+                   (1250,350),
+                   (2000,350),
+                   (2200,350),
+                   (2450,350),
+                   (2600,350),
+                   (2750,350),
+                   (2800,350),
+                   (3000,350),
+                   (3300,350)]
+            for x,y in zip(pos, self.enemies):
+                y.setPosition(x[0],x[1])
+        
                 
 if __name__ == "__main__":
     while True:

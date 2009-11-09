@@ -45,8 +45,8 @@ class Menu(object):
                             return 2
                         elif self.ycord == 275:
                             return 0
-                print self.xcord
-                print self.ycord
+                #print self.xcord
+                #print self.ycord
                 
             if self.ycord >= 280:
                 self.xcord = 50

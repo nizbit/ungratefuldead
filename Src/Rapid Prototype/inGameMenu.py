@@ -27,8 +27,8 @@ class InGame(menu.Menu):
                             return 1
                         elif self.ycord == 385:
                             return 0
-                print self.xcord
-                print self.ycord
+                #print self.xcord
+                #print self.ycord
             if self.ycord > 385:
                 self.ycord = 300
             if self.ycord < 300:

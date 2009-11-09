@@ -302,7 +302,6 @@ class EnemyStateMachine(StateMachine):
         change currentState to a different state
         """
         for state in self._actions:
-            print state
             self._actions[state].act()
         if self._actions.has_key("jump"):
             del self._actions["jump"]
