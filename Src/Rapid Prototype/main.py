@@ -132,7 +132,9 @@ class Game(object):
                 sys.exit()
             if event.type == pygame.KEYDOWN:    
                 if event.key == pygame.K_ESCAPE:
+                    self.bckMusic.pause()
                     self.pause()
+                    self.bckMusic.unpause()
                 
                     
         self.player.update(temp)
@@ -234,6 +236,7 @@ class Game(object):
         self.player = character.Player(spriteSheet, actions, velocity)
         self.player.setSpriteSheetCoord(actions["right"]["right"])
         self.player.setPosition(50,300)
+        
     def loadEnemies(self, level):
         zombieSpriteSheet = pygame.image.load('Images/zombie.png').convert_alpha()
         zombieActions = {"right": {"right": pygame.Rect(120, 4, 40, 80)},
@@ -375,6 +378,7 @@ class Game(object):
             #self.enemies[22].setPosition(3530,450)
             for enemy in self.enemies:
                 print enemy.getRect()
+                
 if __name__ == "__main__":
     while True:
         pygame.init()
