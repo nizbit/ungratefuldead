@@ -44,7 +44,7 @@ class State(object):
         dictionary
         """
         self._counter += 1
-        if self._counter > 20:
+        if self._counter > 5:
             self._counter = 0
             self._frameNum += 1
         if frameSet == "right":

@@ -11,7 +11,7 @@ class Menu(object):
         self.colorkey = [0,0,0]
         self.marker.set_colorkey(self.colorkey)
         self.xcord = 50
-        self.ycord = 150
+        self.ycord = 200
         
     def update(self):
         self.screen.blit(self.bck, (0,0))
@@ -24,7 +24,8 @@ class Menu(object):
             """loop through the events"""
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    #self.running = False
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
@@ -41,19 +42,19 @@ class Menu(object):
                             return 0
                 print self.xcord
                 print self.ycord
+                
             if self.ycord >= 280:
                 self.xcord = 50
                 self.ycord = 200
-            if self.ycord <= 195:
-                self.xcord = 25
-                self.ycord = 275
             if self.ycord > 225 and self.xcord == 50:
                 self.xcord = 25
                 self.ycord = 275
-            if self.ycord < 275 and self.xcord == 25:
+            if self.ycord < 275 and self.ycord > 195 and self.xcord == 25:
                 self.xcord = 50
                 self.ycord = 225
-            
+            if self.ycord <= 195:
+                self.xcord = 25
+                self.ycord = 275
             self.update()
                     
         
