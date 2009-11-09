@@ -1,7 +1,7 @@
 import sys, pygame
 from pygame.locals import *
 
-class menu():
+class Menu(object):
     def __init__(self, name1, name2):
         self.screen = pygame.display.set_mode((640,480))
         self.bck = pygame.image.load(name1).convert()
