@@ -7,6 +7,7 @@ import coin
 import sys
 import menu
 import vector2d
+import inGameMenu
 from  pygame.locals import *
 
 class Game(object):
@@ -114,6 +115,8 @@ class Game(object):
                 elif test == 0:
                     loop = 0
                     self.running = False
+                elif test == 1:
+                    loop = 0
 
     def update(self):
 
