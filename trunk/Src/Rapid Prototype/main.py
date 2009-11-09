@@ -7,10 +7,11 @@ import coin
 import sys
 import menu
 import vector2d
+import inGameMenu
 from  pygame.locals import *
 
 class Game(object):
-    def __init__(self, level):
+    def __init__(self):
         """init pygame and the sound mixer"""
         pygame.init()
         pygame.mixer.init()
@@ -19,14 +20,10 @@ class Game(object):
         self.clock = pygame.time.Clock()
         
         """init the world and the characters"""
-        self.level = None
-        self.loadLevel(level)
+        self.level = world.World()
         self.vp = viewport.Viewport(pygame.Rect(0,0,640,480))
         #MAY BE OVERKILL
-        if level == 0:
-            self.tempvp = pygame.image.load("Images/level2.png")
-        else:
-            self.tempvp = pygame.image.load("Images/bck.png")
+        self.tempvp = pygame.image.load("Images/bck.png")
         self.player = None
         self.loadPlayer()
         
@@ -54,57 +51,13 @@ class Game(object):
         self.HPText = self.font.render("HP: ", 1, (255,255,255))
         self.scoreText = self.font.render("Score: ", 1, (255,255,255))
         self.running = True
-    
-    def loadLevel(self, level):
-        if level == 0:
-            solids = [pygame.Rect(0, 0, 10, 480),
-                      pygame.Rect(3790, 0, 10, 480),
-                      pygame.Rect(0, 103, 3800, 10),
-                      pygame.Rect(0, 367, 925, 113),
-                      pygame.Rect(1144, 367, 770, 113),
-                      pygame.Rect(2190, 367, 423, 113),
-                      pygame.Rect(2715, 367, 56, 113),
-                      pygame.Rect(2892, 367, 908, 113)]
         
-            platform = [pygame.Rect(333, 343,117, 24),
-                        pygame.Rect(450, 289,116, 78),
-                        pygame.Rect(1518, 294,226, 73),
-                        pygame.Rect(1869, 244, 118, 23),
-                        pygame.Rect(2141, 244,118, 23),
-                        pygame.Rect(2487, 288, 116, 78),
-                        pygame.Rect(2994,244, 118,23)]
-            
-            self.level = world.World("Images/level2.png", solids, platform)
-        else:
-            solids = [pygame.Rect(0, 0, 3800, 10),
-                      pygame.Rect(0, 470, 3800, 10),
-                      pygame.Rect(0, 0, 10, 470),
-                      pygame.Rect(3790, 0, 10, 470)]
-        
-            platform = [pygame.Rect(410, 398,100, 20),
-                        pygame.Rect(540, 382,100, 20),
-                        pygame.Rect(934, 408,100, 20),
-                        pygame.Rect(1450, 405,100, 20),
-                        pygame.Rect(1573, 377,100, 20),
-                        pygame.Rect(1705, 371,100, 20),
-                        pygame.Rect(2605, 407, 100, 20),
-                        pygame.Rect(2605,362, 100, 20),
-                        pygame.Rect(2605,319, 100, 20),
-                        pygame.Rect(2605,274, 100, 20),
-                        pygame.Rect(2605,223, 100, 20),
-                        pygame.Rect(2605,168, 100, 20),
-                        pygame.Rect(3161,192, 100, 20),
-                        pygame.Rect(3290,245, 100, 20),
-                        pygame.Rect(3295,372, 100, 20),
-                        pygame.Rect(3420,296, 100, 20),
-                        pygame.Rect(3550,343, 100, 20)]
-            self.level = world.World("Images/bck.png", solids, platform)    
     def handleEnemies(self, event):
         pass
     
     def pause(self):
         loop = 1
-        menu2 = menu.Menu('Images/menu.png','Images/com.png')
+        menu2 = inGameMenu.InGame('Images/ingamemenu.png','Images/dink.png')
         test = menu2.handle_event()
         
         while loop:
@@ -114,6 +67,8 @@ class Game(object):
                 elif test == 0:
                     loop = 0
                     self.running = False
+                elif test == 1:
+                    loop = 0
 
     def update(self):
 
@@ -199,12 +154,12 @@ class Game(object):
                                 "right-run4": pygame.Rect(135, 70, 35, 45),
                                 "right-run5": pygame.Rect(175, 70, 35, 45),
                                 "right-run6": pygame.Rect(225, 70, 35, 45)},
-                  "run-left": {"left-run6": pygame.Rect(433, 59, 32, 45),
-                               "left-run5": pygame.Rect(395, 59, 26, 45),
-                               "left-run4": pygame.Rect(360, 70, 26, 45),
-                               "left-run3": pygame.Rect(330, 70, 26, 45),
+                  "run-left": {"left-run1": pygame.Rect(265, 70, 26, 45),
                                "left-run2": pygame.Rect(298, 70, 26, 45),
-                               "left-run1": pygame.Rect(265, 70, 26, 45)},
+                               "left-run3": pygame.Rect(330, 70, 26, 45),
+                               "left-run4": pygame.Rect(360, 70, 26, 45),
+                               "left-run5": pygame.Rect(395, 59, 26, 45),
+                               "left-run6": pygame.Rect(433, 59, 32, 45)},
                   "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
                                    "right-attack2": pygame.Rect(52, 130, 44, 45),
                                    "right-attack3": pygame.Rect(100, 130, 50, 45),
@@ -217,7 +172,7 @@ class Game(object):
                                   "left-attack4": pygame.Rect(508, 121, 67, 45),
                                   "left-attack5": pygame.Rect(459, 120, 42, 45),
                                   "left-attack6": pygame.Rect(377, 127, 76, 45)}}
-        velocity = vector2d.Vector2D(5,12)
+        velocity = vector2d.Vector2D(5,15)
         spriteSheet = pygame.image.load('Images/johnmorris.png')
         self.player = character.Player(spriteSheet, actions, velocity)
         self.player.setSpriteSheetCoord(actions["right"]["right"])
@@ -229,11 +184,8 @@ if __name__ == "__main__":
         menu1 = menu.Menu('Images/menu.png','Images/com.png')
         print "this is where you call level1 for 1 and level2 for 2 and quit the game if 0 " 
         test = menu1.handle_event()
-        if test == 2:
-            game = Game(1)
-            game.run()
-        elif test == 1:
-            game = Game(0)
+        if test == 1:
+            game = Game()
             game.run()
         elif test == 0:
             sys.exit(0)
