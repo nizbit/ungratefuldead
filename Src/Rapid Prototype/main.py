@@ -170,7 +170,9 @@ class Game(object):
                 sys.exit()
             if event.type == pygame.KEYDOWN:    
                 if event.key == pygame.K_ESCAPE:
+                    self.bckMusic.pause()
                     self.pause()
+                    self.bckMusic.unpause()
                     
         if self.player.getRect().top > self.vp.rect.bottom or \
         self.player.getRect().bottom < self.vp.rect.top:
