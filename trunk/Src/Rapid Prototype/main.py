@@ -52,6 +52,7 @@ class Game(object):
         self.killSound = pygame.mixer.Sound("Sounds/killSound.wav")
         self.coinSound = pygame.mixer.Sound("Sounds/coinSound.wav")
         self.gameOverSound = pygame.mixer.Sound("Sounds/tpirhorns.ogg")
+        self.gameOverSound.set_volume(.1)
         self.coinSound.set_volume(.05)
         self.killSound.set_volume(.25)
         self.bckMusic = pygame.mixer.music 
@@ -345,6 +346,7 @@ class Game(object):
             self.player.setPosition(50,300)
             self.vp.rect.left = 0
             self.running = True
+            
             self.bckMusic.play()
         else:
             self.gameOverSound.play()
