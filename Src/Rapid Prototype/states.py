@@ -176,6 +176,7 @@ class AttackingState(State):
     def __init__(self, character, rightFrames, leftFrames):
         super(AttackingState,self).__init__(character, rightFrames, leftFrames)
         self.hurtSound = pygame.mixer.Sound("Sounds/whip.wav")
+        self.hurtSound.set_volume(.1)
     def act(self):
         """
         Inject projectile into the world, based upon the current type of
