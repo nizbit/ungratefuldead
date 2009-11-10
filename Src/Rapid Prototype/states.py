@@ -44,7 +44,7 @@ class State(object):
         dictionary
         """
         self._counter += 1
-        if self._counter > 5:
+        if self._counter > 3:
             self._counter = 0
             self._frameNum += 1
         if frameSet == "right":
@@ -181,7 +181,10 @@ class AttackingState(State):
         Inject projectile into the world, based upon the current type of
         weapon
         """
-        pass
+        if self._frameNum >= len(self._leftFrames) - 3:
+            self._character.attacking = True
+        else:
+            self._character.attacking = False
     
     def __str__(self):
         return "AttackingState"

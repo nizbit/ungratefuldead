@@ -60,7 +60,7 @@ class Game(object):
     
     def loadLevel(self, level):
         if level == 0:
-            solids = [pygame.Rect(0, 0, 10, 480),
+            solids = [pygame.Rect(0, 0, 40, 480),
                       pygame.Rect(3790, 0, 10, 480),
                       pygame.Rect(0, 103, 3800, 10),
                       pygame.Rect(0, 367, 925, 113),
@@ -99,7 +99,7 @@ class Game(object):
         else:
             solids = [pygame.Rect(0, 0, 3800, 10),
                       pygame.Rect(0, 470, 3800, 10),
-                      pygame.Rect(0, 0, 10, 470),
+                      pygame.Rect(0, 0, 40, 470),
                       pygame.Rect(3790, 0, 10, 470)]
         
             platform = [pygame.Rect(410, 398,100, 20),
@@ -173,8 +173,39 @@ class Game(object):
             if event.type == pygame.KEYDOWN:    
                 if event.key == pygame.K_ESCAPE:
                     self.pause()
-                    
-        self.player.update(temp)
+        if self.player.getRect().top > self.vp.rect.bottom or \
+        self.player.getRect().bottom < self.vp.rect.top:
+            self.player.getStateMachine().kill()
+            self.running = False
+                       
+        else:
+            self.player.update(temp)
+        
+        killList = []
+        for enemy in self.enemies:
+            if self.player.attacking is True and \
+            self.player.getRect().colliderect(enemy.getRect()):
+                if enemy.HP > 1:
+                    enemy.HP -= 10
+                    coll = self.player.handleCollision("enemy", enemy.getRect())
+                    self.player.getStateMachine().pushEnemy(enemy, coll)
+                else:
+                    killList.append(enemy)
+               
+            elif self.player.getRect().colliderect(enemy.getRect()):
+                if self.player.HP > 1:
+                    self.player.HP -= 1
+                else:
+                    print "dead"
+                coll = self.player.handleCollision("enemy", enemy.getRect())
+                self.player.getStateMachine().pushEnemy(enemy, coll)
+        for enemy in killList:
+            self.enemies.remove(enemy)
+            enemy = None
+            
+        for enemy in self.enemies:
+            enemy.update()
+        
         for solid in self.level.solids:
             if self.player.getRect().colliderect(solid):
                 self.player.handleCollision("object", solid)
@@ -182,19 +213,31 @@ class Game(object):
         for platform in self.level.platform:
             if self.player.getRect().colliderect(platform):
                 self.player.handleCollision("object", platform)
+        
+        del killList[:]
+        
         for enemy in self.enemies:
-            enemy.update()
+            if enemy.getRect().top > self.vp.rect.bottom or \
+            enemy.getRect().bottom < self.vp.rect.top:
+                killList.append(enemy)
+        
+        for enemy in killList:
+            self.enemies.remove(enemy)
+            enemy = None
+        
         if self.player.getRect().left >= self.vp.rect.right - 300 and \
         self.player.getRect().left + 300 <= 3800:
-            self.vp.rect.right += self.player.velocity.x#self.player.getRect().left + 300
-        if self.player.getRect().right <= self.vp.rect.left + 300 and \
-        self.player.getRect().right - 300 >= 0:
-            self.vp.rect.left += self.player.velocity.x#self.player.getRect().right - 300
+            self.vp.rect.right = self.player.getRect().left + 300
+        if self.player.getRect().left <= self.vp.rect.left + 300 and \
+        self.player.getRect().left - 300 >= 0:
+            self.vp.rect.left = self.player.getRect().left - 300
         if self.vp.rect.right > 3800:
             self.vp.rect.right = 3800
         if self.vp.rect.left < 0:
             self.vp.rect.left = 0
-                
+        if self.running == False:
+            self.reset()
+           
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
@@ -240,7 +283,16 @@ class Game(object):
             self.update()
             self.render()
             self.clock.tick(60)
-            
+    def reset(self):
+        if self.player.lives > 1:
+            self.player.HP = 100
+            self.player.lives -= 1
+            if self.player.getStateMachine().getCurrentStates().has_key("dead"):
+                del self.player.getStateMachine().getCurrentStates()["dead"]
+            self.player.setPosition(50,300)
+            self.vp.rect.left = 0
+            self.running = True
+                    
     def loadPlayer(self):
         actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
                   "left": {"left": pygame.Rect(265, 20, 35, 45)},
@@ -294,7 +346,7 @@ class Game(object):
                                "left-run7": pygame.Rect(508, 7, 40, 76)},
                   "attack-right": {"right": pygame.Rect(120, 4, 40, 80)},
                   "attack-left": {"left": pygame.Rect(838, 5, 40, 80)}}
-        zombieVelocity = vector2d.Vector2D(3,5)
+        zombieVelocity = vector2d.Vector2D(1,5)
         
         zombieSpriteSheet2 = pygame.image.load('Images/GR-Zombie.png').convert_alpha()
         zombieActions2 = {"right": {"right": pygame.Rect(856,70,41,53)},
@@ -331,7 +383,7 @@ class Game(object):
                                           "left-attack4": pygame.Rect(139, 349,46,47),
                                           "left-attack5": pygame.Rect(73, 353,51,43),
                                           "left-attack6": pygame.Rect(7, 355 ,53,40)}}
-        zombieVelocity2 = vector2d.Vector2D(3,5)
+        zombieVelocity2 = vector2d.Vector2D(1,5)
         tempRect = pygame.Rect(0,0,0,0)
         tempWorldRects = []
         

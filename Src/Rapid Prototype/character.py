@@ -38,7 +38,7 @@ class Character(object):
         self._lives = 5
         
         self.MAX_VELOCITY = MAX_VELOCITY
-        
+        self.attacking = False
         self._direction = "right"
     def setSpriteSheet(self, spriteSheet):
         """
@@ -391,9 +391,12 @@ if __name__ == "__main__":
         #player = NPC(spriteSheet, actions, velocity, "blah", "a", platform4, pList, "b")
         #player.HP = 5
         player = Player(spriteSheet, actions, velocity)
+        
+        
+                
         player.setSpriteSheetCoord(actions["right"]["right"])
         player.setPosition(50,200)
-               
+        projectileList = []   
         clock = pygame.time.Clock()
         buf = 11
         running = True
@@ -404,12 +407,23 @@ if __name__ == "__main__":
                     player.handleCollision("object", platform)
             if player.getRect().colliderect(platform4):
                 player.handleCollision("enemy", platform4)
+            if player.getStateMachine().getCurrentStates().has_key("attack"):
+                bulletSound = pygame.mixer.Sound("Sounds/hit.wav")
+                bulletSound.set_volume(.25)
+                bulletImage = pygame.image.load("Images/bulletTest.png").convert_alpha()
+                bulletRect = bulletImage.get_rect()
+                bulletVelocity = vector2d.Vector2D(1,1)
+                bullet = item.Projectile(bulletImage,bulletRect,"bullet",bulletSound,bulletVelocity,1,1)
+                projectileList.append(bullet)
             
             player.getStateMachine().handleAnimation()
             
             clock.tick(60)
-            screen.fill((0,0,0))
-            
+            screen.fill((100,100,0))
+            print len(projectileList)
+            for bullet in projectileList:
+                bullet.update()
+                screen.blit(bullet.getImage(),bullet.getRect())
             for p in pList:
                 screen.blit(temp,p,p)
             screen.blit(enemy,platform4)
