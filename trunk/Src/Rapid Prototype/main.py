@@ -197,6 +197,7 @@ class Game(object):
         if self.player.getRect().top > self.vp.rect.bottom or \
         self.player.getRect().bottom < self.vp.rect.top:
             self.player.getStateMachine().kill()
+            self.bckMusic.stop()
             self.running = False
             self.screen.blit(self.deadImage, self.deadImage.get_rect())
             pygame.display.flip()
@@ -222,6 +223,7 @@ class Game(object):
                 if self.player.HP > 1:
                     self.player.HP -= 1
                 else:
+                    self.bckMusic.stop()
                     self.running = False
                     self.screen.blit(self.deadImage, self.deadImage.get_rect())
                     pygame.display.flip()
