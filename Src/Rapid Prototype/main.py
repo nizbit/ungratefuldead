@@ -283,45 +283,46 @@ class Game(object):
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
-        self.level.image.blit(self.tempvp,self.vp.rect,self.vp.rect)
-        
-        self.level.image.blit(self.player.getSpriteSheet(),self.player.getRect(),self.player.getSpriteSheetCoord())
-        if self.vp.rect.inflate(50,0).contains(self.coinRect):
-            self.level.image.blit(self.coin,self.coinRect)
-        for enemy in self.enemies:
-            if self.vp.rect.inflate(50,50).contains(enemy.getRect()):
-            #print enemy.getSpriteSheetCoord()
-                self.level.image.blit(enemy.getSpriteSheet(),enemy.getRect(),enemy.getSpriteSheetCoord())
-        
-        self.screen.blit(self.level.image.subsurface(self.vp.rect),(0,0))        
-        
-        
+        if self.running:
+            self.level.image.blit(self.tempvp,self.vp.rect,self.vp.rect)
             
-        if self.player.HP <= 0:
-            self.screen.blit(self.HPText, (0,0))
-            self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
-            self.screen.blit(self.tempText, (125, 0))
+            self.level.image.blit(self.player.getSpriteSheet(),self.player.getRect(),self.player.getSpriteSheetCoord())
+            if self.vp.rect.inflate(50,0).contains(self.coinRect):
+                self.level.image.blit(self.coin,self.coinRect)
+            for enemy in self.enemies:
+                if self.vp.rect.inflate(50,50).contains(enemy.getRect()):
+                #print enemy.getSpriteSheetCoord()
+                    self.level.image.blit(enemy.getSpriteSheet(),enemy.getRect(),enemy.getSpriteSheetCoord())
             
-            self.screen.blit(self.scoreText, (0,25))
-            self.tempText = self.font.render(str(self.score), 1, (255,255,255))
-            self.screen.blit(self.tempText, (75, 25))
-            
-            #self.screen.blit(self.gameOverText, (250,250))
-        else:
-            self.screen.blit(self.HPText, (0,0))
-            self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
-            self.screen.blit(self.tempText, (50, 0))
-            
-            self.screen.blit(self.livesText, (0,50))
-            self.tempText = self.font.render(str(self.player.lives),1, (255,255,255))
-            self.screen.blit(self.tempText, (75, 50))
+            self.screen.blit(self.level.image.subsurface(self.vp.rect),(0,0))        
             
             
-            self.screen.blit(self.scoreText, (0,25))
-            self.tempText = self.font.render(str(self.score), 1, (255,255,255))
-            self.screen.blit(self.tempText, (75, 25))
-            
-        pygame.display.flip()
+                
+            if self.player.HP <= 0:
+                self.screen.blit(self.HPText, (0,0))
+                self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
+                self.screen.blit(self.tempText, (125, 0))
+                
+                self.screen.blit(self.scoreText, (0,25))
+                self.tempText = self.font.render(str(self.score), 1, (255,255,255))
+                self.screen.blit(self.tempText, (75, 25))
+                
+                #self.screen.blit(self.gameOverText, (250,250))
+            else:
+                self.screen.blit(self.HPText, (0,0))
+                self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
+                self.screen.blit(self.tempText, (50, 0))
+                
+                self.screen.blit(self.livesText, (0,50))
+                self.tempText = self.font.render(str(self.player.lives),1, (255,255,255))
+                self.screen.blit(self.tempText, (75, 50))
+                
+                
+                self.screen.blit(self.scoreText, (0,25))
+                self.tempText = self.font.render(str(self.score), 1, (255,255,255))
+                self.screen.blit(self.tempText, (75, 25))
+                
+            pygame.display.flip()
         
         
     def run(self):
