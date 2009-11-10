@@ -147,7 +147,7 @@ class Game(object):
     
     def pause(self):
         loop = 1
-        menu2 = inGameMenu.InGame('Images/ingamemenu.png','Images/dink.png')
+        menu2 = inGameMenu.InGame('Images/ingamemenu.png','Images/mask.png')
         test = menu2.handle_event()
         
         while loop:
@@ -157,14 +157,12 @@ class Game(object):
                 elif test == 0:
                     loop = 0
                     self.running = False
+                    self.bckMusic.stop()
                 elif test == 1:
                     loop = 0
 
     def update(self):
-
         #print "player velocity: ", self.player.x_velocity
-        
-        
         """loop through the events"""
         temp = pygame.event.get()
         for event in temp:
@@ -173,6 +171,7 @@ class Game(object):
             if event.type == pygame.KEYDOWN:    
                 if event.key == pygame.K_ESCAPE:
                     self.pause()
+                    
         if self.player.getRect().top > self.vp.rect.bottom or \
         self.player.getRect().bottom < self.vp.rect.top:
             self.player.getStateMachine().kill()
