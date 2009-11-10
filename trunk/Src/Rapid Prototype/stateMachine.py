@@ -45,8 +45,8 @@ class StateMachine(object):
                 
         self._actions = {"falling": self._fallingState}
         self.isJumping = False
-    def getCurrentState(self):
-        return self._currentState
+    def getCurrentStates(self):
+        return self._actions
     
     def handleAnimation(self):
         """
@@ -144,6 +144,7 @@ class StateMachine(object):
                 typeOfColl = "top"
             self._character.velocity.y = 0      
         return typeOfColl
+    
     def act(self):
         for item in self._actions.items():
             item[1].act()
@@ -151,11 +152,18 @@ class StateMachine(object):
         if self._actions.has_key("jump"):
             del self._actions["jump"]
             
-            
+    def kill(self):
+        
+        if self._actions.has_key("runRight"):
+            del self._actions["runRight"]
+        if self._actions.has_key("runLeft"):
+            del self._actions["runLeft"]
+        self._actions["dead"] = self._deadState
+                
     def move(self):
         self._character.getRect().left += self._character.velocity.x
         self._character.getRect().top += self._character.velocity.y
-    
+        
 class PlayerStateMachine(StateMachine):
     def __init__(self, character, sprites):
         """
@@ -170,18 +178,47 @@ class PlayerStateMachine(StateMachine):
         "character", "item", or "solids" and changes the state accordingly. The
         new state's act() method is then called.
         """
+        coll = "n/a"
+        amount = 50
         if type == "object":
             self.translate(rect)
         if type == "enemy":
-            self.translate(rect)
-            if self._character.HP >= 1:
-                self._character.HP -= 1
-                print self._character.HP
-            else:
-                if self._character.lives >= 1:
-                    self._character.lives -= 1
-                print "DEAD!" 
-    
+            
+            coll = self.translate(rect)
+            if self._character.attacking:
+                if coll == "right":
+                    rect.left += amount
+                elif coll == "left":
+                    rect.right -= amount
+                elif coll == "top":
+                    rect.bottom -= amount
+                else:
+                    rect.top += amount
+        return coll
+        """
+        if self._character.HP >= 1:
+            self._character.HP -= 1
+            print self._character.HP
+        else:
+            if self._character.lives >= 1:
+                self._character.lives -= 1
+            print "DEAD!" 
+        """
+    def pushEnemy(self, enemy, direction):
+        amount = 150
+        if direction == "right":
+            
+            enemy.right += amount
+        elif direction == "left":
+            
+            enemy.left -= amount
+        elif direction == "top":
+            
+            enemy.top -= amount
+        elif direction == "bottom":
+            
+            enemy.bottom += amount
+            
     def handleEvent(self, events):
         """
         Based on the event, set currentState and call act(). Variation of the
@@ -237,9 +274,12 @@ class PlayerStateMachine(StateMachine):
                 #elif event.key == pygame.K_SPACE:
                 #    del self._actions["space"]
                 elif event.key == pygame.K_LSHIFT:
-                    self._actions["attack"].resetFrames()
+                    if self._actions.has_key("attack"):
+                        self._actions["attack"].resetFrames()
                     self.handleAnimation()
-                    del self._actions["attack"]
+                    if self._actions.has_key("attack"):
+                        del self._actions["attack"]
+                    self._character.attacking = False
         self.act()
     
 class EnemyStateMachine(StateMachine):

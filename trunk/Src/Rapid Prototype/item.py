@@ -47,13 +47,13 @@ class Item(object):
         
     
 class Weapon(Item):
-    def __init__(self, image, rect, name, projectile=None):
+    def __init__(self, image, rect, name, sound, projectile=None):
         '''
         ** call base class constructor
         ** set weapon items projectile ==> Projectile
         ** (a weapon only has a corresponding Projectile)
         '''
-        super(Projectile, self).__init__(image, rect, name, None)
+        super(Projectile, self).__init__(image, rect, name, sound, None)
         self._projectile = projectile
         
     def getProjectile(self):
