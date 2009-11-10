@@ -135,7 +135,7 @@ class JumpingState(State):
         Call the base class' constructor
         """
         super(JumpingState,self).__init__(character, rightFrames, leftFrames)
-
+        
     def act(self):
         """
         Set the y velocity to MAX_VELOCITY and with each call, decrement until
@@ -143,7 +143,7 @@ class JumpingState(State):
         need to be performed so do nothing
         """
         #if self._character.velocity.y == 0:
-
+        
         self._character.velocity.y = -1 * self._character.MAX_VELOCITY.y
         #self._character.getRect().move_ip(0, self._character.velocity.y)
         """   
@@ -175,12 +175,15 @@ class FallingState(State):
 class AttackingState(State):
     def __init__(self, character, rightFrames, leftFrames):
         super(AttackingState,self).__init__(character, rightFrames, leftFrames)
-    
+        self.hurtSound = pygame.mixer.Sound("Sounds/whip.wav")
     def act(self):
         """
         Inject projectile into the world, based upon the current type of
         weapon
         """
+        if self._frameNum == len(self._leftFrames) - 3 and \
+        self._counter == 0:
+            self.hurtSound.play()
         if self._frameNum >= len(self._leftFrames) - 3:
             self._character.attacking = True
         else:

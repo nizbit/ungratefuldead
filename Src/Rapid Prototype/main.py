@@ -33,6 +33,17 @@ class Game(object):
         
         self.enemies = []
         self.loadEnemies(level)
+        
+        """
+        Images
+        """
+        self.deadImage = pygame.image.load("Images/dead.png").convert()
+        self.gameOverImage = pygame.image.load("Images/gameover.png").convert()
+        self.winImage = pygame.image.load("Images/win.png").convert()
+        self.coin = pygame.image.load("Images/copperCoin.png").convert_alpha()
+        self.coinRect = self.coin.get_rect()
+        self.coinRect.top = 200
+        self.coinRect.left = 3600
         """
         Sounds
         """
@@ -40,11 +51,12 @@ class Game(object):
         self.hurtSound = pygame.mixer.Sound("Sounds/hit.wav")
         self.killSound = pygame.mixer.Sound("Sounds/killSound.wav")
         self.coinSound = pygame.mixer.Sound("Sounds/coinSound.wav")
+        self.gameOverSound = pygame.mixer.Sound("Sounds/tpirhorns.ogg")
         self.coinSound.set_volume(.05)
         self.killSound.set_volume(.25)
         self.bckMusic = pygame.mixer.music 
         self.bckMusic.load("Sounds/music.ogg")
-        self.bckMusic.set_volume(.35)
+        self.bckMusic.set_volume(.95)
         self.bckMusic.play()
         
         """
@@ -52,12 +64,18 @@ class Game(object):
         """
         self.score = 0
         self.font = pygame.font.Font(None, 30)
-        self.winText = self.font.render("YOU WIN!!!", 1, (255,255,255))
+        self.winText = self.font.render("We don't have a boss yet, so...YOU WIN!!!", 1, (255,255,255))
         self.gameOverText = self.font.render("GAME OVER", 1, (255,255,255))
         self.HPText = self.font.render("HP: ", 1, (255,255,255))
+        self.livesText = self.font.render("Lives: ", 1, (255,255,255))
         self.scoreText = self.font.render("Score: ", 1, (255,255,255))
+        
+        """
+        Flags
+        """
         self.running = True
-    
+        self.hackyQuit = False
+        self.won = False
     def loadLevel(self, level):
         if level == 0:
             solids = [pygame.Rect(0, 0, 40, 480),
@@ -157,6 +175,7 @@ class Game(object):
                 elif test == 0:
                     loop = 0
                     self.running = False
+                    self.hackyQuit = True
                     self.bckMusic.stop()
                 elif test == 1:
                     loop = 0
@@ -178,7 +197,10 @@ class Game(object):
         self.player.getRect().bottom < self.vp.rect.top:
             self.player.getStateMachine().kill()
             self.running = False
-                       
+            self.screen.blit(self.deadImage, self.deadImage.get_rect())
+            pygame.display.flip()
+            pygame.time.wait(3000)
+                      
         else:
             self.player.update(temp)
         
@@ -187,17 +209,22 @@ class Game(object):
             if self.player.attacking is True and \
             self.player.getRect().colliderect(enemy.getRect()):
                 if enemy.HP > 1:
-                    enemy.HP -= 10
+                    enemy.HP -= 20
                     coll = self.player.handleCollision("enemy", enemy.getRect())
                     self.player.getStateMachine().pushEnemy(enemy, coll)
                 else:
                     killList.append(enemy)
+                    self.killSound.play()
+                    self.score += 100 + self.player.HP + self.player.lives * 100
                
             elif self.player.getRect().colliderect(enemy.getRect()):
                 if self.player.HP > 1:
                     self.player.HP -= 1
                 else:
-                    print "dead"
+                    self.running = False
+                    self.screen.blit(self.deadImage, self.deadImage.get_rect())
+                    pygame.display.flip()
+                    pygame.time.wait(3000)
                 coll = self.player.handleCollision("enemy", enemy.getRect())
                 self.player.getStateMachine().pushEnemy(enemy, coll)
         for enemy in killList:
@@ -221,11 +248,23 @@ class Game(object):
             if enemy.getRect().top > self.vp.rect.bottom or \
             enemy.getRect().bottom < self.vp.rect.top:
                 killList.append(enemy)
+                
         
         for enemy in killList:
             self.enemies.remove(enemy)
             enemy = None
         
+            
+        if self.player.getRect().colliderect(self.coinRect):
+            self.won = True
+            self.screen.blit(self.winText, (100,200))
+            pygame.display.flip()
+            pygame.time.wait(2000)
+            self.screen.blit(self.winImage, self.winImage.get_rect())
+            pygame.display.flip()
+            pygame.time.wait(3000)
+            self.running = False
+            
         if self.player.getRect().left >= self.vp.rect.right - 300 and \
         self.player.getRect().left + 300 <= 3800:
             self.vp.rect.right = self.player.getRect().left + 300
@@ -245,13 +284,17 @@ class Game(object):
         self.level.image.blit(self.tempvp,self.vp.rect,self.vp.rect)
         
         self.level.image.blit(self.player.getSpriteSheet(),self.player.getRect(),self.player.getSpriteSheetCoord())
-        
+        if self.vp.rect.inflate(50,0).contains(self.coinRect):
+            self.level.image.blit(self.coin,self.coinRect)
         for enemy in self.enemies:
             if self.vp.rect.inflate(50,50).contains(enemy.getRect()):
             #print enemy.getSpriteSheetCoord()
                 self.level.image.blit(enemy.getSpriteSheet(),enemy.getRect(),enemy.getSpriteSheetCoord())
         
         self.screen.blit(self.level.image.subsurface(self.vp.rect),(0,0))        
+        
+        
+            
         if self.player.HP <= 0:
             self.screen.blit(self.HPText, (0,0))
             self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
@@ -261,16 +304,21 @@ class Game(object):
             self.tempText = self.font.render(str(self.score), 1, (255,255,255))
             self.screen.blit(self.tempText, (75, 25))
             
-            self.screen.blit(self.gameOverText, (250,250))
+            #self.screen.blit(self.gameOverText, (250,250))
         else:
             self.screen.blit(self.HPText, (0,0))
             self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
             self.screen.blit(self.tempText, (50, 0))
             
+            self.screen.blit(self.livesText, (0,50))
+            self.tempText = self.font.render(str(self.player.lives),1, (255,255,255))
+            self.screen.blit(self.tempText, (75, 50))
+            
+            
             self.screen.blit(self.scoreText, (0,25))
             self.tempText = self.font.render(str(self.score), 1, (255,255,255))
             self.screen.blit(self.tempText, (75, 25))
-        
+            
         pygame.display.flip()
         
         
@@ -285,7 +333,11 @@ class Game(object):
             self.render()
             self.clock.tick(60)
     def reset(self):
-        if self.player.lives > 1:
+        self.bckMusic.stop()
+        if self.won:
+            pass
+        
+        elif self.player.lives > 1 and not self.hackyQuit:
             self.player.HP = 100
             self.player.lives -= 1
             if self.player.getStateMachine().getCurrentStates().has_key("dead"):
@@ -293,6 +345,12 @@ class Game(object):
             self.player.setPosition(50,300)
             self.vp.rect.left = 0
             self.running = True
+            self.bckMusic.play()
+        else:
+            self.gameOverSound.play()
+            self.screen.blit(self.gameOverImage, self.gameOverImage.get_rect())
+            pygame.display.flip()
+            pygame.time.wait(3000)
                     
     def loadPlayer(self):
         actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
