@@ -170,7 +170,7 @@ class PlayerStateMachine(StateMachine):
         Call the parent class' __init__
         """
         super(PlayerStateMachine, self).__init__(character, sprites)
-    
+        self.jumpSound = pygame.mixer.Sound("Sounds/jump.wav")
     
     def handleCollision(self, type, rect):
         """
@@ -206,6 +206,7 @@ class PlayerStateMachine(StateMachine):
         """
     def pushEnemy(self, enemy, direction):
         amount = 150
+        
         if direction == "right":
             
             enemy.right += amount
@@ -254,6 +255,7 @@ class PlayerStateMachine(StateMachine):
                     if not self.isJumping:
                         self._actions["jump"] = self._jumpingState
                         self.isJumping = True
+                        self.jumpSound.play()
 
                 elif event.key == pygame.K_LSHIFT:
                     self._actions["attack"] = self._attackingState
