@@ -7,11 +7,8 @@ class Menu(object):
         self.bck = pygame.image.load(name1).convert()
         self.marker = pygame.image.load(name2).convert()
         self.rect = self.bck.get_rect()
-        #self.font = pygame.font.Font("Images/murder.ttf", 30)
-        #self.music = pygame.mixer.Sound("Sounds/zombie_nation")
-        self.menuMusic = pygame.mixer.music 
-        self.menuMusic.load("Sounds/zombie_nation.ogg")
-        self.menuMusic.set_volume(.25)
+        self.music = pygame.mixer.Sound("Sounds/zombie_nation.ogg")
+        self.music.set_volume(.35)
         self.colorkey = [0,0,0]
         self.marker.set_colorkey(self.colorkey)
         self.xcord = 50
@@ -23,7 +20,7 @@ class Menu(object):
         pygame.display.flip()
         
     def handle_event(self):
-        self.menuMusic.play()
+        self.music.play()
         self.running = True
         while self.running:
             """loop through the events"""
@@ -40,13 +37,14 @@ class Menu(object):
                         self.ycord -= 25
                     elif event.key == pygame.K_RETURN:
                         if self.ycord == 200:
+                            self.music.stop()
                             return 1
                         elif self.ycord == 225:
+                            self.music.stop()
                             return 2
                         elif self.ycord == 275:
+                            self.music.stop()
                             return 0
-                #print self.xcord
-                #print self.ycord
                 
             if self.ycord >= 280:
                 self.xcord = 50
