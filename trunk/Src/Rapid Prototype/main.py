@@ -258,6 +258,7 @@ class Game(object):
             
         if self.player.getRect().colliderect(self.coinRect):
             self.won = True
+            self.coinSound.play()
             self.screen.blit(self.winText, (100,200))
             pygame.display.flip()
             pygame.time.wait(2000)
