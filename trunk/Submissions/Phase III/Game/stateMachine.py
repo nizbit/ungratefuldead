@@ -43,10 +43,10 @@ class StateMachine(object):
         
         '''initialize current state to the base class and set to standing'''
                 
-        self._actions = {"falling": self._fallingState}
+        self._currentStates = {"falling": self._fallingState}
         self.isJumping = False
     def getCurrentStates(self):
-        return self._actions
+        return self._currentStates
     
     def handleAnimation(self):
         """
@@ -55,56 +55,56 @@ class StateMachine(object):
         """
         
         if self._character.getDirection() == "right":
-            if self._actions.has_key("attack"):
-                for state in self._actions:
-                    if self._actions[state].__str__() != "AttackingState":
-                        self._actions[state].resetFrames()
+            if self._currentStates.has_key("attack"):
+                for state in self._currentStates:
+                    if self._currentStates[state].__str__() != "AttackingState":
+                        self._currentStates[state].resetFrames()
                         
-                temp = self._actions["attack"].getFrame("right")
+                temp = self._currentStates["attack"].getFrame("right")
                 temp = self._sprites["attack-right"][temp]
                 self._character.setSpriteSheetCoord(temp)
-            elif self._actions.has_key("runRight"):
-                for state in self._actions:
-                    if self._actions[state].__str__() != "RunningState":
-                        self._actions[state].resetFrames()
-                temp = self._actions["runRight"].getFrame("right")
+            elif self._currentStates.has_key("runRight"):
+                for state in self._currentStates:
+                    if self._currentStates[state].__str__() != "RunningState":
+                        self._currentStates[state].resetFrames()
+                temp = self._currentStates["runRight"].getFrame("right")
                 temp = self._sprites["run-right"][temp]
                 self._character.setSpriteSheetCoord(temp)
         else:
             
-            if self._actions.has_key("attack"):
-                for state in self._actions:
-                    if self._actions[state].__str__() != "AttackingState":
-                        self._actions[state].resetFrames()
+            if self._currentStates.has_key("attack"):
+                for state in self._currentStates:
+                    if self._currentStates[state].__str__() != "AttackingState":
+                        self._currentStates[state].resetFrames()
                         
-                temp = self._actions["attack"].getFrame("left")
+                temp = self._currentStates["attack"].getFrame("left")
                 temp2 = self._sprites["attack-left"][temp]
                 self._character.setSpriteSheetCoord(temp2)
                 
-            elif self._actions.has_key("runLeft"):
-                for state in self._actions:
-                    if self._actions[state].__str__() != "RunningState":
-                        self._actions[state].resetFrames()
-                temp = self._actions["runLeft"].getFrame("left")
+            elif self._currentStates.has_key("runLeft"):
+                for state in self._currentStates:
+                    if self._currentStates[state].__str__() != "RunningState":
+                        self._currentStates[state].resetFrames()
+                temp = self._currentStates["runLeft"].getFrame("left")
                 temp = self._sprites["run-left"][temp]
                 self._character.setSpriteSheetCoord(temp)
-        if len(self._actions.keys()) == 1 and self._actions.has_key("falling"):
-            for state in self._actions:
-                self._actions[state].resetFrames()
+        if len(self._currentStates.keys()) == 1 and self._currentStates.has_key("falling"):
+            for state in self._currentStates:
+                self._currentStates[state].resetFrames()
             
             if self._character.getDirection() == "right":
-                self._actions["right"] = self._standingState
-                temp = self._actions["right"].getFrame("right")
+                self._currentStates["right"] = self._standingState
+                temp = self._currentStates["right"].getFrame("right")
                 temp = self._sprites["right"][temp]
                 
                 self._character.setSpriteSheetCoord(temp)
-                del self._actions["right"]
+                del self._currentStates["right"]
             else:
-                self._actions["left"] = self._standingState
-                temp = self._actions["left"].getFrame("left")
+                self._currentStates["left"] = self._standingState
+                temp = self._currentStates["left"].getFrame("left")
                 temp = self._sprites["left"][temp]
                 self._character.setSpriteSheetCoord(temp)
-                del self._actions["left"]
+                del self._currentStates["left"]
                     
     def handleCollision(self, type, rect):
         pass
@@ -146,19 +146,19 @@ class StateMachine(object):
         return typeOfColl
     
     def act(self):
-        for item in self._actions.items():
+        for item in self._currentStates.items():
             item[1].act()
                 
-        if self._actions.has_key("jump"):
-            del self._actions["jump"]
+        if self._currentStates.has_key("jump"):
+            del self._currentStates["jump"]
             
     def kill(self):
         
-        if self._actions.has_key("runRight"):
-            del self._actions["runRight"]
-        if self._actions.has_key("runLeft"):
-            del self._actions["runLeft"]
-        self._actions["dead"] = self._deadState
+        if self._currentStates.has_key("runRight"):
+            del self._currentStates["runRight"]
+        if self._currentStates.has_key("runLeft"):
+            del self._currentStates["runLeft"]
+        self._currentStates["dead"] = self._deadState
                 
     def move(self):
         self._character.getRect().left += self._character.velocity.x
@@ -231,56 +231,56 @@ class PlayerStateMachine(StateMachine):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    if self._actions.has_key("right"):
-                        del self._actions["right"]
-                    if self._actions.has_key("left"):
-                        del self._actions["left"]
-                    if self._actions.has_key("runLeft"):
-                        del self._actions["runLeft"]
+                    if self._currentStates.has_key("right"):
+                        del self._currentStates["right"]
+                    if self._currentStates.has_key("left"):
+                        del self._currentStates["left"]
+                    if self._currentStates.has_key("runLeft"):
+                        del self._currentStates["runLeft"]
                                              
                     self._character.setDirection("right")
-                    self._actions["runRight"] = self._runningState
+                    self._currentStates["runRight"] = self._runningState
                     
                 if event.key == pygame.K_LEFT:
-                    if self._actions.has_key("right"):
-                        del self._actions["right"]
-                    if self._actions.has_key("left"):
-                        del self._actions["left"]
-                    if self._actions.has_key("runRight"):
-                        del self._actions["runRight"]
+                    if self._currentStates.has_key("right"):
+                        del self._currentStates["right"]
+                    if self._currentStates.has_key("left"):
+                        del self._currentStates["left"]
+                    if self._currentStates.has_key("runRight"):
+                        del self._currentStates["runRight"]
                     self._character.setDirection("left")
-                    self._actions["runLeft"] = self._runningState
+                    self._currentStates["runLeft"] = self._runningState
                         
                 elif event.key == pygame.K_SPACE:
                     if not self.isJumping:
-                        self._actions["jump"] = self._jumpingState
+                        self._currentStates["jump"] = self._jumpingState
                         self.isJumping = True
                         self.jumpSound.play()
 
                 elif event.key == pygame.K_LSHIFT:
-                    self._actions["attack"] = self._attackingState
+                    self._currentStates["attack"] = self._attackingState
                 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT:
-                    if self._actions.has_key("runRight"):
-                        del self._actions["runRight"]
+                    if self._currentStates.has_key("runRight"):
+                        del self._currentStates["runRight"]
                     if self._character.getDirection() == "right":
                         self._character.velocity.x = 0
-                    #self._actions["right"] = self._standingState
+                    #self._currentStates["right"] = self._standingState
                 elif event.key == pygame.K_LEFT:
-                    if self._actions.has_key("runLeft"):
-                        del self._actions["runLeft"]
+                    if self._currentStates.has_key("runLeft"):
+                        del self._currentStates["runLeft"]
                     if self._character.getDirection() == "left":
                         self._character.velocity.x = 0
-                    #self._actions["left"] = self._standingState
+                    #self._currentStates["left"] = self._standingState
                 #elif event.key == pygame.K_SPACE:
-                #    del self._actions["space"]
+                #    del self._currentStates["space"]
                 elif event.key == pygame.K_LSHIFT:
-                    if self._actions.has_key("attack"):
-                        self._actions["attack"].resetFrames()
+                    if self._currentStates.has_key("attack"):
+                        self._currentStates["attack"].resetFrames()
                     self.handleAnimation()
-                    if self._actions.has_key("attack"):
-                        del self._actions["attack"]
+                    if self._currentStates.has_key("attack"):
+                        del self._currentStates["attack"]
                     self._character.attacking = False
         self.act()
     
@@ -296,8 +296,8 @@ class EnemyStateMachine(StateMachine):
         Call the parent class' __init__
         """
         super(EnemyStateMachine, self).__init__(character, sprites)
-        self._actions["runRight"] = self._runningState
-        self._actions["falling"] = self._fallingState
+        self._currentStates["runRight"] = self._runningState
+        self._currentStates["falling"] = self._fallingState
         self.counter = 0
         self.tRects = []
         for rect in topographyRects:
@@ -307,7 +307,7 @@ class EnemyStateMachine(StateMachine):
         if type == "object":
             self.counter += 1
             if self.counter % 17 == 0:
-                self._actions["jump"] = self._jumpingState
+                self._currentStates["jump"] = self._jumpingState
             typeOfColl = self.translate(rect)
             if typeOfColl == "right" or typeOfColl == "left":
                 self.turnAround()
@@ -317,9 +317,9 @@ class EnemyStateMachine(StateMachine):
             if self._character.HP >= 1:
                 self._character.HP -= 1
             else:
-                self._actions.clear()
-                self._actions["falling"] = self._fallingState
-                self._actions["dead"] = self._deadState
+                self._currentStates.clear()
+                self._currentStates["falling"] = self._fallingState
+                self._currentStates["dead"] = self._deadState
 
             typeOfColl = self.translate(rect)
             if typeOfColl == "right" or typeOfColl == "left":
@@ -328,14 +328,14 @@ class EnemyStateMachine(StateMachine):
     def turnAround(self):
         if self._character.getDirection() == "right":
             self._character.setDirection("left")
-            if self._actions.has_key("runRight"):
-                del self._actions["runRight"]
-            self._actions["runLeft"] = self._runningState
+            if self._currentStates.has_key("runRight"):
+                del self._currentStates["runRight"]
+            self._currentStates["runLeft"] = self._runningState
         else:
             self._character.setDirection("right")
-            if self._actions.has_key("runLeft"):
-                del self._actions["runLeft"]
-            self._actions["runRight"] = self._runningState
+            if self._currentStates.has_key("runLeft"):
+                del self._currentStates["runLeft"]
+            self._currentStates["runRight"] = self._runningState
         self._character.velocity.x = 0
         
     def think(self):
@@ -343,10 +343,10 @@ class EnemyStateMachine(StateMachine):
         Based on the character's type, currentState, and level topography,
         change currentState to a different state
         """
-        for state in self._actions:
-            self._actions[state].act()
-        if self._actions.has_key("jump"):
-            del self._actions["jump"]
+        for state in self._currentStates:
+            self._currentStates[state].act()
+        if self._currentStates.has_key("jump"):
+            del self._currentStates["jump"]
         for rect in self.tRects:
             if self._character.getRect().colliderect(rect):
                 self.handleCollision("object", rect)
