@@ -53,7 +53,7 @@ class Weapon(Item):
         ** set weapon items projectile ==> Projectile
         ** (a weapon only has a corresponding Projectile)
         '''
-        super(Projectile, self).__init__(image, rect, name, sound, None)
+        super(Weapon, self).__init__(image, rect, name, sound)
         self._projectile = projectile
         
     def getProjectile(self):
