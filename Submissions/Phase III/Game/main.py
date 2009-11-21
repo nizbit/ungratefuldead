@@ -216,6 +216,17 @@ class Game(object):
         
         killList = []
         for enemy in self.enemies:
+            '''check projectiles against enemies'''
+            for projectile in self.player.getCurrentWeapon().getProjectileList():
+                if projectile.getRect().colliderect(enemy.getRect()):
+                    if enemy.HP > 1:
+                        enemy.HP -= 20
+                        self.player.getCurrentWeapon().removeProjectile(projectile)
+                    else:
+                        killList.append(enemy)
+                        self.killSound.play()
+                        self.score += 100 + self.player.HP + self.player.lives * 100
+                
             if self.player.attacking is True and \
             self.player.getRect().colliderect(enemy.getRect()):
                 if enemy.HP > 1:
@@ -236,7 +247,8 @@ class Game(object):
                     pygame.display.flip()
                     pygame.time.wait(3000)
                 coll = self.player.handleCollision("enemy", enemy.getRect())
-                self.player.getStateMachine().pushEnemy(enemy, coll)
+                self.player.getStateMachine().pushEnemy(enemy, coll)             
+                
         for enemy in killList:
             self.enemies.remove(enemy)
             enemy = None
