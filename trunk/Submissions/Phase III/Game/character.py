@@ -210,14 +210,6 @@ class Player(Character):
         """
         super(Player, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
         self._weapons = {}
-        
-        '''test projectiles ==> manipulate projectile through currentWeapon so we can change projectiles at will'''
-        '''self._bulletImage = pygame.image.load('Images/bullets.png')'''
-        """self._projectile = item.Projectile(self._bulletImage, 
-                                           self._rect, 
-                                           "testProjectile", 
-                                           None, 
-                                           vector2d.Vector2D(5,0))"""
         self._currentWeapon = item.Weapon(None, self._rect, "testWeapon", None)
         self._weapons["whip"] = self._currentWeapon
         

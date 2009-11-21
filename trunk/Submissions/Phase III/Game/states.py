@@ -183,7 +183,7 @@ class AttackingState(State):
         weapon
         """
         '''Add a projectile to the list of projectiles'''
-        if (self._character.getCurrentWeapon().getName() == "testWeapon"):
+        if (self._character.getCurrentWeapon().getName() == "testWeapon" and self._counter == 0 and self._frameNum == 1):
             self._bulletImage = pygame.image.load('Images/bullets.png')
             self._projectile = item.Projectile(self._bulletImage, 
                                 self._character.getRect(), 
