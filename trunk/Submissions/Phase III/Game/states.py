@@ -182,6 +182,16 @@ class AttackingState(State):
         Inject projectile into the world, based upon the current type of
         weapon
         """
+        '''Add a projectile to the list of projectiles'''
+        if (self._character.getCurrentWeapon().getName() == "testWeapon"):
+            self._bulletImage = pygame.image.load('Images/bullets.png')
+            self._projectile = item.Projectile(self._bulletImage, 
+                                self._character.getRect(), 
+                                "testProjectile", 
+                                None, 
+                                vector2d.Vector2D(5,0))
+            self._character.getCurrentWeapon().addProjectile(self._projectile)
+        
         if self._frameNum == len(self._leftFrames) - 3 and \
         self._counter == 0:
             self.hurtSound.play()

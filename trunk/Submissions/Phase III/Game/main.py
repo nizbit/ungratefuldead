@@ -199,6 +199,7 @@ class Game(object):
                     self.pause()
                     self.bckMusic.unpause()
                     
+        '''fall out of the level'''
         if self.player.getRect().top > self.vp.rect.bottom or \
         self.player.getRect().bottom < self.vp.rect.top:
             self.player.getStateMachine().kill()
@@ -208,7 +209,10 @@ class Game(object):
             pygame.time.wait(3000)
                       
         else:
+            '''update everything associated with the player: weapons, projectiles, rects etc...'''
             self.player.update(temp)
+            for projectile in self.player.getCurrentWeapon().getProjectileList():
+                projectile.update()
         
         killList = []
         for enemy in self.enemies:
@@ -292,6 +296,11 @@ class Game(object):
             self.level.image.blit(self.tempvp,self.vp.rect,self.vp.rect)
             
             self.level.image.blit(self.player.getSpriteSheet(),self.player.getRect(),self.player.getSpriteSheetCoord())
+            
+            '''blit the projectiles'''
+            for projectile in self.player.getCurrentWeapon().getProjectileList():
+                self.level.image.blit(projectile.getImage(), projectile.getRect())
+                
             if self.vp.rect.inflate(50,0).contains(self.coinRect):
                 self.level.image.blit(self.coin,self.coinRect)
             for enemy in self.enemies:

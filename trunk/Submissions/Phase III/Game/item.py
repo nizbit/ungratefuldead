@@ -54,6 +54,7 @@ class Weapon(Item):
         ** (a weapon only has a corresponding Projectile)
         '''
         super(Weapon, self).__init__(image, rect, name, sound)
+        self._projectileList = []
         self._projectile = projectile
         
     def getProjectile(self):
@@ -61,6 +62,12 @@ class Weapon(Item):
     
     def setProjectile(self, projectile):
         self._projectile = projectile
+        
+    def addProjectile(self, projectile):
+        self._projectileList.append(projectile)
+        
+    def getProjectileList(self):
+        return self._projectileList
 
 class Projectile(Item):
     def __init__(self, image, rect, name, sound, velocity, power=0, range=0):
