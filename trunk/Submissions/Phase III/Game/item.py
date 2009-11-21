@@ -66,6 +66,9 @@ class Weapon(Item):
     def addProjectile(self, projectile):
         self._projectileList.append(projectile)
         
+    def removeProjectile(self, projectile):
+        self._projectileList.remove(projectile)
+        
     def getProjectileList(self):
         return self._projectileList
 
