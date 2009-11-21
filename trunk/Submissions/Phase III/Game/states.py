@@ -183,13 +183,17 @@ class AttackingState(State):
         weapon
         """
         '''Add a projectile to the list of projectiles'''
+        if (self._character.getDirection() == "right"):
+            self._projectileXVelocity = 5
+        else:
+            self._projectileXVelocity = -5  
         if (self._character.getCurrentWeapon().getName() == "testWeapon" and self._counter == 0 and self._frameNum == 1):
             self._bulletImage = pygame.image.load('Images/bullets.png')
             self._projectile = item.Projectile(self._bulletImage, 
                                 self._character.getRect(), 
                                 "testProjectile", 
                                 None, 
-                                vector2d.Vector2D(5,0))
+                                vector2d.Vector2D(self._projectileXVelocity,0))
             self._character.getCurrentWeapon().addProjectile(self._projectile)
         
         if self._frameNum == len(self._leftFrames) - 3 and \
