@@ -189,6 +189,7 @@ class AttackingState(State):
             self._projectileXDirection = -1  
         '''**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
         if (self._character.getCurrentWeapon().getName() == "testWeapon" and self._counter == 0 and self._frameNum == 1):
+            '''I'll take this out later and put it in the init on State'''
             self._bulletImage = pygame.image.load('Images/bullets.png')
             self._projectile = item.Projectile(self._bulletImage, 
                                 self._character.getRect(), 
