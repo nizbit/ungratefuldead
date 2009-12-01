@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import status
 
 class game(object):
     def __init__(self):
@@ -32,7 +33,11 @@ class game(object):
         self.yCord = 100
         self.xCord = 180
 
+        self.counter = 100
+
+
     def upDate(self):
+        
         
         self.screen.blit(self.tempSurface, (0, 0))
         
@@ -41,7 +46,7 @@ class game(object):
         self.screen.blit(self.startGameTxt, (200, 130))
         self.screen.blit(self.settingsTxt, (200, 160))
         self.screen.blit(self.exitTxt, (200, 190))
-        
+        status1 = status.Status(self.screen,self.counter,self.counter,1)
         
         
     def render(self):
@@ -51,8 +56,10 @@ class game(object):
     def run(self):
         i = 1
       
-      
-        
+        if self.counter >= 1:
+            self.counter -= 1
+        else:
+            self.counter = 100
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
