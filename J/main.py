@@ -7,6 +7,8 @@ class game(object):
     def __init__(self):
         pygame.init()
         window = pygame.display.set_mode((640, 480))
+        
+        #pygame.display.toggle_fullscreen()
         pygame.display.set_caption("Hello")
         
         self.screen = pygame.display.get_surface()
@@ -18,6 +20,7 @@ class game(object):
         
         self.jImage = pygame.image.load('Images/currentSelection.png')
         
+        self.weapon = pygame.image.load('Images/currentWeaponTest.png')
                 
         self.clock = pygame.time.Clock()
 
@@ -51,7 +54,7 @@ class game(object):
         self.screen.blit(self.settingsTxt, (200, 160))
         self.screen.blit(self.exitTxt, (200, 190))
         
-        self.status1.upDate(self.counter,self.counter2, 1)
+        self.status1.upDate(self.counter,self.counter2, 1,self.weapon)
         
         
     def render(self):
@@ -68,7 +71,7 @@ class game(object):
         
       
         if self.counter >= 1:
-            self.counter -= .125
+            self.counter -= 1
         else:
             self.counter = 100
 
