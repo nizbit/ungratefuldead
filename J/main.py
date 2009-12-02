@@ -38,6 +38,7 @@ class game(object):
         self.counter = 100
         self.status1 = status.Status(self.screen, "youmurdererbb_reg.ttf")
 
+        self.counter2 = 1
 
     def upDate(self):
         
@@ -50,7 +51,7 @@ class game(object):
         self.screen.blit(self.settingsTxt, (200, 160))
         self.screen.blit(self.exitTxt, (200, 190))
         
-        self.status1.upDate(self.counter,self.counter, 1)
+        self.status1.upDate(self.counter,self.counter2, 1)
         
         
     def render(self):
@@ -59,6 +60,12 @@ class game(object):
 
     def run(self):
         i = 1
+        
+        if self.counter2 <= 1000000:
+            self.counter2 += 100
+        else:
+            self.counter2 = 1
+        
       
         if self.counter >= 1:
             self.counter -= .125
