@@ -40,7 +40,7 @@ class Character(object):
         self.MAX_VELOCITY = MAX_VELOCITY
         self.attacking = False
         self._direction = "right"
-    def setSpriteSheet(self, spriteSheet):
+    def setSpriteSheet(self, sprzipiteSheet):
         """
         Set class variable __spriteSheet to spriteSheet
         """
