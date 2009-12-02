@@ -14,6 +14,8 @@ class game(object):
         self.tempSurface = pygame.Surface((640, 480))
         self.tempSurface.fill((0,0,0))
         
+    
+        
         self.jImage = pygame.image.load('Images/currentSelection.png')
         
                 
@@ -34,6 +36,7 @@ class game(object):
         self.xCord = 180
 
         self.counter = 100
+        self.status1 = status.Status(self.screen, "youmurdererbb_reg.ttf")
 
 
     def upDate(self):
@@ -46,7 +49,8 @@ class game(object):
         self.screen.blit(self.startGameTxt, (200, 130))
         self.screen.blit(self.settingsTxt, (200, 160))
         self.screen.blit(self.exitTxt, (200, 190))
-        status1 = status.Status(self.screen,self.counter,self.counter,1)
+        
+        self.status1.upDate(self.counter,self.counter, 1)
         
         
     def render(self):
@@ -57,7 +61,7 @@ class game(object):
         i = 1
       
         if self.counter >= 1:
-            self.counter -= 1
+            self.counter -= .125
         else:
             self.counter = 100
 
@@ -79,7 +83,7 @@ class game(object):
             if self.yCord >= 220:
                 self.yCord = 130
                 
-        print(self.yCord)          
+                 
         self.upDate()
         self.render()
         self.clock.tick(60)
