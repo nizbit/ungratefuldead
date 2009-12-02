@@ -9,6 +9,8 @@ class Status(object):
         self.myScreen = screen 
         self.font = pygame.font.Font(fontPath, 30)
 
+        self.myFont = fontPath
+
         self.hCord_x = 5
         self.hCord_y = 5
         
@@ -16,8 +18,8 @@ class Status(object):
         self.hBar_y = self.hCord_y + 2
         self.hBar_height = 17
     
-        self.sCord_x = 5
-        self.sCord_y = 45
+        self.sCord_x = 490
+        self.sCord_y = 5
         
         self.lCord_x = 5
         self.lCord_y = 25
@@ -30,12 +32,12 @@ class Status(object):
         
     def upDate(self, healthPoints, score, lives):
         
-        healthPoints = 30
+        #healthPoints = 30
         
         if self.jCounter >= 7:
             self.jCounter = 0
         else:
-            self.jCounter += .25
+            self.jCounter += .5
         
         offSet = math.floor(15 * math.sin(self.jCounter))
         
@@ -50,10 +52,21 @@ class Status(object):
         else:
             self.hpBarColor = lGreen  
         
+       #Max Score : 1000000 length = 7
+        
+    
+            
+    
         
         self.healthPointTxt = self.font.render("HP:", 1, self.labelColor)
         self.hpNumTxt = self.font.render(str(healthPoints), 1, self.labelColor)
-        self.scoreTxt = self.font.render("Score: " + str(score), 1, self.labelColor)
+        
+        self.scoreTxt = self.font.render("Score: ", 1, self.labelColor)
+        
+        self.font = pygame.font.Font(None, 30)
+        self.scoreNumTxt = self.font.render(str(score).rjust(7), 1, self.labelColor)
+        self.font = pygame.font.Font(self.myFont, 30)
+        
         self.liveTxt  = self.font.render("Lives: " + str(lives), 1, self.labelColor)    
         
         # HP Label
@@ -64,6 +77,7 @@ class Status(object):
         self.myScreen.blit(self.liveTxt, (self.lCord_x, self.lCord_y))
         # Score
         self.myScreen.blit(self.scoreTxt, (self.sCord_x, self.sCord_y))
+        self.myScreen.blit(self.scoreNumTxt, (self.sCord_x + 60, self.sCord_y + 4))
         
         # Note: HealthPoints Max out at 100 and Min at 0
         # rect(screen, (color), (x,y,w,h)
