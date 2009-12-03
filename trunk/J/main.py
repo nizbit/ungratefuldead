@@ -2,6 +2,7 @@ import pygame
 import sys
 import os
 import status
+import bossStatus
 
 class game(object):
     def __init__(self):
@@ -40,6 +41,7 @@ class game(object):
 
         self.counter = 100
         self.status1 = status.Status(self.screen, "youmurdererbb_reg.ttf")
+        self.bStatus = bossStatus.BossStatus(self.screen, "youmurdererbb_reg.ttf")
 
         self.counter2 = 1
 
@@ -55,9 +57,11 @@ class game(object):
         self.screen.blit(self.exitTxt, (200, 190))
         
         self.status1.upDate(self.counter,self.counter2, 1,self.weapon)
-        
+        self.bStatus.upDate((100 - self.counter))
         
     def render(self):
+        self.status1.render()
+        self.bStatus.render()
         pygame.display.flip()
         
 
