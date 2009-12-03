@@ -13,6 +13,7 @@ import viewport
 import character
 import vector2d
 
+import status
 
 
 class Game(object):
@@ -24,6 +25,10 @@ class Game(object):
         pygame.display.set_caption("Rapid Prototype")
         self.clock = pygame.time.Clock()
         
+        """init the status bar"""
+        self.statusBar = status.Status(self.screen, "Images/youmurdererbb_reg.ttf")
+        self.currentWeaponImage = pygame.image.load("Images/currentWeaponTest.png")
+
         """init the world and the characters"""
         self.level = None
         self.loadLevel(level)
@@ -73,8 +78,11 @@ class Game(object):
         self.winText = self.font.render("We don't have a boss yet, so...YOU WIN!!!", 1, (255,255,255))
         self.gameOverText = self.font.render("GAME OVER", 1, (255,255,255))
         self.HPText = self.font.render("HP: ", 1, (255,255,255))
-        self.livesText = self.font.render("Lives: ", 1, (255,255,255))
-        self.scoreText = self.font.render("Score: ", 1, (255,255,255))
+        
+        
+        
+        #self.livesText = self.font.render("Lives: ", 1, (255,255,255))
+        #self.scoreText = self.font.render("Score: ", 1, (255,255,255))
         
         """
         Flags
@@ -300,6 +308,7 @@ class Game(object):
             self.vp.rect.left = 0
         if self.running == False:
             self.reset()
+        self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
            
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
@@ -323,30 +332,35 @@ class Game(object):
             self.screen.blit(self.level.image.subsurface(self.vp.rect),(0,0))        
             
             
-                
+            self.statusBar.render()
+            
             if self.player.HP <= 0:
-                self.screen.blit(self.HPText, (0,0))
-                self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
-                self.screen.blit(self.tempText, (125, 0))
+               self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
+               # self.screen.blit(self.HPText, (0,0))
+               # self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
+               # self.screen.blit(self.tempText, (125, 0))
                 
-                self.screen.blit(self.scoreText, (0,25))
-                self.tempText = self.font.render(str(self.score), 1, (255,255,255))
-                self.screen.blit(self.tempText, (75, 25))
+               # self.screen.blit(self.scoreText, (0,25))
+               # self.tempText = self.font.render(str(self.score), 1, (255,255,255))
+               # self.screen.blit(self.tempText, (75, 25))
                 
-                #self.screen.blit(self.gameOverText, (250,250))
+               self.screen.blit(self.gameOverText, (250,250))
+                
             else:
-                self.screen.blit(self.HPText, (0,0))
-                self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
-                self.screen.blit(self.tempText, (50, 0))
+               pass
+               #self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
+                #self.screen.blit(self.HPText, (0,0))
+                #self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
+                #self.screen.blit(self.tempText, (50, 0))
                 
-                self.screen.blit(self.livesText, (0,50))
-                self.tempText = self.font.render(str(self.player.lives),1, (255,255,255))
-                self.screen.blit(self.tempText, (75, 50))
+               # self.screen.blit(self.livesText, (0,50))
+               # self.tempText = self.font.render(str(self.player.lives),1, (255,255,255))
+               # self.screen.blit(self.tempText, (75, 50))
                 
                 
-                self.screen.blit(self.scoreText, (0,25))
-                self.tempText = self.font.render(str(self.score), 1, (255,255,255))
-                self.screen.blit(self.tempText, (75, 25))
+                #self.screen.blit(self.scoreText, (0,25))
+                #self.tempText = self.font.render(str(self.score), 1, (255,255,255))
+                #self.screen.blit(self.tempText, (75, 25))
                 
             pygame.display.flip()
         
