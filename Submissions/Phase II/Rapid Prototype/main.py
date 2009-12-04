@@ -76,7 +76,7 @@ class Game(object):
         self.killSound.set_volume(.25)
         self.bckMusic = pygame.mixer.music 
         self.bckMusic.load("Sounds/music.ogg")
-        self.bckMusic.set_volume(.25)
+        self.bckMusic.set_volume(1)
         self.bckMusic.play()
         
         self.score = 0

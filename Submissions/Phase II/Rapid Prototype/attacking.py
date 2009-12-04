@@ -42,7 +42,7 @@ class Attacking(state.State):
  
     """cycle through attack sprites and utilize the attacking speed"""
     def attack(self):
-        #self.character.attack_sound.play()
+        self.character.attack_sound.play()
         if self.character.direction == "left":
             self.character.spriterect.move_ip(-self.character.attacking_speed, 0)
             self.character.rect.topleft = self.character.spriterect.topleft
