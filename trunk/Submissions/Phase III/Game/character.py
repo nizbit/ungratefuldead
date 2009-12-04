@@ -210,8 +210,19 @@ class Player(Character):
         """
         super(Player, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
         self._weapons = {}
+        
+        
         self._currentWeapon = item.Weapon(None, self._rect, "testWeapon", None)
-        self._weapons["whip"] = self._currentWeapon
+        self.jWeapon = item.Weapon(image, rect, name, sound, projectile)
+        
+        
+        
+        self._weapons[self._currentWeapon.getName()] = self._currentWeapon
+        
+        
+        
+        for something in self._weapons:
+            print something
         
         self._stateMachine = stateMachine.PlayerStateMachine(self, sprites)
     

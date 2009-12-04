@@ -260,6 +260,10 @@ class PlayerStateMachine(StateMachine):
                 elif event.key == pygame.K_LSHIFT:
                     self._currentStates["attack"] = self._attackingState
                 
+# =-==========================================================================================
+                elif event.key == pygame.K_v:
+                    print("change weapon")
+                
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT:
                     if self._currentStates.has_key("runRight"):
