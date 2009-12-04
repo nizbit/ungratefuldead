@@ -8,6 +8,7 @@ Contents:
     Invincibility
     InstaKill
 """
+import math
 
 class Item(object):
     def __init__(self, image, rect, name, sound):
@@ -95,7 +96,9 @@ class Projectile(Item):
         '''
         ** offset the projectile items rect by the current velocity
         '''
-        self._rect = self._rect.move(self._velocity.get_x(), self._velocity.get_y())
+        if self._name == "testProjectile":
+            pass
+        self._rect = self._rect.move(self._velocity.get_x(),(self._velocity.get_y()/2) * math.sin(self._rect.left))
         
 '''**base class for different types of powerups**'''
 class Powerups(Item):

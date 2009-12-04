@@ -177,6 +177,8 @@ class AttackingState(State):
         super(AttackingState,self).__init__(character, rightFrames, leftFrames)
         self.hurtSound = pygame.mixer.Sound("Sounds/whip.wav")
         self.hurtSound.set_volume(.1)
+        self._bulletImage = pygame.image.load('Images/bullets.png')
+        
     def act(self):
         """
         Inject projectile into the world, based upon the current type of
@@ -187,15 +189,13 @@ class AttackingState(State):
             self._projectileXDirection = 1
         else:
             self._projectileXDirection = -1  
-        '''**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
+        '''(basically adding a proj to the world)**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
         if (self._character.getCurrentWeapon().getName() == "testWeapon" and self._counter == 0 and self._frameNum == 1):
-            '''I'll take this out later and put it in the init on State'''
-            self._bulletImage = pygame.image.load('Images/bullets.png')
             self._projectile = item.Projectile(self._bulletImage, 
-                                self._character.getRect(), 
-                                "testProjectile", 
-                                None, 
-                                vector2d.Vector2D(self._projectileXDirection*5,0))
+                                               self._character.getRect(), 
+                                               "testProjectile", 
+                                               None, 
+                                               vector2d.Vector2D(self._projectileXDirection*5,8))
             self._character.getCurrentWeapon().addProjectile(self._projectile)
         
         if self._frameNum == len(self._leftFrames) - 3 and \
