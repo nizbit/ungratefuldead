@@ -258,8 +258,9 @@ class Game(object):
                 self.player.getStateMachine().pushEnemy(enemy, coll)             
                 
         for enemy in killList:
-            self.enemies.remove(enemy)
-            enemy = None
+            if enemy in self.enemies:
+                self.enemies.remove(enemy)
+                enemy = None
             
         for enemy in self.enemies:
             enemy.update()
