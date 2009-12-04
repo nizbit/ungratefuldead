@@ -30,16 +30,18 @@ class Game(object):
         self.currentWeaponImage = pygame.image.load("Images/currentWeaponTest.png")
 
         """init the world and the characters"""
+        self.player = None
+        self.loadPlayer()
+        
         self.level = None
         self.loadLevel(level)
-        self.vp = viewport.Viewport(pygame.Rect(0,0,640,480))
+        self.vp = viewport.Viewport(pygame.Rect(0,0,640,480), self.player)
         #MAY BE OVERKILL
         if level == 0:
             self.tempvp = pygame.image.load("Images/level2.png")
         else:
             self.tempvp = pygame.image.load("Images/bck.png")
-        self.player = None
-        self.loadPlayer()
+        
         
         self.enemies = []
         self.loadEnemies(level)
@@ -297,20 +299,12 @@ class Game(object):
             pygame.time.wait(3000)
             self.running = False
             
-        if self.player.getRect().left >= self.vp.rect.right - 300 and \
-        self.player.getRect().left + 300 <= 3800:
-            self.vp.rect.right = self.player.getRect().left + 300
-        if self.player.getRect().left <= self.vp.rect.left + 300 and \
-        self.player.getRect().left - 300 >= 0:
-            self.vp.rect.left = self.player.getRect().left - 300
-        if self.vp.rect.right > 3800:
-            self.vp.rect.right = 3800
-        if self.vp.rect.left < 0:
-            self.vp.rect.left = 0
+        self.vp.update()
+        
         if self.running == False:
             self.reset()
         self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
-           
+        
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
