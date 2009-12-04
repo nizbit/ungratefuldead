@@ -209,48 +209,60 @@ class Player(Character):
         current weapon to none
         """
         super(Player, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
-        self._weapons = {}
+
+        # Images for the currentWeapon box
+        gun1Image = pygame.image.load("Images/weaponPic/gun1.png")
+        gun2Image = pygame.image.load("Images/weaponPic/gun2.png")
+        testImage = pygame.image.load("Images/weaponPic/gun?.png")
         
+        gun1 = item.Weapon(gun1Image, self._rect, "gun1", None)
+        gun2 = item.Weapon(gun2Image, self._rect, "gun2", None)
+        gun3 = item.Weapon(testImage, self._rect, "testWeapon", None)
         
-        self._currentWeapon = item.Weapon(None, self._rect, "testWeapon", None)
-        self.jWeapon = item.Weapon(image, rect, name, sound, projectile)
+        self._weaponsList = []
+        self._weaponsList.append(gun1)
+        self._weaponsList.append(gun2)
+        self._weaponsList.append(gun3)
         
-        
-        
-        self._weapons[self._currentWeapon.getName()] = self._currentWeapon
-        
-        
-        
-        for something in self._weapons:
-            print something
-        
+        self._currentWeapon = gun1
+                
         self._stateMachine = stateMachine.PlayerStateMachine(self, sprites)
     
+    def setNextWeapon(self):
+        
+        index = self._weaponsList.index(self._currentWeapon)
+        index += 1
+        if index < len(self._weaponsList):
+            self._currentWeapon = self._weaponsList[index]
+        else:
+            self._currentWeapon = self._weaponsList[0]
+    
+    def setPreviousWeapon(self):
+        
+        index = self._weaponsList.index(self._currentWeapon)
+        index -= 1
+        if index >= 0:
+            self._currentWeapon = self._weaponsList[index]
+        else:
+            self._currentWeapon = self._weaponsList[len(self._weaponsList) -1]
+        
     def getCurrentWeapon(self):
         """
         Return __currentWeapon
         """
         return self._currentWeapon
     
-    def setCurrentWeapon(self, key):
-        """
-        set __currentWeapon to the value corresponding to key in __weapons
-        """
-        self._currentWeapon = self._weapons[key]
-    
-    currentWeapon = property(getCurrentWeapon, setCurrentWeapon)
-    
-    def addWeapon(self,key, weapon):
+    def addWeapon(self, weapon):
         """
         Add weapon and through key to the weapons dictionary
         """
-        self._weapons[key] = weapon
+        self._weaponsList.append(weapon)
     
-    def removeWeapon(self, key):
+    def removeWeapon(self, weapon):
         """
         Delete weapon from the weapons dictionary using the key
         """
-        del self._weapons[key]
+        self._weaponsList.remove(weapon)
     
     def update(self, event):
         self._stateMachine.handleEvent(event)
@@ -435,7 +447,7 @@ if __name__ == "__main__":
             
             clock.tick(60)
             screen.fill((100,100,0))
-            print len(projectileList)
+            #print len(projectileList)
             for bullet in projectileList:
                 bullet.update()
                 screen.blit(bullet.getImage(),bullet.getRect())
