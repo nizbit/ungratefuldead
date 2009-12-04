@@ -262,7 +262,10 @@ class PlayerStateMachine(StateMachine):
                 
 # =-==========================================================================================
                 elif event.key == pygame.K_v:
-                    print("change weapon")
+                    self._character.setNextWeapon()
+
+                elif event.key == pygame.K_c:
+                    self._character.setPreviousWeapon()
                 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT:
