@@ -48,7 +48,7 @@ class Item(object):
         
     
 class Weapon(Item):
-    def __init__(self, image, rect, name, sound, projectile=None):
+    def __init__(self, image, rect, name, sound, projectile = None):
         '''
         ** call base class constructor
         ** set weapon items projectile ==> Projectile
@@ -57,6 +57,13 @@ class Weapon(Item):
         super(Weapon, self).__init__(image, rect, name, sound)
         self._projectileList = []
         self._projectile = projectile
+
+        if projectile != None:
+            self._hasProjectileFlag = True
+        else:
+            self._hasProjectileFlag = False 
+    def hasProjectile(self):
+        return self._hasProjectileFlag
         
     def getProjectile(self):
         return self._projectile
@@ -96,8 +103,8 @@ class Projectile(Item):
         '''
         ** offset the projectile items rect by the current velocity
         '''
-        if self._name == "testProjectile":
-            pass
+       # if self._name == "testProjectile":
+       #     pass
         self._rect = self._rect.move(self._velocity.get_x(),(self._velocity.get_y()/2) * math.sin(self._rect.left))
         
 '''**base class for different types of powerups**'''

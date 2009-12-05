@@ -214,10 +214,16 @@ class Player(Character):
         gun1Image = pygame.image.load("Images/weaponPic/gun1.png")
         gun2Image = pygame.image.load("Images/weaponPic/gun2.png")
         testImage = pygame.image.load("Images/weaponPic/gun?.png")
+                
+        gun1Projectile = item.Projectile(gun1Image, self._rect, "testProjectile", None, vector2d.Vector2D(1, 8))
         
-        gun1 = item.Weapon(gun1Image, self._rect, "gun1", None)
+        gun1 = item.Weapon(gun1Image, self._rect, "gun1", None, gun1Projectile)
         gun2 = item.Weapon(gun2Image, self._rect, "gun2", None)
         gun3 = item.Weapon(testImage, self._rect, "testWeapon", None)
+        
+
+        
+        
         
         self._weaponsList = []
         self._weaponsList.append(gun1)
@@ -227,6 +233,8 @@ class Player(Character):
         self._currentWeapon = gun1
                 
         self._stateMachine = stateMachine.PlayerStateMachine(self, sprites)
+    def getWeaponsList(self):
+        return self._weaponsList
     
     def setNextWeapon(self):
         
