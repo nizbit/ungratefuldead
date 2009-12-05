@@ -31,3 +31,10 @@ left-appear4 220 385 80 47
 left-appear5 301 369 83 63
 left-appear6 404 363 63 65
 left-appear7 477 361 88 89
+;
+Velocity
+4 30
+SpriteSheet
+Images/darkheartless1kg.png
+Position
+4630 400
