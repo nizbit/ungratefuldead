@@ -129,6 +129,8 @@ class Projectile(Item):
         self._rect = self._rect.move(xPos, yPos)
         
         
+
+
         
 '''**base class for different types of powerups**'''
 class Powerups(Item):
