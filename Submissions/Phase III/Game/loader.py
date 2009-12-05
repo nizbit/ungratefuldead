@@ -8,7 +8,7 @@ class Loader(object):
     def __init__(self):
         self.platforms = []
         self.enemyBounds = [] 
-    
+        self.sections = []
     def loadLevel(self, fileName):
         try:
             levelFile = open(fileName, 'r')
@@ -19,12 +19,17 @@ class Loader(object):
         fileInfo = levelFile.read()
         levelFile.close()
         p = fileInfo.find("Platforms")
+        s = fileInfo.find("Sections")
         e = fileInfo.find("EnemyBounds")
         i = fileInfo.find("Image")
         v = fileInfo.find("Viewport")
-        temp = fileInfo[p:e].splitlines()
+        temp = fileInfo[p:s].splitlines()
         temp.pop(0)
         self.loadPlatforms(temp)
+        
+        temp = fileInfo[s:e].splitlines()
+        temp.pop(0)
+        self.loadSections(temp)
         
         temp = fileInfo[e:i].splitlines()
         temp.pop(0)
@@ -39,7 +44,7 @@ class Loader(object):
         viewport = [int(temp[0]), int(temp[1]), int(temp[2]), \
                     int(temp[3]), int(temp[4]), int(temp[5])]
         
-        return [self.platforms,self.enemyBounds, image, viewport]
+        return [self.platforms, self.enemyBounds, image, self.sections, viewport]
         
     
     def loadPlatforms(self, platList):
@@ -49,6 +54,15 @@ class Loader(object):
                 continue
             x = y.split()
             self.platforms.append(pygame.Rect(int(x[0]), int(x[1]), \
+                                              int(x[2]), int(x[3])))
+    
+    def loadSections(self, sections):
+
+        for y in sections:
+            if y == "":
+                continue
+            x = y.split()
+            self.sections.append(pygame.Rect(int(x[0]), int(x[1]), \
                                               int(x[2]), int(x[3])))
             
     def loadEnemyBounds(self, bounds):
