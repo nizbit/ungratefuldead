@@ -1,0 +1,10 @@
+Actions
+left
+left 23 311 130 165
+;
+Velocity
+4 30
+SpriteSheet
+Images/torso.png
+Position
+14856 550
