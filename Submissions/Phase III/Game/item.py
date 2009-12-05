@@ -95,6 +95,12 @@ class Projectile(Item):
         ** set projectile items velocity ==> Vector2D
         ** set projectile items power    ==> int
         ** set projectile items range    ==> int
+        Note: Angle::
+                270
+            225     315
+        180             0
+            135     45
+                90    
         '''
         super(Projectile, self).__init__(image, rect, name, sound)
         self._velocity = velocity
