@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 
 class Viewport(object):
-    def __init__(self, rect, character, offsetx=300, offsety=150, \
+    def __init__(self, rect, character, sections, offsetx=300, offsety=150, \
                  boundsx=640, boundsy=480):
         self.rect = rect
         self.character = character
@@ -12,8 +12,11 @@ class Viewport(object):
         self.offsety = offsety
         self.xbounds = boundsx
         self.ybounds = boundsy
+        temp = pygame.Rect(0, 0, 0, 0)
+        self.sections = temp.unionall(sections)
         
     def update(self):
+        
         if self.character.getRect().left >= self.rect.right - self.offsetx:
             self.rect.right = self.character.getRect().left + self.offsetx
             
@@ -35,4 +38,7 @@ class Viewport(object):
             self.rect.bottom = self.ybounds
         elif self.rect.top < 0:
             self.rect.top = 0
+        
+        if not self.sections.contains(self.rect):
+            self.rect.clamp_ip(self.sections)
         

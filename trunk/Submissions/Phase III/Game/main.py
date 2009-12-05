@@ -185,11 +185,13 @@ class Game(object):
             platform = info[0][:]
             enemyBounds = info[1][:]
             image = info[2]
+            print type(image)
             self.level = world.World(image,[],platform,enemyBounds)
-            self.vp = viewport.Viewport(pygame.Rect(info[3][0], info[3][1], \
+            self.vp = viewport.Viewport(pygame.Rect(info[4][0], info[4][1], \
                                                     640, 480), self.player, \
-                                                    info[3][2], info[3][3], \
-                                                    info[3][4], info[3][5])
+                                                    info[3],
+                                                    info[4][2], info[4][3], \
+                                                    info[4][4], info[4][5])
             
     def handleEnemies(self, event):
         pass
