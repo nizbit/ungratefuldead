@@ -190,9 +190,7 @@ class AttackingState(State):
         else:
             projectileAngle = 180  
         '''(basically adding a proj to the world)**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
-        
 
-#        if (self._character.getCurrentWeapon().hasProjectile() and self._counter == 0 and self._frameNum == 1):
         if (self._counter == 0 and self._frameNum == 1):
    
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
@@ -201,21 +199,6 @@ class AttackingState(State):
             
             
             self._character.getCurrentWeapon().addProjectile(projectileTemp)
-        
-            
-            
-            # gun1Projectile = item.Projectile(gun1Image, self._rect, "testProjectile", None, vector2d.Vector2D(1, 8))
-            
-#            self._projectile = self._character.getCurrentWeapon()._projectile()
-            
-            
-#        if (self._character.getCurrentWeapon().getName() == "testWeapon" and self._counter == 0 and self._frameNum == 1):
-#            self._projectile = item.Projectile(self._bulletImage, 
-#                                               self._character.rect, 
-#                                               "testProjectile", 
-#                                               None, 
-#                                               vector2d.Vector2D(self._projectileXDirection*5,8))
-#            self._character.getCurrentWeapon().addProjectile(self._projectile)
         
         if self._frameNum == len(self.leftFrames) - 3 and \
         self._counter == 0:
