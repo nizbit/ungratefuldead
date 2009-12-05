@@ -21,7 +21,7 @@ class Loader(object):
         p = fileInfo.find("Platforms")
         e = fileInfo.find("EnemyBounds")
         i = fileInfo.find("Image")
-        
+        v = fileInfo.find("Viewport")
         temp = fileInfo[p:e].splitlines()
         temp.pop(0)
         self.loadPlatforms(temp)
@@ -30,10 +30,16 @@ class Loader(object):
         temp.pop(0)
         self.loadEnemyBounds(temp)
         
-        temp = fileInfo[i:].splitlines()
+        temp = fileInfo[i:v].splitlines()
         temp.pop(0)
+        image = self.loadImage(temp)
         
-        return [self.platforms,self.enemyBounds,self.loadImage(temp)]
+        temp = fileInfo[v:].splitlines()
+        temp = temp[1].split()
+        viewport = [int(temp[0]), int(temp[1]), int(temp[2]), \
+                    int(temp[3]), int(temp[4]), int(temp[5])]
+        
+        return [self.platforms,self.enemyBounds, image, viewport]
         
     
     def loadPlatforms(self, platList):
@@ -85,24 +91,26 @@ class Loader(object):
         temp = fileInfo[ss:p].splitlines()
         spriteSheet = temp[1]
         
-        temp = fileInfo[ss:].splitlines()
+        temp = fileInfo[p:].splitlines()
         temp.pop(0)
         temp = temp[0].split()
+        
         position = [temp[0], temp[1]]
         return [actions, velocity, spriteSheet, position]
         
     def loadPlayerActions(self, alist):
+        
         actions = {}
         while alist != []:
-            key = alist.pop(0)
+            key = alist.pop(0).replace(" ", "")
             temp = {}
             while alist[0] != ";":
                 l = alist.pop(0).split()
                 t = [l[0]]
                 for x in l[1:]:
                     t.append(int(x))
-                print t
                 temp[t[0]] = pygame.Rect(t[1],t[2],t[3],t[4])
+                
             actions[key] = temp
             alist.pop(0)
         return actions
