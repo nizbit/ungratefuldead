@@ -30,8 +30,8 @@ class State(object):
         """
         self._character = character
         
-        self._leftFrames = leftFrames
-        self._rightFrames = rightFrames
+        self.leftFrames = leftFrames
+        self.rightFrames = rightFrames
         
         self._frameNum = 0
         self._counter = 0
@@ -48,13 +48,13 @@ class State(object):
             self._counter = 0
             self._frameNum += 1
         if frameSet == "right":
-            if self._frameNum > (len(self._rightFrames) - 1):
+            if self._frameNum > (len(self.rightFrames) - 1):
                 self._frameNum = 0
-            return self._rightFrames[self._frameNum]
+            return self.rightFrames[self._frameNum]
         else:
-            if self._frameNum > (len(self._leftFrames) - 1):
+            if self._frameNum > (len(self.leftFrames) - 1):
                 self._frameNum = 0
-            return self._leftFrames[self._frameNum]
+            return self.leftFrames[self._frameNum]
     
     def getFrameNum(self):
         """
@@ -217,10 +217,10 @@ class AttackingState(State):
 #                                               vector2d.Vector2D(self._projectileXDirection*5,8))
 #            self._character.getCurrentWeapon().addProjectile(self._projectile)
         
-        if self._frameNum == len(self._leftFrames) - 3 and \
+        if self._frameNum == len(self.leftFrames) - 3 and \
         self._counter == 0:
             self.hurtSound.play()
-        if self._frameNum >= len(self._leftFrames) - 3:
+        if self._frameNum >= len(self.leftFrames) - 3:
             self._character.attacking = True
         else:
             self._character.attacking = False
