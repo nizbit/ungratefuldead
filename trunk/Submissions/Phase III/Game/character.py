@@ -211,9 +211,9 @@ class Player(Character):
         super(Player, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
 
         # Images for the currentWeapon box
-        gun1Image = pygame.image.load("Images/weaponPic/gun1.png")
-        gun2Image = pygame.image.load("Images/weaponPic/gun2.png")
-        testImage = pygame.image.load("Images/weaponPic/gun0.png")
+        gun1Image = pygame.image.load("Images/weaponPic/handGun.png")
+        gun2Image = pygame.image.load("Images/weaponPic/M16.png")
+        testImage = pygame.image.load("Images/weaponPic/bazooka.png")
                 
        # gun1Projectile = item.Projectile(gun1Image, self._rect, "testProjectile", None, vector2d.Vector2D(1, 8))
         
