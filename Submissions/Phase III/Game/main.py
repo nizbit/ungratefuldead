@@ -253,9 +253,7 @@ class Game(object):
             self.player.update(temp)
             for projectile in self.projectileListMain:
                 projectile.update()
-#            for projectile in self.player.getCurrentWeapon().getProjectileList():
-#                projectile.update()
-        
+  
 
         
         
@@ -272,8 +270,7 @@ class Game(object):
                         killList.append(enemy)
                         self.killSound.play()
                         self.score += 100 + self.player.HP + self.player.lives * 100
-            
-                
+
             if self.player.attacking is True and \
             self.player.getRect().colliderect(enemy.getRect()):
                 if enemy.HP > 1:
@@ -307,11 +304,15 @@ class Game(object):
         for solid in self.level.solids:
             if self.player.getRect().colliderect(solid):
                 self.player.handleCollision("object", solid)
+
         
         for platform in self.level.platform:
             if self.player.getRect().colliderect(platform):
                 self.player.handleCollision("object", platform)
-        
+            for projectiles in self.projectileListMain:
+                if platform.colliderect(projectiles.getRect()):
+                    self.projectileListMain.remove(projectiles)
+
         del killList[:]
         
         for enemy in self.enemies:
@@ -341,7 +342,7 @@ class Game(object):
         if self.running == False:
             self.reset()
         self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.player.getCurrentWeapon().getImage()) 
-                              #self.currentWeaponImage)
+
         
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
@@ -354,7 +355,7 @@ class Game(object):
             '''blit the projectiles'''
             for projectile in self.projectileListMain:
                 self.level.image.blit(projectile.getImage(), projectile.getRect())
-            
+
             if self.vp.rect.inflate(50,0).contains(self.coinRect):
                 self.level.image.blit(self.coin,self.coinRect)
             for enemy in self.enemies:
@@ -369,7 +370,6 @@ class Game(object):
             
             if self.player.HP <= 0:
                self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
-              
                self.screen.blit(self.gameOverText, (250,250))
                 
             pygame.display.flip()
