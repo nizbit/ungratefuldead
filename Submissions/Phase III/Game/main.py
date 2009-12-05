@@ -86,6 +86,9 @@ class Game(object):
         #self.livesText = self.font.render("Lives: ", 1, (255,255,255))
         #self.scoreText = self.font.render("Score: ", 1, (255,255,255))
         
+        self.projectileListMain = []
+        
+        
         """
         Flags
         """
@@ -198,6 +201,15 @@ class Game(object):
 
     def update(self):
         #print "player velocity: ", self.player.x_velocity
+        
+        #======================================================
+        for weaponElement in self.player.getWeaponsList():
+            for projectile in weaponElement.getProjectileList():
+                self.projectileListMain.append(projectile)
+                weaponElement.getProjectileList().remove(projectile)
+                    
+        
+        
         """loop through the events"""
         temp = pygame.event.get()
         for event in temp:
@@ -221,21 +233,37 @@ class Game(object):
         else:
             '''update everything associated with the player: weapons, projectiles, rects etc...'''
             self.player.update(temp)
-            for projectile in self.player.getCurrentWeapon().getProjectileList():
+            for projectile in self.projectileListMain:
                 projectile.update()
+#            for projectile in self.player.getCurrentWeapon().getProjectileList():
+#                projectile.update()
+        
+
+        
+        
         
         killList = []
         for enemy in self.enemies:
             '''check projectiles against enemies'''
-            for projectile in self.player.getCurrentWeapon().getProjectileList():
+            for projectile in self.projectileListMain:
                 if projectile.getRect().colliderect(enemy.getRect()):
                     if enemy.HP > 1:
                         enemy.HP -= 20
-                        self.player.getCurrentWeapon().removeProjectile(projectile)
+                        self.projectileListMain.remove(projectile)
                     else:
                         killList.append(enemy)
                         self.killSound.play()
                         self.score += 100 + self.player.HP + self.player.lives * 100
+            
+ #           for projectile in self.player.getCurrentWeapon().getProjectileList():
+ #               if projectile.getRect().colliderect(enemy.getRect()):
+ #                   if enemy.HP > 1:
+ #                       enemy.HP -= 20
+ #                       self.player.getCurrentWeapon().removeProjectile(projectile)
+ #                   else:
+ #                       killList.append(enemy)
+ #                       self.killSound.play()
+ #                       self.score += 100 + self.player.HP + self.player.lives * 100
                 
             if self.player.attacking is True and \
             self.player.getRect().colliderect(enemy.getRect()):
@@ -315,8 +343,19 @@ class Game(object):
             self.level.image.blit(self.player.getSpriteSheet(),self.player.getRect(),self.player.getSpriteSheetCoord())
             
             '''blit the projectiles'''
-            for projectile in self.player.getCurrentWeapon().getProjectileList():
+            for projectile in self.projectileListMain:
                 self.level.image.blit(projectile.getImage(), projectile.getRect())
+            
+            
+#            for weaponElement in self.player.getWeaponsList():
+#                for projectile in weaponElement.getProjectileList():
+#                    print(projectile)
+#                    self.level.image.blit(projectile.getImage(), projectile.getRect())
+                    
+                
+            
+#            for projectile in self.player.getCurrentWeapon().getProjectileList():
+#                self.level.image.blit(projectile.getImage(), projectile.getRect())
                 
             if self.vp.rect.inflate(50,0).contains(self.coinRect):
                 self.level.image.blit(self.coin,self.coinRect)

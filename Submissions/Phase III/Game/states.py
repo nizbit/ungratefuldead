@@ -190,13 +190,22 @@ class AttackingState(State):
         else:
             self._projectileXDirection = -1  
         '''(basically adding a proj to the world)**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
-        if (self._character.getCurrentWeapon().getName() == "testWeapon" and self._counter == 0 and self._frameNum == 1):
-            self._projectile = item.Projectile(self._bulletImage, 
-                                               self._character.getRect(), 
-                                               "testProjectile", 
-                                               None, 
-                                               vector2d.Vector2D(self._projectileXDirection*5,8))
+        
+        if (self._character.getCurrentWeapon().hasProjectile() and self._counter == 0 and self._frameNum == 1):
+            print("HIT ")
+            self._projectile = self._character.getCurrentWeapon().getProjectile()
             self._character.getCurrentWeapon().addProjectile(self._projectile)
+            
+#            self._projectile = self._character.getCurrentWeapon()._projectile()
+            
+            
+#        if (self._character.getCurrentWeapon().getName() == "testWeapon" and self._counter == 0 and self._frameNum == 1):
+#            self._projectile = item.Projectile(self._bulletImage, 
+#                                               self._character.getRect(), 
+#                                               "testProjectile", 
+#                                               None, 
+#                                               vector2d.Vector2D(self._projectileXDirection*5,8))
+#            self._character.getCurrentWeapon().addProjectile(self._projectile)
         
         if self._frameNum == len(self._leftFrames) - 3 and \
         self._counter == 0:
