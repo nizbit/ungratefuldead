@@ -194,7 +194,7 @@ class AttackingState(State):
 
 #        if (self._character.getCurrentWeapon().hasProjectile() and self._counter == 0 and self._frameNum == 1):
         if (self._counter == 0 and self._frameNum == 1):
-            print("HIT ")
+   
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
                                           vector2d.Vector2D(self._projectileXDirection *10,8))
