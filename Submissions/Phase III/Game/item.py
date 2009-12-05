@@ -89,7 +89,7 @@ class Weapon(Item):
         return self._projectileList
 
 class Projectile(Item):
-    def __init__(self, image, rect, name, sound, velocity, power=0, range=0):
+    def __init__(self, image, rect, name, sound, velocity, angle=None, power=0, range=0):
         '''
         ** call base class constructor
         ** set projectile items velocity ==> Vector2D
@@ -100,20 +100,29 @@ class Projectile(Item):
         self._velocity = velocity
         self._power = power
         self._range = range
-        
+        if angle == None:
+            self._angle = 0
+        else:
+            self._angle = angle 
+            
     def getVelocity(self):
         return self._velocity
     
     def setVelocity(self, velocity):
         self._velocity = velocity
         
-    def update(self):
+    def update(self, updateAngle = None):
         '''
         ** offset the projectile items rect by the current velocity
         '''
-       # if self._name == "testProjectile":
-       #     pass
-        self._rect = self._rect.move(self._velocity.get_x(),(self._velocity.get_y()/2) * math.sin(self._rect.left))
+        if updateAngle != None:
+            self._angle = updateAngle
+        
+        xPos = math.cos(math.radians(self._angle)) * self._velocity   
+        yPos = math.sin(math.radians(self._angle)) * self._velocity
+        self._rect = self._rect.move(xPos, yPos)
+        
+        
         
 '''**base class for different types of powerups**'''
 class Powerups(Item):
