@@ -310,7 +310,7 @@ class Game(object):
             if self.player.getRect().colliderect(platform):
                 self.player.handleCollision("object", platform)
             for projectiles in self.projectileListMain:
-                if platform.colliderect(projectiles.getRect()):
+                if platform.colliderect(projectiles.getRect().inflate(-10,-10)):
                     self.projectileListMain.remove(projectiles)
 
         del killList[:]
