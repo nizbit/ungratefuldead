@@ -1,0 +1,33 @@
+Actions
+left
+left 458 150 64 95
+;
+right
+right 620 150 64 95
+;
+run-left
+left-run1 245 268 72 92
+;
+run-right  
+right-run1 826 268 72 92
+;
+attack-left
+left-attack1 47 149 103 93
+left-attack2 174 161 52 96
+left-attack3 252 160 73 93
+left-attack4 342 180 100 70
+;
+attack-right
+right-attack1 992 149 103 93
+right-attack2 916 161 52 96
+right-attack3 816 160 73 93
+right-attack4 700 180 100 70
+;
+appear-left
+left-appear1 17 412 17 9
+left-appear2 41 400 73 31
+left-appear3 130 399 73 30
+left-appear4 220 385 80 47
+left-appear5 301 369 83 63
+left-appear6 404 363 63 65
+left-appear7 477 361 88 89
