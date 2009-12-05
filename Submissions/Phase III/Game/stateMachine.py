@@ -53,7 +53,33 @@ class StateMachine(object):
         Checks __character's dictionary of sprites and cycles through the
         dictionary with each call
         """
+        if self._currentStates.has_key("attack"):
+            if self.character.getCurrentWeapon().getName() == "handGun":
+                self._runningState.rightFrames = self._sprites[run-pistol-right].keys()
+                self._runningState.leftFrames = self._sprites[run-pistol-left].keys()
+                if self._attackingState.direction == "up":
+                    self._standingState.rightFrames = self._sprites[pistol-up-right].keys()
+                    self._standingState.leftFrames = self._sprites[pistol-up-left].keys()
+                elif self._attackingState.direction == "down":
+                    self._standingState.rightFrames = self._sprites[pistol-down-right].keys()
+                    self._standingState.leftFrames = self._sprites[pistol-down-left].keys()
+                else:
+                    self._standingState.rightFrames = self._sprites[right].keys()
+                    self._standingState.leftFrames = self._sprites[left].keys()
+                    
+            elif self.character.getCurrentWeapon().getName() == "M16":
+                self._runningState.rightFrames = self._sprites[run-pistol-right].keys()
+                self._runningState.leftFrames = self._sprites[run-pistol-left].keys()
+                self._standingState.rightFrames = self._sprites[right].keys()
+                self._standingState.leftFrames = self._sprites[left].keys()
+            elif self.character.getCurrentWeapon().getName() == "shotGun":
+                pass
+            elif self.character.getCurrentWeapon().getName() == "bazooka":
+                pass
+            elif self.character.getCurrentWeapon().getName() == "sniper":
+                pass
         
+        """
         if self._character.getDirection() == "right":
             if self._currentStates.has_key("attack"):
                 for state in self._currentStates:
@@ -70,8 +96,24 @@ class StateMachine(object):
                 temp = self._currentStates["runRight"].getFrame("right")
                 temp = self._sprites["run-right"][temp]
                 self._character.setSpriteSheetCoord(temp)
-        else:
             
+        else:
+            if self._currentStates.has_key("attack"):
+                for state in self._currentStates:
+                    if self._currentStates[state].__str__() != "AttackingState":
+                        self._currentStates[state].resetFrames()
+                        
+                temp = self._currentStates["attack"].getFrame("right")
+                temp = self._sprites["attack-right"][temp]
+                self._character.setSpriteSheetCoord(temp)
+            elif self._currentStates.has_key("runRight"):
+                for state in self._currentStates:
+                    if self._currentStates[state].__str__() != "RunningState":
+                        self._currentStates[state].resetFrames()
+                temp = self._currentStates["runRight"].getFrame("right")
+                temp = self._sprites["run-right"][temp]
+                self._character.setSpriteSheetCoord(temp)
+
             if self._currentStates.has_key("attack"):
                 for state in self._currentStates:
                     if self._currentStates[state].__str__() != "AttackingState":
@@ -88,6 +130,7 @@ class StateMachine(object):
                 temp = self._currentStates["runLeft"].getFrame("left")
                 temp = self._sprites["run-left"][temp]
                 self._character.setSpriteSheetCoord(temp)
+
         if len(self._currentStates.keys()) == 1 and self._currentStates.has_key("falling"):
             for state in self._currentStates:
                 self._currentStates[state].resetFrames()
@@ -100,12 +143,19 @@ class StateMachine(object):
                 self._character.setSpriteSheetCoord(temp)
                 del self._currentStates["right"]
             else:
+                self._currentStates["right"] = self._standingState
+                temp = self._currentStates["right"].getFrame("right")
+                temp = self._sprites["right"][temp]
+                
+                self._character.setSpriteSheetCoord(temp)
+                del self._currentStates["right"]
+                
                 self._currentStates["left"] = self._standingState
                 temp = self._currentStates["left"].getFrame("left")
                 temp = self._sprites["left"][temp]
                 self._character.setSpriteSheetCoord(temp)
                 del self._currentStates["left"]
-                    
+        """         
     def handleCollision(self, type, rect):
         pass
                   
@@ -259,7 +309,7 @@ class PlayerStateMachine(StateMachine):
 
                 elif event.key == pygame.K_LSHIFT:
                     self._currentStates["attack"] = self._attackingState
-                
+                    
 # =-==========================================================================================
                 elif event.key == pygame.K_v:
                     self._character.setNextWeapon()
