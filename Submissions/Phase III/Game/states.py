@@ -186,9 +186,9 @@ class AttackingState(State):
         """
         '''Add a projectile to the list of projectiles'''
         if (self._character.getDirection() == "right"):
-            self._projectileXDirection = 1
+            projectileAngle = 0
         else:
-            self._projectileXDirection = -1  
+            projectileAngle = 180  
         '''(basically adding a proj to the world)**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
         
 
@@ -197,7 +197,7 @@ class AttackingState(State):
    
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
-                                          vector2d.Vector2D(self._projectileXDirection *10,8))
+                                          9, projectileAngle)
             
             
             self._character.getCurrentWeapon().addProjectile(projectileTemp)
