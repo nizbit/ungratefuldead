@@ -19,17 +19,17 @@ class Viewport(object):
     def update(self):
         
         
-        if self.character.getRect().left >= self.rect.right - self.offsetx:
-            self.rect.right = self.character.getRect().left + self.offsetx
+        if self.character.rect.left >= self.rect.right - self.offsetx:
+            self.rect.right = self.character.rect.left + self.offsetx
 
-        elif self.character.getRect().left <= self.rect.left + self.offsetx:
-            self.rect.left = self.character.getRect().left - self.offsetx
+        elif self.character.rect.left <= self.rect.left + self.offsetx:
+            self.rect.left = self.character.rect.left - self.offsetx
         
-        if self.character.getRect().top <= self.rect.top + self.offsety:
-            self.rect.top = self.character.getRect().top - self.offsety
+        if self.character.rect.top <= self.rect.top + self.offsety:
+            self.rect.top = self.character.rect.top - self.offsety
             
-        elif self.character.getRect().bottom >= self.rect.bottom - self.offsety:
-            self.rect.bottom = self.character.getRect().bottom + self.offsety
+        elif self.character.rect.bottom >= self.rect.bottom - self.offsety:
+            self.rect.bottom = self.character.rect.bottom + self.offsety
      
             
         if self.rect.right > self.xbounds:
@@ -58,7 +58,7 @@ class Viewport(object):
         
         
     def determineSection(self):
-        cRect = self.character.getRect()
+        cRect = self.character.rect
         for x in range(len(self.sections)):
             if self.sections[x].collidepoint(cRect.centerx, cRect.centery):
                 return self.sections[x]

@@ -28,7 +28,7 @@ class Character(object):
         self._spriteSheetRect = self._spriteSheet.get_rect()
         self._rect = pygame.Rect(0,0,0,0)
         self._spriteSheetCoord = pygame.Rect(0,0,0,0)
-        self.colRect = pygame.Rect(0,0,0,0)
+        self._colRect = pygame.Rect(0,0,0,0)
         
         self._sprites = sprites
         
@@ -61,8 +61,8 @@ class Character(object):
         
         Set the class variable, __rect, to rect
         """
-        print type(rect)
         self._rect = rect
+        self.colRect = self._rect.inflate(-5,-5)
     def getRect(self):
         """
         
@@ -72,14 +72,20 @@ class Character(object):
         
         Return the class variable, __rect
         """
-        
+        self.colRect = self._rect.inflate(-5,-5)
         return self._rect
-    #rect = property(getRect, setRect)
+    rect = property(getRect, setRect)
     
+    def getColRect(self):
+        return self._colRect
+    def setColRect(self, rect):
+        self._colRect = rect
+        self._rect = self._colRect.inflate(5, 5)
+    colRect = property(getColRect, setColRect)
     def setPosition(self, x, y):
         self._rect.top = y
         self._rect.left = x
-        
+        self.colRect = self._rect.inflate(-5,-5)
     def setSpriteSheetCoord(self, rect):
         """
         Set __spriteSheetCoord to input argument, rect
@@ -87,8 +93,7 @@ class Character(object):
         
         self._spriteSheetCoord = rect
         self._rect.size = self._spriteSheetCoord.size
-        
-        #self.colRect = self._rect.inflate(-10,-1)
+        self.colRect = self._rect.inflate(-5,-5)
     
     def getSpriteSheetCoord(self):
         """
