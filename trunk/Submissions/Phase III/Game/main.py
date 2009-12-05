@@ -273,15 +273,6 @@ class Game(object):
                         self.killSound.play()
                         self.score += 100 + self.player.HP + self.player.lives * 100
             
-#            for projectile in self.player.getCurrentWeapon().getProjectileList():
-#                if projectile.getRect().colliderect(enemy.getRect()):
-#                    if enemy.HP > 1:
-#                        enemy.HP -= 20
-#                        self.player.getCurrentWeapon().removeProjectile(projectile)
-#                    else:
-#                        killList.append(enemy)
-#                        self.killSound.play()
-#                        self.score += 100 + self.player.HP + self.player.lives * 100
                 
             if self.player.attacking is True and \
             self.player.getRect().colliderect(enemy.getRect()):
@@ -364,17 +355,6 @@ class Game(object):
             for projectile in self.projectileListMain:
                 self.level.image.blit(projectile.getImage(), projectile.getRect())
             
-            
-#            for weaponElement in self.player.getWeaponsList():
-#                for projectile in weaponElement.getProjectileList():
-#                    print(projectile)
-#                    self.level.image.blit(projectile.getImage(), projectile.getRect())
-                    
-                
-            
-#            for projectile in self.player.getCurrentWeapon().getProjectileList():
-#                self.level.image.blit(projectile.getImage(), projectile.getRect())
-                
             if self.vp.rect.inflate(50,0).contains(self.coinRect):
                 self.level.image.blit(self.coin,self.coinRect)
             for enemy in self.enemies:
@@ -389,31 +369,8 @@ class Game(object):
             
             if self.player.HP <= 0:
                self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
-               # self.screen.blit(self.HPText, (0,0))
-               # self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
-               # self.screen.blit(self.tempText, (125, 0))
-                
-               # self.screen.blit(self.scoreText, (0,25))
-               # self.tempText = self.font.render(str(self.score), 1, (255,255,255))
-               # self.screen.blit(self.tempText, (75, 25))
-                
+              
                self.screen.blit(self.gameOverText, (250,250))
-                
-            else:
-               pass
-               #self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
-                #self.screen.blit(self.HPText, (0,0))
-                #self.tempText = self.font.render(str(self.player.HP),1, (255,255,255))
-                #self.screen.blit(self.tempText, (50, 0))
-                
-               # self.screen.blit(self.livesText, (0,50))
-               # self.tempText = self.font.render(str(self.player.lives),1, (255,255,255))
-               # self.screen.blit(self.tempText, (75, 50))
-                
-                
-                #self.screen.blit(self.scoreText, (0,25))
-                #self.tempText = self.font.render(str(self.score), 1, (255,255,255))
-                #self.screen.blit(self.tempText, (75, 25))
                 
             pygame.display.flip()
         
