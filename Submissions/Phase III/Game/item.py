@@ -48,12 +48,13 @@ class Item(object):
         
     
 class Weapon(Item):
-    def __init__(self, image, rect, name, sound, projectile = None):
+    def __init__(self, image, rect, name, sound, projectile = None, projectileImage = None):
         '''
         ** call base class constructor
         ** set weapon items projectile ==> Projectile
         ** (a weapon only has a corresponding Projectile)
         '''
+        
         super(Weapon, self).__init__(image, rect, name, sound)
         self._projectileList = []
         self._projectile = projectile
@@ -61,7 +62,14 @@ class Weapon(Item):
         if projectile != None:
             self._hasProjectileFlag = True
         else:
-            self._hasProjectileFlag = False 
+            self._hasProjectileFlag = False
+            
+            
+        self._projectileImage = projectileImage
+    
+    def getProjectileImage(self):
+        return self._projectileImage
+             
     def hasProjectile(self):
         return self._hasProjectileFlag
         

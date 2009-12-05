@@ -207,7 +207,11 @@ class Game(object):
             for projectile in weaponElement.getProjectileList():
                 self.projectileListMain.append(projectile)
                 weaponElement.getProjectileList().remove(projectile)
-                    
+        
+        # if it goes outside the viewport
+        for projectiles in self.projectileListMain:
+            if not self.vp.rect.contains(projectiles.getRect()):
+                self.projectileListMain.remove(projectiles)            
         
         
         """loop through the events"""
@@ -255,15 +259,15 @@ class Game(object):
                         self.killSound.play()
                         self.score += 100 + self.player.HP + self.player.lives * 100
             
- #           for projectile in self.player.getCurrentWeapon().getProjectileList():
- #               if projectile.getRect().colliderect(enemy.getRect()):
- #                   if enemy.HP > 1:
- #                       enemy.HP -= 20
- #                       self.player.getCurrentWeapon().removeProjectile(projectile)
- #                   else:
- #                       killList.append(enemy)
- #                       self.killSound.play()
- #                       self.score += 100 + self.player.HP + self.player.lives * 100
+#            for projectile in self.player.getCurrentWeapon().getProjectileList():
+#                if projectile.getRect().colliderect(enemy.getRect()):
+#                    if enemy.HP > 1:
+#                        enemy.HP -= 20
+#                        self.player.getCurrentWeapon().removeProjectile(projectile)
+#                    else:
+#                        killList.append(enemy)
+#                        self.killSound.play()
+#                        self.score += 100 + self.player.HP + self.player.lives * 100
                 
             if self.player.attacking is True and \
             self.player.getRect().colliderect(enemy.getRect()):

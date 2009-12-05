@@ -215,11 +215,15 @@ class Player(Character):
         gun2Image = pygame.image.load("Images/weaponPic/gun2.png")
         testImage = pygame.image.load("Images/weaponPic/gun?.png")
                 
-        gun1Projectile = item.Projectile(gun1Image, self._rect, "testProjectile", None, vector2d.Vector2D(1, 8))
+       # gun1Projectile = item.Projectile(gun1Image, self._rect, "testProjectile", None, vector2d.Vector2D(1, 8))
         
-        gun1 = item.Weapon(gun1Image, self._rect, "gun1", None, gun1Projectile)
-        gun2 = item.Weapon(gun2Image, self._rect, "gun2", None)
-        gun3 = item.Weapon(testImage, self._rect, "testWeapon", None)
+        projectileImage1 = pygame.image.load("Images/bullets.png")
+        projectileImage2 = pygame.image.load("Images/weaponPic/gun1.png")
+        
+        
+        gun1 = item.Weapon(gun1Image, self._rect, "gun1", None, None, projectileImage1)
+        gun2 = item.Weapon(gun2Image, self._rect, "gun2", None, None, projectileImage2)
+        gun3 = item.Weapon(testImage, self._rect, "testWeapon", None, None, projectileImage1)
         
 
         
