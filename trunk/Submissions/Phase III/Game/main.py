@@ -85,10 +85,11 @@ class Game(object):
         
         
         
-        #self.livesText = self.font.render("Lives: ", 1, (255,255,255))
-        #self.scoreText = self.font.render("Score: ", 1, (255,255,255))
         
         self.projectileListMain = []
+        self.powerUpListMain = []
+        
+        
         
         
         """
