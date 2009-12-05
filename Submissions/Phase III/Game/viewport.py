@@ -7,15 +7,17 @@ class Viewport(object):
     def __init__(self, rect, character, sections, offsetx=300, offsety=150, \
                  boundsx=640, boundsy=480):
         self.rect = rect
+        self.startingRect = rect
         self.character = character
         self.offsetx = offsetx
         self.offsety = offsety
         self.xbounds = boundsx
         self.ybounds = boundsy
         temp = pygame.Rect(0, 0, 0, 0)
-        self.sections = temp.unionall(sections)
-        
+        self.sections = sections[:]
+        self.section = sections[0]
     def update(self):
+        
         
         if self.character.getRect().left >= self.rect.right - self.offsetx:
             self.rect.right = self.character.getRect().left + self.offsetx
@@ -34,11 +36,29 @@ class Viewport(object):
         elif self.rect.left < 0:
             self.rect.left = 0
         
+        section = self.determineSection()
+        
+        if section is not None:
+            self.section = section
+        
+        if self.rect.right > self.section.right:
+            self.rect.right = self.section.right
+        if self.rect.left < self.section.left:
+            self.rect.left = self.section.left
+        if self.rect.top < self.section.top:
+            self.rect.top = self.section.top
+        if self.rect.bottom > self.section.bottom:
+            self.rect.bottom = self.section.bottom
+        
         if self.rect.bottom > self.ybounds:
             self.rect.bottom = self.ybounds
         elif self.rect.top < 0:
             self.rect.top = 0
         
-        if not self.sections.contains(self.rect):
-            self.rect.clamp_ip(self.sections)
         
+    def determineSection(self):
+        cRect = self.character.getRect()
+        for x in range(len(self.sections)):
+            if self.sections[x].collidepoint(cRect.centerx, cRect.centery):
+                return self.sections[x]
+        return None
