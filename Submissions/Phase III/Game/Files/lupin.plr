@@ -1,0 +1,53 @@
+Actions
+right
+right 15 15 35 45
+;
+run-pistol  
+run-pistol1 261 4 42 65
+run-pistol2 328 7 44 61
+run-pistol3 417 6 33 63
+run-pistol4 264 83 41 61
+run-pistol5 329 85 46 65
+run-pistol6 414 89 35 61
+;
+walk-pistol
+walk-pistol1 260 55 41 62
+walk-pistol2 337 154 36 62
+walk-pistol3 414 154 34 63
+walk-pistol4 260 224 40 60
+walk-pistol5 338 222 33 62
+walk-pistol6 407 224 39 61
+;
+attack-right
+right-attack1 15 130 22 45
+right-attack2 52 130 44 45
+right-attack3 100 130 50 45
+right-attack4 160 130 67 45
+right-attack5 238 130 42 45
+right-attack6 295 130 76 45
+;
+left
+left 265 20 35 45
+;
+attack-left
+left-attack1 577 73 22 45
+left-attack2 526 62 44 45
+left-attack3 471 62 50 45
+left-attack4 508 121 67 45
+left-attack5 459 120 42 45
+left-attack6 377 127 76 45
+;
+run-left-pistol
+run-left-pistol1 152 5 42 65
+run-left-pistol2 82 7 44 61
+run-left-pistol3 5 5 33 63 
+run-left-pistol4 150 84 41 61
+run-left-pistol5 80 84 46 65
+run-left-pistol6 6 89 35 61
+;
+Velocity
+4 30
+SpriteSheet
+Images/mysprite.png
+Position
+90 780

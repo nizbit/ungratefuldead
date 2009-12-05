@@ -111,11 +111,11 @@ class StateMachine(object):
                   
     def translate(self, rect):
         typeOfColl = None
-        bottom = self._character.getRect().bottom - rect.top
-        top = self._character.getRect().top - rect.bottom
+        bottom = self._character.rect.bottom - rect.top
+        top = self._character.rect.top - rect.bottom
         
-        right = self._character.getRect().right - rect.left
-        left = self._character.getRect().left - rect.right
+        right = self._character.rect.right - rect.left
+        left = self._character.rect.left - rect.right
         
         miny = bottom
         
@@ -127,20 +127,20 @@ class StateMachine(object):
             minx = right
         if abs(miny) > abs(minx):
             if abs(left) < abs(right):
-                self._character.getRect().left = rect.right
+                self._character.rect.left = rect.right
                 typeOfColl = "left"
             else:
-                self._character.getRect().right = rect.left
+                self._character.rect.right = rect.left
                 typeOfColl = "right"
             self._character.velocity.x = 0
             
         else:
             if abs(bottom) < abs(top):
-                self._character.getRect().bottom = rect.top
+                self._character.rect.bottom = rect.top
                 self.isJumping = False
                 typeOfColl = "bottom"
             else:
-                self._character.getRect().top = rect.bottom
+                self._character.rect.top = rect.bottom
                 typeOfColl = "top"
             self._character.velocity.y = 0      
         return typeOfColl
@@ -161,8 +161,8 @@ class StateMachine(object):
         self._currentStates["dead"] = self._deadState
                 
     def move(self):
-        self._character.getRect().left += self._character.velocity.x
-        self._character.getRect().top += self._character.velocity.y
+        self._character.rect.left += self._character.velocity.x
+        self._character.rect.top += self._character.velocity.y
         
 class PlayerStateMachine(StateMachine):
     def __init__(self, character, sprites):
@@ -355,7 +355,7 @@ class EnemyStateMachine(StateMachine):
         if self._currentStates.has_key("jump"):
             del self._currentStates["jump"]
         for rect in self.tRects:
-            if self._character.getRect().colliderect(rect):
+            if self._character.rect.colliderect(rect):
                 self.handleCollision("object", rect)
         
         

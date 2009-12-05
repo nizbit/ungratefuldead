@@ -240,8 +240,8 @@ class Game(object):
                     self.bckMusic.unpause()
                     
         '''fall out of the level'''
-        if self.player.getRect().top > self.vp.rect.bottom or \
-        self.player.getRect().bottom < self.vp.rect.top:
+        if self.player.rect.top > self.vp.rect.bottom or \
+        self.player.rect.bottom < self.vp.rect.top:
             self.player.getStateMachine().kill()
             self.running = False
             self.screen.blit(self.deadImage, self.deadImage.get_rect())
@@ -262,7 +262,7 @@ class Game(object):
         for enemy in self.enemies:
             '''check projectiles against enemies'''
             for projectile in self.projectileListMain:
-                if projectile.getRect().colliderect(enemy.getRect()):
+                if projectile.getRect().colliderect(enemy.rect):
                     if enemy.HP > 1:
                         enemy.HP -= 20
                         self.projectileListMain.remove(projectile)
@@ -272,17 +272,17 @@ class Game(object):
                         self.score += 100 + self.player.HP + self.player.lives * 100
 
             if self.player.attacking is True and \
-            self.player.getRect().colliderect(enemy.getRect()):
+            self.player.rect.colliderect(enemy.rect):
                 if enemy.HP > 1:
                     enemy.HP -= 20
-                    coll = self.player.handleCollision("enemy", enemy.getRect())
+                    coll = self.player.handleCollision("enemy", enemy.rect)
                     self.player.getStateMachine().pushEnemy(enemy, coll)
                 else:
                     killList.append(enemy)
                     self.killSound.play()
                     self.score += 100 + self.player.HP + self.player.lives * 100
                
-            elif self.player.getRect().colliderect(enemy.getRect()):
+            elif self.player.rect.colliderect(enemy.rect):
                 if self.player.HP > 1:
                     self.player.HP -= 1
                 else:
@@ -290,7 +290,7 @@ class Game(object):
                     self.screen.blit(self.deadImage, self.deadImage.get_rect())
                     pygame.display.flip()
                     pygame.time.wait(3000)
-                coll = self.player.handleCollision("enemy", enemy.getRect())
+                coll = self.player.handleCollision("enemy", enemy.rect)
                 self.player.getStateMachine().pushEnemy(enemy, coll)             
                 
         for enemy in killList:
@@ -302,12 +302,12 @@ class Game(object):
             enemy.update()
         
         for solid in self.level.solids:
-            if self.player.getRect().colliderect(solid):
+            if self.player.rect.colliderect(solid):
                 self.player.handleCollision("object", solid)
 
         
         for platform in self.level.platform:
-            if self.player.getRect().colliderect(platform):
+            if self.player.rect.colliderect(platform):
                 self.player.handleCollision("object", platform)
 
             for projectiles in self.projectileListMain:
@@ -323,8 +323,7 @@ class Game(object):
         del killList[:]
         
         for enemy in self.enemies:
-            if enemy.getRect().top > self.vp.rect.bottom or \
-            enemy.getRect().bottom < self.vp.rect.top:
+            if enemy.rect.top > self.vp.rect.bottom or enemy.rect.bottom < self.vp.rect.top:
                 killList.append(enemy)
                 
         
@@ -333,7 +332,7 @@ class Game(object):
             enemy = None
         
             
-        if self.player.getRect().colliderect(self.coinRect):
+        if self.player.rect.colliderect(self.coinRect):
             self.won = True
             self.coinSound.play()
             self.screen.blit(self.winText, (100,200))
@@ -357,7 +356,7 @@ class Game(object):
         if self.running:
             self.level.image.blit(self.tempvp,self.vp.rect,self.vp.rect)
             
-            self.level.image.blit(self.player.getSpriteSheet(),self.player.getRect(),self.player.getSpriteSheetCoord())
+            self.level.image.blit(self.player.getSpriteSheet(),self.player.rect,self.player.getSpriteSheetCoord())
             
             '''blit the projectiles'''
             for projectile in self.projectileListMain:
@@ -366,9 +365,9 @@ class Game(object):
             if self.vp.rect.inflate(50,0).contains(self.coinRect):
                 self.level.image.blit(self.coin,self.coinRect)
             for enemy in self.enemies:
-                if self.vp.rect.inflate(50,50).contains(enemy.getRect()):
+                if self.vp.rect.inflate(50,50).contains(enemy.rect):
                 #print enemy.getSpriteSheetCoord()
-                    self.level.image.blit(enemy.getSpriteSheet(),enemy.getRect(),enemy.getSpriteSheetCoord())
+                    self.level.image.blit(enemy.getSpriteSheet(),enemy.rect,enemy.getSpriteSheetCoord())
             
             self.screen.blit(self.level.image.subsurface(self.vp.rect),(0,0))        
             
@@ -404,7 +403,7 @@ class Game(object):
                 del self.player.getStateMachine().getCurrentStates()["dead"]
                 
             """BIG PROBLEM"""
-            self.player.setPosition(50,300)
+            self.player.setPosition(90, 700)
             self.vp.rect.left = 0
             self.running = True
             
@@ -528,7 +527,7 @@ class Game(object):
                                               zombieVelocity,
                                               "blah",
                                               "a",
-                                              self.player.getRect(),
+                                              self.player.rect,
                                               tempWorldRects,
                                               "a"))
             #self.enemies[x].setSpriteSheetCoord(zombieActions["right"]["right"])
@@ -538,7 +537,7 @@ class Game(object):
                                               zombieVelocity2, 
                                               "blah",
                                               "a", 
-                                              self.player.getRect(),
+                                              self.player.rect,
                                               tempWorldRects, 
                                              "a"))
             #self.enemies[x].setSpriteSheetCoord(zombieActions2["right"]["right"])

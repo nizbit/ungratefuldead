@@ -116,7 +116,7 @@ class RunningState(State):
             self._character.MAX_VELOCITY.x:
                 self._character.velocity.x += .5
                 
-            #self._character.getRect().move_ip(self._character.velocity.x, 0)
+            #self._character.rect.move_ip(self._character.velocity.x, 0)
                 
         else:
             if self._character.velocity.x > 0:
@@ -124,7 +124,7 @@ class RunningState(State):
             elif self._character.getVelocity().x > \
             (-1 * self._character.MAX_VELOCITY.x):
                 self._character.velocity.x -= .5
-            #self._character.getRect().move_ip(self._character.velocity.x, 0)
+            #self._character.rect.move_ip(self._character.velocity.x, 0)
 
     def __str__(self):
         return "RunningState"
@@ -145,11 +145,11 @@ class JumpingState(State):
         #if self._character.velocity.y == 0:
         
         self._character.velocity.y = -1 * self._character.MAX_VELOCITY.y
-        #self._character.getRect().move_ip(0, self._character.velocity.y)
+        #self._character.rect.move_ip(0, self._character.velocity.y)
         """   
         if self._character.velocity.y < 0:
             self._character.velocity.y += .5
-        self._character.getRect().move_ip(0, self._character.velocity.y)
+        self._character.rect.move_ip(0, self._character.velocity.y)
         """
              
     def __str__(self):
@@ -168,7 +168,7 @@ class FallingState(State):
         
         if self._character.velocity.y < self._character.MAX_VELOCITY.y:
             self._character.velocity.y += .5
-        #self._character.getRect().move_ip(0, self._character.velocity.y)
+        #self._character.rect.move_ip(0, self._character.velocity.y)
     def __str__(self):
         return "FallingState"
     
@@ -196,7 +196,7 @@ class AttackingState(State):
         if (self._counter == 0 and self._frameNum == 1):
             print("HIT ")
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
-                                          self._character.getRect(),"randomShit", None,
+                                          self._character.rect,"randomShit", None,
                                           vector2d.Vector2D(self._projectileXDirection *10,8))
             
             
@@ -211,7 +211,7 @@ class AttackingState(State):
             
 #        if (self._character.getCurrentWeapon().getName() == "testWeapon" and self._counter == 0 and self._frameNum == 1):
 #            self._projectile = item.Projectile(self._bulletImage, 
-#                                               self._character.getRect(), 
+#                                               self._character.rect, 
 #                                               "testProjectile", 
 #                                               None, 
 #                                               vector2d.Vector2D(self._projectileXDirection*5,8))
