@@ -357,7 +357,16 @@ class Game(object):
         if self.running:
             self.level.image.blit(self.tempvp,self.vp.rect,self.vp.rect)
             
-            self.level.image.blit(self.player.getSpriteSheet(),self.player.rect,self.player.getSpriteSheetCoord())
+            
+            if self.player.getDirection() == "left":
+                temp = pygame.Surface(self.player.rect.size)
+                temp.blit(self.level.image,self.player.rect)
+                temp = pygame.transform.flip(temp, True, False)
+                temp.blit(self.player.getSpriteSheet(),(0,0),self.player.getSpriteSheetCoord())
+                temp = pygame.transform.flip(temp, True, False)
+                self.level.image.blit(temp, self.player.rect)
+            else:
+                self.level.image.blit(self.player.getSpriteSheet(),self.player.rect,self.player.getSpriteSheetCoord())
             
             '''blit the projectiles'''
             for projectile in self.projectileListMain:
@@ -418,10 +427,13 @@ class Game(object):
     def loadPlayer(self, level):
         
         if level == 1:
-            info = self.loader.loadPlayer("Files/player.plr")
+            info = self.loader.loadPlayer("Files/lupin.plr")
             actions = info[0]
             velocity = info[1]
             spriteSheet = pygame.image.load(info[2]).convert_alpha()
+            self.player = character.Player(spriteSheet, actions, velocity)
+            self.player.setSpriteSheetCoord(actions["right"]["right"])
+            self.player.setPosition(250,684)
         else:
             actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
                       "left": {"left": pygame.Rect(265, 20, 35, 45)},
@@ -451,9 +463,9 @@ class Game(object):
                                       "left-attack6": pygame.Rect(377, 127, 76, 45)}}
             velocity = vector2d.Vector2D(4,12)
             spriteSheet = pygame.image.load('Images/johnmorris.png').convert_alpha()
-        self.player = character.Player(spriteSheet, actions, velocity)
-        self.player.setSpriteSheetCoord(actions["right"]["right"])
-        self.player.setPosition(250,684)
+            self.player = character.Player(spriteSheet, actions, velocity)
+            self.player.setSpriteSheetCoord(actions["right"]["right"])
+            self.player.setPosition(250,684)
         
     def loadEnemies(self, level):
         zombieSpriteSheet = pygame.image.load('Images/zombie.png').convert_alpha()

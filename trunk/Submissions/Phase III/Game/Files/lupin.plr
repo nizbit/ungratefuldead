@@ -1,49 +1,78 @@
 Actions
 right
-right 15 15 35 45
+right 337 154 36 62
 ;
-run-pistol  
-run-pistol1 261 4 42 65
-run-pistol2 328 7 44 61
-run-pistol3 417 6 33 63
-run-pistol4 264 83 41 61
-run-pistol5 329 85 46 65
-run-pistol6 414 89 35 61
+pistol-run-right
+pistol-run-right1 261 4 42 65
+pistol-run-right2 328 7 44 61
+pistol-run-right3 417 6 33 63
+pistol-run-right4 264 83 41 61
+pistol-run-right5 329 85 46 65
+pistol-run-right6 414 89 35 61
 ;
-walk-pistol
-walk-pistol1 260 55 41 62
-walk-pistol2 337 154 36 62
-walk-pistol3 414 154 34 63
-walk-pistol4 260 224 40 60
-walk-pistol5 338 222 33 62
-walk-pistol6 407 224 39 61
+walk-pistol-right
+pistol-walk-right1 260 55 41 62
+pistol-walk-right2 337 154 36 62
+pistol-walk-right3 414 154 34 63
+pistol-walk-right4 260 224 40 60
+pistol-walk-right5 338 222 33 62
+pistol-walk-right6 407 224 39 61
 ;
-attack-right
-right-attack1 15 130 22 45
-right-attack2 52 130 44 45
-right-attack3 100 130 50 45
-right-attack4 160 130 67 45
-right-attack5 238 130 42 45
-right-attack6 295 130 76 45
+shot-run-right
+shot-run-right1 252 290 50 66
+shot-run-right2 320 294 52 61
+shot-run-right3 408 291 41 63
+shot-run-right4 256 368 48 62
+shot-run-right5 320 370 54 65
+shot-run-right6 406 375 42 61
 ;
-left
-left 265 20 35 45
+shot-walk-right
+shot-walk-right1 250 467 49 63
+shot-walk-right2 328 464 43 64
+shot-walk-right3 404 466 42 63
+shot-walk-right4 252 536 45 60
+shot-walk-right5 328 534 41 62
+shot-walk-right6 398 536 46 61
 ;
-attack-left
-left-attack1 577 73 22 45
-left-attack2 526 62 44 45
-left-attack3 471 62 50 45
-left-attack4 508 121 67 45
-left-attack5 459 120 42 45
-left-attack6 377 127 76 45
+machine-run-right
+machine-run-right1 238 604 62 65
+machine-run-right2 306 606 64 61
+machine-run-right3 394 604 53 62
+machine-run-right4 240 682 62 62
+machine-run-right5 306 684 66 64
+machine-run-right6 390 688 56 61
 ;
-run-left-pistol
-run-left-pistol1 152 5 42 65
-run-left-pistol2 82 7 44 61
-run-left-pistol3 5 5 33 63 
-run-left-pistol4 150 84 41 61
-run-left-pistol5 80 84 46 65
-run-left-pistol6 6 89 35 61
+machine-walk-right
+machine-walk-right1 238 754 61 62
+machine-walk-right2 316 752 58 64
+machine-walk-right3 392 754 54 62
+machine-walk-right4 239 823 58 60
+machine-walk-right5 316 821 53 62
+machine-walk-right6 385 823 59 61
+;
+snip-right
+snip-right 236 894 86 25
+;
+bazooka-right
+bazooka-right 345 891 53 63
+;
+pistol-up-right
+pistol-up-right 240 924 22 71
+;
+shot-up-right
+shot-up-right 271 918 23 82
+;
+machine-up-right
+machine-up-right 307 918 23 91
+;
+pistol-down-right
+pistol-down-right 244 1010 31 52
+;
+shot-down
+shot-down-right 279 1012 40 51
+;
+machine-down
+machine-down-right 324 1012 51 51
 ;
 Velocity
 4 30
