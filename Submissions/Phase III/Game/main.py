@@ -14,7 +14,7 @@ import character
 import vector2d
 
 import status
-
+import loader
 
 class Game(object):
     def __init__(self, level):
@@ -24,6 +24,7 @@ class Game(object):
         self.screen = pygame.display.set_mode((640,480))
         pygame.display.set_caption("Rapid Prototype")
         self.clock = pygame.time.Clock()
+        self.loader = loader.Loader()
         
         """init the status bar"""
         self.statusBar = status.Status(self.screen, "Images/youmurdererbb_reg.ttf")
@@ -31,18 +32,19 @@ class Game(object):
 
         """init the world and the characters"""
         self.player = None
-        self.loadPlayer()
+        self.loadPlayer(level)
         
         self.level = None
+        self.vp = None
         self.loadLevel(level)
-        self.vp = viewport.Viewport(pygame.Rect(0,0,640,480), self.player)
+        
         #MAY BE OVERKILL
         if level == 0:
             self.tempvp = pygame.image.load("Images/level2.png")
+        elif level == 1:
+            self.tempvp = pygame.image.load("Images/level3.png")
         else:
             self.tempvp = pygame.image.load("Images/bck.png")
-        
-        
         self.enemies = []
         self.loadEnemies(level)
         
@@ -133,7 +135,7 @@ class Game(object):
                            pygame.Rect(2488, 240, 10, 40),
                            pygame.Rect(2595, 216, 10, 40)]
             self.level = world.World("Images/level2.png", solids, platform, enemyBounds)
-        else:
+        elif level == 2:
             solids = [pygame.Rect(0, 0, 3800, 10),
                       pygame.Rect(0, 470, 3800, 10),
                       pygame.Rect(0, 0, 40, 470),
@@ -178,7 +180,17 @@ class Game(object):
                            pygame.Rect(3555, 280, 10, 40),
                            pygame.Rect(3655, 280, 10, 40)]
             self.level = world.World("Images/bck.png", solids, platform, enemyBounds)
-                
+        elif level == 1:
+            info = self.loader.loadLevel("Files/level3.zom")
+            platform = info[0][:]
+            enemyBounds = info[1][:]
+            image = info[2]
+            self.level = world.World(image,[],platform,enemyBounds)
+            self.vp = viewport.Viewport(pygame.Rect(info[3][0], info[3][1], \
+                                                    640, 480), self.player, \
+                                                    info[3][2], info[3][3], \
+                                                    info[3][4], info[3][5])
+            
     def handleEnemies(self, event):
         pass
     
@@ -424,6 +436,8 @@ class Game(object):
             self.player.lives -= 1
             if self.player.getStateMachine().getCurrentStates().has_key("dead"):
                 del self.player.getStateMachine().getCurrentStates()["dead"]
+                
+            """BIG PROBLEM"""
             self.player.setPosition(50,300)
             self.vp.rect.left = 0
             self.running = True
@@ -435,38 +449,45 @@ class Game(object):
             pygame.display.flip()
             pygame.time.wait(3000)
                     
-    def loadPlayer(self):
-        actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
-                  "left": {"left": pygame.Rect(265, 20, 35, 45)},
-                  "run-right": {"right-run1": pygame.Rect(15, 70, 35, 45),
-                                "right-run2": pygame.Rect(60, 70, 35, 45),
-                                "right-run3": pygame.Rect(100, 70, 35, 45),
-                                "right-run4": pygame.Rect(135, 70, 35, 45),
-                                "right-run5": pygame.Rect(175, 70, 35, 45),
-                                "right-run6": pygame.Rect(225, 70, 35, 45)},
-                  "run-left": {"left-run6": pygame.Rect(433, 59, 32, 45),
-                               "left-run5": pygame.Rect(395, 59, 26, 45),
-                               "left-run4": pygame.Rect(360, 70, 26, 45),
-                               "left-run3": pygame.Rect(330, 70, 26, 45),
-                               "left-run2": pygame.Rect(298, 70, 26, 45),
-                               "left-run1": pygame.Rect(265, 70, 26, 45)},
-                  "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
-                                   "right-attack2": pygame.Rect(52, 130, 44, 45),
-                                   "right-attack3": pygame.Rect(100, 130, 50, 45),
-                                   "right-attack4": pygame.Rect(160, 130, 67, 45),
-                                   "right-attack5": pygame.Rect(238, 130, 42, 45),
-                                   "right-attack6": pygame.Rect(295, 130, 76, 45)},
-                  "attack-left": {"left-attack1": pygame.Rect(577, 73, 22, 45),
-                                  "left-attack2": pygame.Rect(526, 62, 44, 45),
-                                  "left-attack3": pygame.Rect(471, 62, 50, 45),
-                                  "left-attack4": pygame.Rect(508, 121, 67, 45),
-                                  "left-attack5": pygame.Rect(459, 120, 42, 45),
-                                  "left-attack6": pygame.Rect(377, 127, 76, 45)}}
-        velocity = vector2d.Vector2D(4,12)
-        spriteSheet = pygame.image.load('Images/johnmorris.png').convert_alpha()
+    def loadPlayer(self, level):
+        
+        if level == 1:
+            info = self.loader.loadPlayer("Files/player.plr")
+            actions = info[0]
+            velocity = info[1]
+            spriteSheet = pygame.image.load(info[2]).convert_alpha()
+        else:
+            actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
+                      "left": {"left": pygame.Rect(265, 20, 35, 45)},
+                      "run-right": {"right-run1": pygame.Rect(15, 70, 35, 45),
+                                    "right-run2": pygame.Rect(60, 70, 35, 45),
+                                    "right-run3": pygame.Rect(100, 70, 35, 45),
+                                    "right-run4": pygame.Rect(135, 70, 35, 45),
+                                    "right-run5": pygame.Rect(175, 70, 35, 45),
+                                    "right-run6": pygame.Rect(225, 70, 35, 45)},
+                      "run-left": {"left-run6": pygame.Rect(433, 59, 32, 45),
+                                   "left-run5": pygame.Rect(395, 59, 26, 45),
+                                   "left-run4": pygame.Rect(360, 70, 26, 45),
+                                   "left-run3": pygame.Rect(330, 70, 26, 45),
+                                   "left-run2": pygame.Rect(298, 70, 26, 45),
+                                   "left-run1": pygame.Rect(265, 70, 26, 45)},
+                      "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
+                                       "right-attack2": pygame.Rect(52, 130, 44, 45),
+                                       "right-attack3": pygame.Rect(100, 130, 50, 45),
+                                       "right-attack4": pygame.Rect(160, 130, 67, 45),
+                                       "right-attack5": pygame.Rect(238, 130, 42, 45),
+                                       "right-attack6": pygame.Rect(295, 130, 76, 45)},
+                      "attack-left": {"left-attack1": pygame.Rect(577, 73, 22, 45),
+                                      "left-attack2": pygame.Rect(526, 62, 44, 45),
+                                      "left-attack3": pygame.Rect(471, 62, 50, 45),
+                                      "left-attack4": pygame.Rect(508, 121, 67, 45),
+                                      "left-attack5": pygame.Rect(459, 120, 42, 45),
+                                      "left-attack6": pygame.Rect(377, 127, 76, 45)}}
+            velocity = vector2d.Vector2D(4,12)
+            spriteSheet = pygame.image.load('Images/johnmorris.png').convert_alpha()
         self.player = character.Player(spriteSheet, actions, velocity)
         self.player.setSpriteSheetCoord(actions["right"]["right"])
-        self.player.setPosition(50,300)
+        self.player.setPosition(250,684)
         
     def loadEnemies(self, level):
         zombieSpriteSheet = pygame.image.load('Images/zombie.png').convert_alpha()
