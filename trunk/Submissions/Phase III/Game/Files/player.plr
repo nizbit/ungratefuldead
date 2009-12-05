@@ -38,7 +38,7 @@ left-attack5 459 120 42 45
 left-attack6 377 127 76 45
 ;
 Velocity
-4 12
+4 30
 SpriteSheet
 Images/johnmorris.png
 Position
