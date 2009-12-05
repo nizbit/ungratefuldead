@@ -130,7 +130,13 @@ class Projectile(Item):
         
         
 
-
+class SafetyNet(Item):
+    def __init__(self, image, rect, name, sound):
+        super(SafetyNet, self).__init__(image, rect, name, sound)
+        
+    def update(self):
+        pass
+    
         
 '''**base class for different types of powerups**'''
 class Powerups(Item):
