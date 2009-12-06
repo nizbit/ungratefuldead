@@ -47,6 +47,7 @@ class State(object):
         dictionary
         """
         self._counter += 1
+
         if self._counter > 3:
             self._counter = 0
             self._frameNum += 1
@@ -188,21 +189,27 @@ class AttackingState(State):
         weapon
         """
         '''Add a projectile to the list of projectiles'''
-        if (self._character.getDirection() == "right"):
-            projectileAngle = 0
-        else:
-            projectileAngle = 180  
+        
         '''(basically adding a proj to the world)**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
         
-        # self.direction == up | staight | down 
+        # self.direction == up | staight | down
+        
+        tempProjAngle = 0 
         self._counter += 1
         print self._counter
         if self._counter == 1:
- #           print "hit"
+            if self.direction == "up":
+                tempProjAngle = 270
+            elif self.direction == "down":
+                tempProjAngle = 45
+            else:
+                if (self._character.getDirection() == "right"):
+                    tempProjAngle = 0
+                else:
+                    tempProjAngle = 180  
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
-                                          9, projectileAngle)
-            
+                                          9, tempProjAngle)
             
             self._character.getCurrentWeapon().addProjectile(projectileTemp)
         
