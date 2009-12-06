@@ -223,8 +223,9 @@ class Player(Character):
 
         gun1Image = pygame.image.load("Images/weaponPic/handGun.png")
         gun2Image = pygame.image.load("Images/weaponPic/M16.png")
-        testImage = pygame.image.load("Images/weaponPic/bazooka.png")
-        gun3Image = pygame.image.load("Images/weaponPic/gun1.png")
+        gun3Image = pygame.image.load("Images/weaponPic/shotGun.png")
+        gun4Image = pygame.image.load("Images/weaponPic/bazooka.png")        
+        gun5Image = pygame.image.load("Images/weaponPic/riffleSniper.png")
 
                 
        # gun1Projectile = item.Projectile(gun1Image, self._rect, "testProjectile", None, vector2d.Vector2D(1, 8))
@@ -236,9 +237,9 @@ class Player(Character):
         
         gun1 = item.Weapon(gun1Image, self._rect, "pistol", None, None, projectileImage1, 30, 11)
         gun2 = item.Weapon(gun2Image, self._rect, "machine", None, None, projectileImage1)
-        gun3 = item.Weapon(testImage, self._rect, "shotGun", None, None, projectileImage3)
-        gun4 = item.Weapon(gun3Image, self._rect, "bazooka", None, None, projectileImage2)
-        gun5 = item.Weapon(gun3Image, self._rect, "snipe", None, None, projectileImage2)
+        gun3 = item.Weapon(gun3Image, self._rect, "shotGun", None, None, projectileImage1)
+        gun4 = item.Weapon(gun4Image, self._rect, "bazooka", None, None, projectileImage1)
+        gun5 = item.Weapon(gun5Image, self._rect, "snipe", None, None, projectileImage1)
 
         self._safetyNetImage = pygame.image.load("Images/weaponPic/blackBullet.png").convert()
             
