@@ -235,7 +235,7 @@ class Player(Character):
         projectileImage3 = pygame.image.load("Images/bullet1.png")
         
         
-        gun1 = item.Weapon(gun1Image, self._rect, "pistol", None, None, projectileImage1, 30, 11)
+        gun1 = item.Weapon(gun1Image, self._rect, "pistol", None, None, projectileImage1)
         gun2 = item.Weapon(gun2Image, self._rect, "machine", None, None, projectileImage1, 48, 10)
         gun3 = item.Weapon(gun3Image, self._rect, "shotGun", None, None, projectileImage1, 35, 10)
         gun4 = item.Weapon(gun4Image, self._rect, "bazooka", None, None, projectileImage1, 48, 10)

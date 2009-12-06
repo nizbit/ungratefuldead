@@ -99,7 +99,7 @@ pistol-down-right 244 1010 31 52
 shot-down-right
 shot-down-right 279 1012 40 51
 ;
-machine-down
+machine-down-right
 machine-down-right 324 1012 51 51
 ;
 left
@@ -115,14 +115,6 @@ run-left6 410 1291 27 60
 run-left7 264 1360 39 61
 run-left8 334 1359 39 63
 run-left9 408 1362 33 57
-;
-run-left
-run-left1 261 4 42 65
-run-left2 328 7 44 61
-run-left3 417 6 33 63
-run-left4 264 83 41 61
-run-left5 329 85 46 65
-run-left6 414 89 35 61
 ;
 crawl-left
 crawl-left1 248 1074 50 25
@@ -207,10 +199,10 @@ machine-up-left 307 918 23 91
 pistol-down-left
 pistol-down-left 244 1010 31 52
 ;
-shot-down
-shot-down-left 279 1012 40 51
+shot-down-left
+shot-down-left1 279 1012 40 51
 ;
-machine-down
+machine-down-left
 machine-down-left 324 1012 51 51
 ;
 Velocity

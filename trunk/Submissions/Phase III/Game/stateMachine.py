@@ -247,24 +247,16 @@ class PlayerStateMachine(StateMachine):
             elif self._character.getCurrentWeapon().getName() == "bazooka":
                 attackStandKey = ["bazooka-right", "bazooka-left"]
                 attackRunKey = ["bazooka-right", "bazooka-left"]
-                if self._attackingState.direction == "up":
-                    self._standingState.rightFrames = self._sprites["bazooka-up-right"].keys()
-                    self._standingState.leftFrames = self._sprites["bazooka-up-left"].keys()
-                    attackStandKey = ["bazooka-up-right", "bazooka-up-left"]
-                
-                elif self._attackingState.direction == "down":
-                    self._standingState.rightFrames = self._sprites["bazooka-down-right"].keys()
-                    self._standingState.leftFrames = self._sprites["bazooka-down-left"].keys()
-                    attackStandKey = ["bazooka-down-right", "bazooka-down-left"]
-                
-                else:
-                    self._standingState.rightFrames = self._sprites["bazooka-right"].keys()
-                    self._standingState.leftFrames = self._sprites["bazooka-left"].keys()
-                    attackStandKey = ["bazooka-right", "bazooka-left"]
+                self._runningState.rightFrames = self._sprites["bazooka-right"].keys()
+                self._runningState.leftFrames = self._sprites["bazooka-left"].keys()
+                self._standingState.rightFrames = self._sprites["bazooka-right"].keys()
+                self._standingState.leftFrames = self._sprites["bazooka-left"].keys()
             
             else:
                 attackStandKey = ["snipe-right", "snipe-left"]
                 attackRunKey = ["snipe-right", "snipe-left"]
+                self._runningState.rightFrames = self._sprites["snipe-right"].keys()
+                self._runningState.leftFrames = self._sprites["snipe-left"].keys()
                 self._standingState.rightFrames = self._sprites["snipe-right"].keys()
                 self._standingState.leftFrames = self._sprites["snipe-left"].keys()
         
@@ -282,7 +274,9 @@ class PlayerStateMachine(StateMachine):
         temp = None
         #print self._character.getCurrentWeapon().getName()
         if self._character.getDirection() == "right":
-                
+            print "Name: ", self._character.getCurrentWeapon().getName()
+            print "attackRun: ", attackRunKey[0]
+            
             if self._currentStates.has_key("runRight"):   
                 temp = self._currentStates["runRight"].getFrame("right")
                 temp = self._sprites[attackRunKey[0]][temp]
@@ -293,6 +287,7 @@ class PlayerStateMachine(StateMachine):
         else:
             if self._currentStates.has_key("runLeft"):   
                 temp = self._currentStates["runLeft"].getFrame("left")
+                
                 temp = self._sprites[attackRunKey[1]][temp]
             else:
                 temp = self._currentStates["left"].getFrame("left")
@@ -421,6 +416,8 @@ class PlayerStateMachine(StateMachine):
 
                 elif event.key == pygame.K_c:
                     self._character.setPreviousWeapon()
+                elif event.key == pygame.K_x:
+                    pass
                 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or \
