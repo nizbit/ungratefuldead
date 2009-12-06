@@ -69,8 +69,8 @@ class Game(object):
         self.gameOverSound.set_volume(.1)
         self.coinSound.set_volume(.05)
         self.killSound.set_volume(.25)
-        self.bckMusic = pygame.mixer.music 
-        self.bckMusic.load("Sounds/music.ogg")
+        #self.bckMusic = pygame.mixer.music 
+        #self.bckMusic.load("Sounds/music.ogg")
         self.bckMusic.set_volume(.95)
         self.bckMusic.play()
         
@@ -118,7 +118,9 @@ class Game(object):
         self.hackyQuit = False
         self.won = False
     def loadLevel(self, level):
-        if level == 0:
+        self.bckMusic = pygame.mixer.music
+        if level == 0: 
+            self.bckMusic.load("HouseSounds/gamesong5.ogg")
             info = self.loader.loadLevel("Files/level2.zom")
             
         elif level == 2:
@@ -167,6 +169,7 @@ class Game(object):
                            pygame.Rect(3655, 280, 10, 40)]
             self.level = world.World("Images/bck.png", solids, platform, enemyBounds)
         elif level == 1:
+            self.bckMusic.load("HouseSounds/gamesong4.ogg")
             info = self.loader.loadLevel("Files/level3.zom")
         platform = info[0][:]
         enemyBounds = info[1][:]
