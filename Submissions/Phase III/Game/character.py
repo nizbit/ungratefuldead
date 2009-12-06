@@ -241,7 +241,7 @@ class Player(Character):
         gun4 = item.Weapon(gun4Image, self._rect, "bazooka", None, None, projectileImage1, 48, 10)
         gun5 = item.Weapon(gun5Image, self._rect, "snipe", None, None, projectileImage1, 80, 10)
 
-        self._safetyNetImage = pygame.image.load("Images/weaponPic/blackBullet.png").convert()
+        self._safetyNetImage = pygame.image.load("Images/safetyNetPic2.png").convert_alpha()
             
         safetyNet1 = item.Powerups(self._safetyNetImage, self._rect, "safetyNet", None)    
         
