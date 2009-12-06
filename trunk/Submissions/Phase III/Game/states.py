@@ -209,8 +209,13 @@ class AttackingState(State):
             elif self.direction == "down":
                 if self._character.getDirection() == "right":
                     tempProjAngle = 45
+                    tempY = 35
                 else:
                     tempProjAngle = 135
+                if self._character.getCurrentWeapon().getName() == "snipe":
+                    tempX += 10
+                    tempY += -15
+                    print " HERERERERERER ======> " 
             else:
                 if (self._character.getDirection() == "right"):
                     tempProjAngle = 0
@@ -233,11 +238,11 @@ class AttackingState(State):
 #        if self._counter == 0 and self._frameNum == 1:
 
         
-                
+        """               
         tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
         for i in range(0, 5, 1):
             self._character.getCurrentPowerup().addPowerup(tempProjectile)
-
+        """
 
 #        pygame.time.wait(100)
 #        self._character.getCurrentPowerup().addPowerup(tempProjectile2)

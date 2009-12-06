@@ -251,6 +251,12 @@ class Game(object):
             self.running = False
             self.screen.blit(self.deadImage, self.deadImage.get_rect())
             pygame.display.flip()
+            
+            for projetile in self.projectileListMain:
+                self.projectileListMain.remove(projectile)
+            for powerUp in self.powerUpListMain:
+                self.powerUpListMain.remove(powerUp)
+                print str(powerUp)
             pygame.time.wait(3000)
                       
         else:
@@ -306,6 +312,11 @@ class Game(object):
                     self.running = False
                     self.screen.blit(self.deadImage, self.deadImage.get_rect())
                     pygame.display.flip()
+                    for projetile in self.projectileListMain:
+                        self.projectileListMain.remove(projectile)
+                    for powerUp in self.powerUpListMain:
+                        self.powerUpListMain.remove(powerUp)
+
                     pygame.time.wait(3000)
                 coll = self.player.handleCollision("enemy", enemy.rect)
                 self.player.getStateMachine().pushEnemy(enemy, coll)             
