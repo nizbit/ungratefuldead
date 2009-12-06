@@ -186,7 +186,6 @@ class Game(object):
             platform = info[0][:]
             enemyBounds = info[1][:]
             image = info[2]
-            print type(image)
             self.level = world.World(image,[],platform,enemyBounds)
             self.vp = viewport.Viewport(pygame.Rect(info[4][0], info[4][1], \
                                                     640, 480), self.player, \

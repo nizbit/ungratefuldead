@@ -24,6 +24,7 @@ class StateMachine(object):
         self._character = character
         self._sprites = sprites
         '''initialize all states fields'''
+        
         self._standingState = states.StandingState(character, sprites["right"].keys(),\
                                                    sprites["left"].keys())
         self._runningState = states.RunningState(character, sprites["run-right"].keys(),\
@@ -32,8 +33,8 @@ class StateMachine(object):
                                                    sprites["left"].keys())
         self._fallingState = states.FallingState(character, sprites["right"].keys(),\
                                                    sprites["left"].keys())
-        self._attackingState = states.AttackingState(character, sprites["attack-right"].keys(),\
-                                                   sprites["attack-left"].keys())
+        self._attackingState = states.AttackingState(character, sprites["run-right"].keys(),\
+                                                   sprites["run-left"].keys())
         self._powerupState = states.PowerupState(character, sprites["right"].keys(),\
                                                    sprites["left"].keys())
         self._deadState = states.DeadState(character, sprites["right"].keys(),\
@@ -43,43 +44,18 @@ class StateMachine(object):
         
         '''initialize current state to the base class and set to standing'''
                 
-        self._currentStates = {"falling": self._fallingState}
+        self._currentStates = {"falling": self._fallingState, \
+                               "right": self._standingState, \
+                               "left": self._standingState}
         self.isJumping = False
     def getCurrentStates(self):
         return self._currentStates
-    
     def handleAnimation(self):
         """
         Checks __character's dictionary of sprites and cycles through the
         dictionary with each call
         """
-        if self._currentStates.has_key("attack"):
-            if self.character.getCurrentWeapon().getName() == "handGun":
-                self._runningState.rightFrames = self._sprites[run-pistol-right].keys()
-                self._runningState.leftFrames = self._sprites[run-pistol-left].keys()
-                if self._attackingState.direction == "up":
-                    self._standingState.rightFrames = self._sprites[pistol-up-right].keys()
-                    self._standingState.leftFrames = self._sprites[pistol-up-left].keys()
-                elif self._attackingState.direction == "down":
-                    self._standingState.rightFrames = self._sprites[pistol-down-right].keys()
-                    self._standingState.leftFrames = self._sprites[pistol-down-left].keys()
-                else:
-                    self._standingState.rightFrames = self._sprites[right].keys()
-                    self._standingState.leftFrames = self._sprites[left].keys()
-                    
-            elif self.character.getCurrentWeapon().getName() == "M16":
-                self._runningState.rightFrames = self._sprites[run-pistol-right].keys()
-                self._runningState.leftFrames = self._sprites[run-pistol-left].keys()
-                self._standingState.rightFrames = self._sprites[right].keys()
-                self._standingState.leftFrames = self._sprites[left].keys()
-            elif self.character.getCurrentWeapon().getName() == "shotGun":
-                pass
-            elif self.character.getCurrentWeapon().getName() == "bazooka":
-                pass
-            elif self.character.getCurrentWeapon().getName() == "sniper":
-                pass
         
-        """
         if self._character.getDirection() == "right":
             if self._currentStates.has_key("attack"):
                 for state in self._currentStates:
@@ -96,24 +72,8 @@ class StateMachine(object):
                 temp = self._currentStates["runRight"].getFrame("right")
                 temp = self._sprites["run-right"][temp]
                 self._character.setSpriteSheetCoord(temp)
-            
         else:
-            if self._currentStates.has_key("attack"):
-                for state in self._currentStates:
-                    if self._currentStates[state].__str__() != "AttackingState":
-                        self._currentStates[state].resetFrames()
-                        
-                temp = self._currentStates["attack"].getFrame("right")
-                temp = self._sprites["attack-right"][temp]
-                self._character.setSpriteSheetCoord(temp)
-            elif self._currentStates.has_key("runRight"):
-                for state in self._currentStates:
-                    if self._currentStates[state].__str__() != "RunningState":
-                        self._currentStates[state].resetFrames()
-                temp = self._currentStates["runRight"].getFrame("right")
-                temp = self._sprites["run-right"][temp]
-                self._character.setSpriteSheetCoord(temp)
-
+            
             if self._currentStates.has_key("attack"):
                 for state in self._currentStates:
                     if self._currentStates[state].__str__() != "AttackingState":
@@ -130,7 +90,6 @@ class StateMachine(object):
                 temp = self._currentStates["runLeft"].getFrame("left")
                 temp = self._sprites["run-left"][temp]
                 self._character.setSpriteSheetCoord(temp)
-
         if len(self._currentStates.keys()) == 1 and self._currentStates.has_key("falling"):
             for state in self._currentStates:
                 self._currentStates[state].resetFrames()
@@ -143,19 +102,13 @@ class StateMachine(object):
                 self._character.setSpriteSheetCoord(temp)
                 del self._currentStates["right"]
             else:
-                self._currentStates["right"] = self._standingState
-                temp = self._currentStates["right"].getFrame("right")
-                temp = self._sprites["right"][temp]
-                
-                self._character.setSpriteSheetCoord(temp)
-                del self._currentStates["right"]
-                
                 self._currentStates["left"] = self._standingState
                 temp = self._currentStates["left"].getFrame("left")
                 temp = self._sprites["left"][temp]
                 self._character.setSpriteSheetCoord(temp)
                 del self._currentStates["left"]
-        """         
+    
+   
     def handleCollision(self, type, rect):
         pass
                   
@@ -221,7 +174,157 @@ class PlayerStateMachine(StateMachine):
         """
         super(PlayerStateMachine, self).__init__(character, sprites)
         self.jumpSound = pygame.mixer.Sound("Sounds/jump.wav")
-    
+        
+    def handleAnimation(self):
+        
+        """
+        Checks __character's dictionary of sprites and cycles through the
+        dictionary with each call
+        """
+        attackRunKey = []
+        attackStandKey = []
+        if self._currentStates.has_key("attack"):
+            if self._character.getCurrentWeapon().getName() == "pistol":
+                self._runningState.rightFrames = self._sprites["pistol-run-right"].keys()
+                self._runningState.leftFrames = self._sprites["pistol-run-left"].keys()
+                attackRunKey = ["pistol-run-right", "pistol-run-left"]
+                
+                if self._attackingState.direction == "up":
+                    self._standingState.rightFrames = self._sprites["pistol-up-right"].keys()
+                    self._standingState.leftFrames = self._sprites["pistol-up-left"].keys()
+                    attackStandKey = ["pistol-up-right", "pistol-up-left"]
+                
+                elif self._attackingState.direction == "down":
+                    self._standingState.rightFrames = self._sprites["pistol-down-right"].keys()
+                    self._standingState.leftFrames = self._sprites["pistol-down-left"].keys()
+                    attackStandKey = ["pistol-down-right", "pistol-down-left"]
+                
+                else:
+                    self._standingState.rightFrames = self._sprites["pistol-right"].keys()
+                    self._standingState.leftFrames = self._sprites["pistol-left"].keys()
+                    attackStandKey = ["pistol-right", "pistol-left"]
+                    
+            elif self._character.getCurrentWeapon().getName() == "machine":
+                self._runningState.rightFrames = self._sprites["machine-run-right"].keys()
+                self._runningState.leftFrames = self._sprites["machine-run-left"].keys()
+                attackRunKey = ["machine-run-right", "machine-run-left"]
+                
+                if self._attackingState.direction == "up":
+                    self._standingState.rightFrames = self._sprites["machine-up-right"].keys()
+                    self._standingState.leftFrames = self._sprites["machine-up-left"].keys()
+                    attackStandKey = ["machine-up-right", "machine-up-left"]
+                
+                elif self._attackingState.direction == "down":
+                    self._standingState.rightFrames = self._sprites["machine-down-right"].keys()
+                    self._standingState.leftFrames = self._sprites["machine-down-left"].keys()
+                    attackStandKey = ["machine-down-right", "machine-down-left"]
+                
+                else:
+                    self._standingState.rightFrames = self._sprites["machine-right"].keys()
+                    self._standingState.leftFrames = self._sprites["machine-left"].keys()
+                    attackStandKey = ["machine-right", "machine-left"]
+            
+            elif self._character.getCurrentWeapon().getName() == "shotGun":
+                self._runningState.rightFrames = self._sprites["shot-run-right"].keys()
+                self._runningState.leftFrames = self._sprites["shot-run-left"].keys()
+                attackRunKey = ["shot-run-right", "shot-run-left"]
+            
+                if self._attackingState.direction == "up":
+                    self._standingState.rightFrames = self._sprites["shot-up-right"].keys()
+                    self._standingState.leftFrames = self._sprites["shot-up-left"].keys()
+                    attackStandKey = ["shot-up-right", "shot-up-left"]
+                
+                elif self._attackingState.direction == "down":
+                    self._standingState.rightFrames = self._sprites["shot-down-right"].keys()
+                    self._standingState.leftFrames = self._sprites["shot-down-left"].keys()
+                    attackStandKey = ["shot-down-right", "shot-down-left"]
+                
+                else:
+                    self._standingState.rightFrames = self._sprites["shot-right"].keys()
+                    self._standingState.leftFrames = self._sprites["shot-left"].keys()
+                    attackStandKey = ["shot-right", "shot-left"]
+            
+            elif self._character.getCurrentWeapon().getName() == "bazooka":
+                attackStandKey = ["bazooka-right", "bazooka-left"]
+                attackRunKey = ["bazooka-right", "bazooka-left"]
+                if self._attackingState.direction == "up":
+                    self._standingState.rightFrames = self._sprites["bazooka-up-right"].keys()
+                    self._standingState.leftFrames = self._sprites["bazooka-up-left"].keys()
+                    attackStandKey = ["bazooka-up-right", "bazooka-up-left"]
+                
+                elif self._attackingState.direction == "down":
+                    self._standingState.rightFrames = self._sprites["bazooka-down-right"].keys()
+                    self._standingState.leftFrames = self._sprites["bazooka-down-left"].keys()
+                    attackStandKey = ["bazooka-down-right", "bazooka-down-left"]
+                
+                else:
+                    self._standingState.rightFrames = self._sprites["bazooka-right"].keys()
+                    self._standingState.leftFrames = self._sprites["bazooka-left"].keys()
+                    attackStandKey = ["bazooka-right", "bazooka-left"]
+            
+            else:
+                attackStandKey = ["snipe-right", "snipe-left"]
+                attackRunKey = ["snipe-right", "snipe-left"]
+                self._standingState.rightFrames = self._sprites["snipe-right"].keys()
+                self._standingState.leftFrames = self._sprites["snipe-left"].keys()
+        
+        else:
+            """
+            NEED TO CHANGE!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            """
+            attackStandKey = ["pistol-right", "pistol-left"]
+            attackRunKey = ["pistol-run-right", "pistol-run-left"]
+            self._runningState.rightFrames = self._sprites["pistol-run-right"].keys()
+            self._runningState.leftFrames = self._sprites["pistol-run-left"].keys()
+            self._standingState.rightFrames = self._sprites["pistol-right"].keys()
+            self._standingState.leftFrames = self._sprites["pistol-left"].keys()
+        
+        temp = None
+        #print self._character.getCurrentWeapon().getName()
+        if self._character.getDirection() == "right":
+                
+            if self._currentStates.has_key("runRight"):   
+                temp = self._currentStates["runRight"].getFrame("right")
+                temp = self._sprites[attackRunKey[0]][temp]
+            else:
+                temp = self._currentStates["right"].getFrame("right")
+                temp = self._sprites[attackStandKey[0]][temp]
+            
+        else:
+            if self._currentStates.has_key("runLeft"):   
+                temp = self._currentStates["runLeft"].getFrame("left")
+                temp = self._sprites[attackRunKey[1]][temp]
+            else:
+                temp = self._currentStates["left"].getFrame("left")
+                temp = self._sprites[attackStandKey[1]][temp]
+                    
+        self._character.setSpriteSheetCoord(temp)
+        
+        if len(self._currentStates.keys()) == 1 and self._currentStates.has_key("falling"):
+            for state in self._currentStates:
+                self._currentStates[state].resetFrames()
+            
+            if self._character.getDirection() == "right":
+                self._currentStates["right"] = self._standingState
+                temp = self._currentStates["right"].getFrame("right")
+                temp = self._sprites["right"][temp]
+                
+                self._character.setSpriteSheetCoord(temp)
+                del self._currentStates["right"]
+            else:
+                self._currentStates["right"] = self._standingState
+                temp = self._currentStates["right"].getFrame("right")
+                temp = self._sprites["right"][temp]
+                
+                self._character.setSpriteSheetCoord(temp)
+                del self._currentStates["right"]
+                
+                self._currentStates["left"] = self._standingState
+                temp = self._currentStates["left"].getFrame("left")
+                temp = self._sprites["left"][temp]
+                self._character.setSpriteSheetCoord(temp)
+                del self._currentStates["left"]
+                
     def handleCollision(self, type, rect):
         """
         Sets __currentState based on collisionBoundary which would be either
@@ -281,25 +384,21 @@ class PlayerStateMachine(StateMachine):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    if self._currentStates.has_key("right"):
-                        del self._currentStates["right"]
-                    if self._currentStates.has_key("left"):
-                        del self._currentStates["left"]
-                    if self._currentStates.has_key("runLeft"):
-                        del self._currentStates["runLeft"]
-                                             
-                    self._character.setDirection("right")
-                    self._currentStates["runRight"] = self._runningState
+                    if not (self._character.getCurrentWeapon().getName() == "bazooka" or \
+                    self._character.getCurrentWeapon().getName() == "sniper"):
+                        if self._currentStates.has_key("runLeft"):
+                            del self._currentStates["runLeft"]
+                                                 
+                        self._character.setDirection("right")
+                        self._currentStates["runRight"] = self._runningState
                     
                 if event.key == pygame.K_LEFT:
-                    if self._currentStates.has_key("right"):
-                        del self._currentStates["right"]
-                    if self._currentStates.has_key("left"):
-                        del self._currentStates["left"]
-                    if self._currentStates.has_key("runRight"):
-                        del self._currentStates["runRight"]
-                    self._character.setDirection("left")
-                    self._currentStates["runLeft"] = self._runningState
+                    if not (self._character.getCurrentWeapon().getName() == "bazooka" or \
+                    self._character.getCurrentWeapon().getName() == "sniper"):
+                        if self._currentStates.has_key("runRight"):
+                            del self._currentStates["runRight"]
+                        self._character.setDirection("left")
+                        self._currentStates["runLeft"] = self._runningState
                         
                 elif event.key == pygame.K_SPACE:
                     if not self.isJumping:
