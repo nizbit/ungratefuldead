@@ -201,7 +201,10 @@ class AttackingState(State):
             if self.direction == "up":
                 tempProjAngle = 270
             elif self.direction == "down":
-                tempProjAngle = 45
+                if self._character.getDirection() == "right":
+                    tempProjAngle = 45
+                else:
+                    tempProjAngle = 135
             else:
                 if (self._character.getDirection() == "right"):
                     tempProjAngle = 0
