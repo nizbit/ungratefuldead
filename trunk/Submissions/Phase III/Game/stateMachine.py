@@ -49,6 +49,7 @@ class StateMachine(object):
                                "left": self._standingState}
         self.isJumping = False
         self.isCrouching = False
+        self.wallJump = False
     def getCurrentStates(self):
         return self._currentStates
     def handleAnimation(self):
@@ -136,12 +137,14 @@ class StateMachine(object):
             else:
                 self._character.rect.right = rect.left
                 typeOfColl = "right"
+            self.wallJump = True
             self._character.velocity.x = 0
             
         else:
             if abs(bottom) < abs(top):
                 self._character.rect.bottom = rect.top
                 self.isJumping = False
+                self.wallJump = False
                 typeOfColl = "bottom"
             else:
                 self._character.rect.top = rect.bottom
@@ -390,7 +393,8 @@ class PlayerStateMachine(StateMachine):
                         self._attackingState.direction = "up"
                         
                 if event.key == pygame.K_DOWN:
-                    self._attackingState.direction = "down"
+                    if self._character.getCurrentWeapon().getName() != "bazooka":
+                        self._attackingState.direction = "down"
                     
                 if event.key == pygame.K_RIGHT:
                     self._attackingState.direction = "straight"
@@ -418,12 +422,21 @@ class PlayerStateMachine(StateMachine):
                         self._currentStates["runLeft"] = self._runningState
                         
                 elif event.key == pygame.K_SPACE:
-                    if not self.isJumping and not self.isCrouching:
+                    if not self.isJumping and not self.isCrouching and \
+                    self._character.getCurrentWeapon().getName() != "bazooka":
                         self._currentStates["jump"] = self._jumpingState
                         self.isJumping = True
                         self.jumpSound.play()
                     if self.isCrouching:
                         self._character.rect.move_ip(0,50)
+                    if self.wallJump:
+                        self._character.changeDirection()
+                        if self._currentStates.has_key("runRight"):
+                            del self._currentStates["runRight"]
+                        if self._currentStates.has_key("runLeft"):
+                            del self._currentStates["runLeft"]
+                        self._currentStates["jump"] = self._jumpingState
+                        
 
                 elif event.key == pygame.K_LSHIFT:
                     self._currentStates["attack"] = self._attackingState
@@ -431,7 +444,7 @@ class PlayerStateMachine(StateMachine):
                     not self.isCrouching:
                         del self._currentStates["attack"]
 # =-==========================================================================================
-                elif event.key == pygame.K_v:
+                elif event.key == pygame.K_1:
                     self._character.setNextWeapon()
                     
                     if self._character.getCurrentWeapon().getName() == "snipe" and \
@@ -440,7 +453,7 @@ class PlayerStateMachine(StateMachine):
                         
                     if "attack" in self._currentStates:
                         self._currentStates["attack"].direction = "straight"
-                elif event.key == pygame.K_c:
+                elif event.key == pygame.K_2:
                     self._character.setPreviousWeapon()
                     if self._character.getCurrentWeapon().getName() == "snipe" and \
                     not self.isCrouching:
@@ -478,7 +491,7 @@ class PlayerStateMachine(StateMachine):
                 elif event.key == pygame.K_z:
                     self.isCrouching = False
         self.act()
-    
+        self.wallJump = False
 class EnemyStateMachine(StateMachine):
     def __init__(self, character, sprites, playerRect, topographyRects):
         """

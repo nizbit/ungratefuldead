@@ -212,7 +212,7 @@ machine-down-left
 machine-down-left 324 1012 51 51
 ;
 Velocity
-4 30
+4 15
 SpriteSheet
 Images/mysprite.png
 Position

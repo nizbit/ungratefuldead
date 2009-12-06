@@ -15,6 +15,7 @@ class Viewport(object):
         self.ybounds = boundsy
         temp = pygame.Rect(0, 0, 0, 0)
         self.sections = sections[:]
+        self.numOfSections = len(self.sections)
         self.section = sections[0]
     def update(self):
         
@@ -59,7 +60,7 @@ class Viewport(object):
         
     def determineSection(self):
         cRect = self.character.rect
-        for x in range(len(self.sections)):
+        for x in range(self.numOfSections):
             if self.sections[x].collidepoint(cRect.centerx, cRect.centery):
                 return self.sections[x]
         return None
