@@ -176,7 +176,7 @@ class ProjectilePowerup(Item):
         
         self._offSetx = 33
         self._offSety = -13
-        self._rect = rect.move(self._offSetx,self._offSety)
+        self._rect.move_ip(self._offSetx, self._offSety)
         (self._previousX, self._previousY) = rect.center
         self._firstRun = True
             
