@@ -178,6 +178,7 @@ class AttackingState(State):
         self.hurtSound = pygame.mixer.Sound("Sounds/whip.wav")
         self.hurtSound.set_volume(.1)
         self._bulletImage = pygame.image.load('Images/bullets.png')
+        self._direction = "straight"
         
     def act(self):
         """
@@ -200,6 +201,22 @@ class AttackingState(State):
             
             self._character.getCurrentWeapon().addProjectile(projectileTemp)
         
+        # Testing for the powerUp safetyNet
+        if self._counter == 0 and self._frameNum == 1:
+            tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
+            tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 90)
+        
+            self._character.getCurrentPowerup().addPowerup(tempProjectile)
+            self._character.getCurrentPowerup().addPowerup(tempProjectile2)
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if self._frameNum == len(self.leftFrames) - 3 and \
         self._counter == 0:
             self.hurtSound.play()
@@ -207,6 +224,7 @@ class AttackingState(State):
             self._character.attacking = True
         else:
             self._character.attacking = False
+            
     
     def __str__(self):
         return "AttackingState"
@@ -251,6 +269,15 @@ class PowerupState(State):
         """
         Apply effects of a powerup to the character
         """
+            
+        if self._counter == 0 and self._frameNum == 1:
+            tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2)
+            tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2)
+        
+        self._character.getCurrentPowerup().addPowerup(tempProjectile)
+        self._character.getCurrentPowerup().addPowerup(tempProjectile2)
+        
+        
         pass
     
     def __str__(self):
