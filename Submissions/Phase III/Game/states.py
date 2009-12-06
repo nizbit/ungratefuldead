@@ -196,7 +196,6 @@ class AttackingState(State):
         
         tempProjAngle = 0 
         self._counter += 1
-        self._counter = 1
         tempX = self._character.getCurrentWeapon().getOffsetX()
         tempY = self._character.getCurrentWeapon().getOffsetY()
         
@@ -221,6 +220,7 @@ class AttackingState(State):
                                           self._character.rect,"randomShit", None,
                                           9, tempProjAngle, tempX, tempY)
             self._character.getCurrentWeapon().addProjectile(projectileTemp)
+        print str(self._counter)
         
         # Testing for the powerUp safetyNet
 
@@ -233,11 +233,10 @@ class AttackingState(State):
 #        if self._counter == 0 and self._frameNum == 1:
 
         
-        
+                
         tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
-        tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 180)
-       
-#        self._character.getCurrentPowerup().addPowerup(tempProjectile)
+        for i in range(0, 5, 1):
+            self._character.getCurrentPowerup().addPowerup(tempProjectile)
 
 
 #        pygame.time.wait(100)
