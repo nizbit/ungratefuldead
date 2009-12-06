@@ -196,10 +196,17 @@ class AttackingState(State):
         
         tempProjAngle = 0 
         self._counter += 1
-        print self._counter
+        self._counter = 1
+        tempX = self._character.getCurrentWeapon().getOffsetX()
+        tempY = self._character.getCurrentWeapon().getOffsetY()
+        
+        
+        
         if self._counter == 1:
             if self.direction == "up":
                 tempProjAngle = 270
+                tempX = 8
+                tempY = -2
             elif self.direction == "down":
                 if self._character.getDirection() == "right":
                     tempProjAngle = 45
@@ -212,8 +219,7 @@ class AttackingState(State):
                     tempProjAngle = 180  
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
-                                          9, tempProjAngle)
-            
+                                          9, tempProjAngle, tempX, tempY)
             self._character.getCurrentWeapon().addProjectile(projectileTemp)
         
         # Testing for the powerUp safetyNet
