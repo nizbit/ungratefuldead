@@ -48,6 +48,7 @@ class StateMachine(object):
                                "right": self._standingState, \
                                "left": self._standingState}
         self.isJumping = False
+        self.isCrouching = False
     def getCurrentStates(self):
         return self._currentStates
     def handleAnimation(self):
@@ -264,12 +265,20 @@ class PlayerStateMachine(StateMachine):
             """
             NEED TO CHANGE!!!!!!!!!!!!!!!!!!!!!!!!!!!
             """
-            attackStandKey = ["right", "left"]
-            attackRunKey = ["run-right", "run-left"]
-            self._runningState.rightFrames = self._sprites["run-right"].keys()
-            self._runningState.leftFrames = self._sprites["run-left"].keys()
-            self._standingState.rightFrames = self._sprites["right"].keys()
-            self._standingState.leftFrames = self._sprites["left"].keys()
+            if self.isCrouching:
+                attackStandKey = ["crawl-right", "crawl-left"]
+                attackRunKey = ["crawl-right", "crawl-left"]
+                self._runningState.rightFrames = self._sprites["crawl-right"].keys()
+                self._runningState.leftFrames = self._sprites["crawl-left"].keys()
+                self._standingState.rightFrames = self._sprites["crawl-right"].keys()
+                self._standingState.leftFrames = self._sprites["crawl-left"].keys()
+            else:
+                attackStandKey = ["right", "left"]
+                attackRunKey = ["run-right", "run-left"]
+                self._runningState.rightFrames = self._sprites["run-right"].keys()
+                self._runningState.leftFrames = self._sprites["run-left"].keys()
+                self._standingState.rightFrames = self._sprites["right"].keys()
+                self._standingState.leftFrames = self._sprites["left"].keys()
         
         temp = None
         #print self._character.getCurrentWeapon().getName()
@@ -395,7 +404,7 @@ class PlayerStateMachine(StateMachine):
                 if event.key == pygame.K_LEFT:
                     self._attackingState.direction = "straight"
                     if not (self._character.getCurrentWeapon().getName() == "bazooka" or \
-                    self._character.getCurrentWeapon().getName() == "sniper"):
+                    self._character.getCurrentWeapon().getName() == "snipe"):
                         if self._currentStates.has_key("runRight"):
                             del self._currentStates["runRight"]
                         self._character.setDirection("left")
@@ -416,8 +425,8 @@ class PlayerStateMachine(StateMachine):
 
                 elif event.key == pygame.K_c:
                     self._character.setPreviousWeapon()
-                elif event.key == pygame.K_x:
-                    pass
+                elif event.key == pygame.K_z:
+                    self.isCrouching = True
                 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or \
@@ -444,6 +453,8 @@ class PlayerStateMachine(StateMachine):
                     if self._currentStates.has_key("attack"):
                         del self._currentStates["attack"]
                     self._character.attacking = False
+                elif event.key == pygame.K_z:
+                    self.isCrouching = False
         self.act()
     
 class EnemyStateMachine(StateMachine):

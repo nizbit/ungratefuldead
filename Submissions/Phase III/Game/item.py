@@ -128,7 +128,7 @@ class Projectile(Item):
         if offSety == None:
             offSety = 0
         
-        self._rect = rect.move(offSetx, offSety)
+        self._rect = self._rect.move(offSetx, offSety)
 
         if angle == None:
             self._angle = 0
