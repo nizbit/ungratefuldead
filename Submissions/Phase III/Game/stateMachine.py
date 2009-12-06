@@ -267,9 +267,9 @@ class PlayerStateMachine(StateMachine):
             """
             if self.isCrouching:
                 attackStandKey = ["crawl-right", "crawl-left"]
-                attackRunKey = ["crawl-right", "crawl-left"]
-                self._runningState.rightFrames = self._sprites["crawl-right"].keys()
-                self._runningState.leftFrames = self._sprites["crawl-left"].keys()
+                attackRunKey = ["crawl-move-right", "crawl-move-left"]
+                self._runningState.rightFrames = self._sprites["crawl-move-right"].keys()
+                self._runningState.leftFrames = self._sprites["crawl-move-left"].keys()
                 self._standingState.rightFrames = self._sprites["crawl-right"].keys()
                 self._standingState.leftFrames = self._sprites["crawl-left"].keys()
             else:
@@ -385,13 +385,20 @@ class PlayerStateMachine(StateMachine):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    self._attackingState.direction = "up"
+                    if self._character.getCurrentWeapon().getName() != "snipe" and \
+                    self._character.getCurrentWeapon().getName() != "bazooka":
+                        self._attackingState.direction = "up"
+                        
                 if event.key == pygame.K_DOWN:
                     self._attackingState.direction = "down"
+                    
                 if event.key == pygame.K_RIGHT:
                     self._attackingState.direction = "straight"
-                    if not (self._character.getCurrentWeapon().getName() == "bazooka" or \
-                    self._character.getCurrentWeapon().getName() == "sniper"):
+                    if (self._character.getCurrentWeapon().getName() == "bazooka" or \
+                    self._character.getCurrentWeapon().getName() == "snipe"):
+                        if self._character.getDirection() == "left":
+                            self._character.changeDirection()
+                    else:
                         if self._currentStates.has_key("runLeft"):
                             del self._currentStates["runLeft"]
                                                  
@@ -400,28 +407,46 @@ class PlayerStateMachine(StateMachine):
                     
                 if event.key == pygame.K_LEFT:
                     self._attackingState.direction = "straight"
-                    if not (self._character.getCurrentWeapon().getName() == "bazooka" or \
+                    if (self._character.getCurrentWeapon().getName() == "bazooka" or \
                     self._character.getCurrentWeapon().getName() == "snipe"):
+                        if self._character.getDirection() == "right":
+                            self._character.changeDirection()
+                    else:
                         if self._currentStates.has_key("runRight"):
                             del self._currentStates["runRight"]
                         self._character.setDirection("left")
                         self._currentStates["runLeft"] = self._runningState
                         
                 elif event.key == pygame.K_SPACE:
-                    if not self.isJumping:
+                    if not self.isJumping and not self.isCrouching:
                         self._currentStates["jump"] = self._jumpingState
                         self.isJumping = True
                         self.jumpSound.play()
+                    if self.isCrouching:
+                        self._character.rect.move_ip(0,50)
 
                 elif event.key == pygame.K_LSHIFT:
                     self._currentStates["attack"] = self._attackingState
-                    
+                    if self._character.getCurrentWeapon().getName() == "snipe" and\
+                    not self.isCrouching:
+                        del self._currentStates["attack"]
 # =-==========================================================================================
                 elif event.key == pygame.K_v:
                     self._character.setNextWeapon()
-
+                    
+                    if self._character.getCurrentWeapon().getName() == "snipe" and \
+                    not self.isCrouching:
+                        self._character.setNextWeapon()
+                        
+                    if "attack" in self._currentStates:
+                        self._currentStates["attack"].direction = "straight"
                 elif event.key == pygame.K_c:
                     self._character.setPreviousWeapon()
+                    if self._character.getCurrentWeapon().getName() == "snipe" and \
+                    not self.isCrouching:
+                        self._character.setPreviousWeapon()
+                    if "attack" in self._currentStates:
+                        self._currentStates["attack"].direction = "straight"
                 elif event.key == pygame.K_z:
                     self.isCrouching = True
                 
