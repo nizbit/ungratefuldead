@@ -190,9 +190,10 @@ class AttackingState(State):
         else:
             projectileAngle = 180  
         '''(basically adding a proj to the world)**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
-
-        if (self._counter == 0 and self._frameNum == 1):
-   
+        
+        
+        if self._counter == 0  and self._frameNum == 0:
+ #           print "hit"
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
                                           9, projectileAngle)
@@ -204,7 +205,7 @@ class AttackingState(State):
 
     
 #        if self._counter == 0 and self._frameNum == 1:
-#            tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
+#        tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
 #            tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 180)
 
         
@@ -213,7 +214,7 @@ class AttackingState(State):
 #            tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 90)
 
         
-#            self._character.getCurrentPowerup().addPowerup(tempProjectile)
+#        self._character.getCurrentPowerup().addPowerup(tempProjectile)
 #            self._character.getCurrentPowerup().addPowerup(tempProjectile2)
     
         
