@@ -90,8 +90,7 @@ class StandingState(State):
         """
         Set the x and y velocity values of the character to zero
         """
-        self._character.velocity.x = 0
-        self._character.velocity.y = 0
+        pass
 
     def __str__(self):
         return "StandingState"
