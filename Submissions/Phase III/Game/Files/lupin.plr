@@ -13,13 +13,16 @@ run-right7 264 1360 39 61
 run-right8 334 1359 39 63
 run-right9 408 1362 33 57
 ;
+crawl-move-right
+crawl-move-right1 248 1074 50 25
+crawl-move-right2 318 1074 51 25
+crawl-move-move-move-right3 384 1074 59 25
+crawl-move-right4 248 1114 52 25
+crawl-move-right5 316 1114 54 25
+crawl-move-right6 384 1115 58 25
+;
 crawl-right
 crawl-right1 248 1074 50 25
-crawl-right2 318 1074 51 25
-crawl-right3 384 1074 59 25
-crawl-right4 248 1114 52 25
-crawl-right5 316 1114 54 25
-crawl-right6 384 1115 58 25
 ;
 pistol-right
 pistol-right 337 154 36 62
@@ -116,13 +119,16 @@ run-left7 264 1360 39 61
 run-left8 334 1359 39 63
 run-left9 408 1362 33 57
 ;
+crawl-move-left
+crawl-move-left1 248 1074 50 25
+crawl-move-left2 318 1074 51 25
+crawl-move-left3 384 1074 59 25
+crawl-move-left4 248 1114 52 25
+crawl-move-left5 316 1114 54 25
+crawl-move-left6 384 1115 58 25
+;
 crawl-left
 crawl-left1 248 1074 50 25
-crawl-left2 318 1074 51 25
-crawl-left3 384 1074 59 25
-crawl-left4 248 1114 52 25
-crawl-left5 316 1114 54 25
-crawl-left6 384 1115 58 25
 ;
 pistol-left
 pistol-left 337 154 36 62
