@@ -50,6 +50,8 @@ class StateMachine(object):
         self.isJumping = False
         self.isCrouching = False
         self.wallJump = False
+        self.wallLeft = False
+        self.wallRight = False
     def getCurrentStates(self):
         return self._currentStates
     def handleAnimation(self):
@@ -429,7 +431,7 @@ class PlayerStateMachine(StateMachine):
                         self.jumpSound.play()
                     if self.isCrouching:
                         self._character.rect.move_ip(0,50)
-                    if self.wallJump:
+                    if self.wallJump and not self.isCrouching:
                         self._character.changeDirection()
                         if self._currentStates.has_key("runRight"):
                             del self._currentStates["runRight"]
