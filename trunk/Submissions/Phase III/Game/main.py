@@ -277,6 +277,16 @@ class Game(object):
                         killList.append(enemy)
                         self.killSound.play()
                         self.score += 100 + self.player.HP + self.player.lives * 100
+            # Note: check if safetyNet collides with enemies
+            for powerUp in self.powerUpListMain:
+                if powerUp.getRect().colliderect(enemy.rect):
+                    if enemy.HP > 1:
+                        enemy.HP -= 20
+                        self.powerUpListMain.remove(powerUp)
+                    else:
+                        killList.append(enemy)
+                        self.killSound.play()
+                        self.score += 100 + self.player.HP + self.player.lives * 100
 
             if self.player.attacking is True and \
             self.player.rect.colliderect(enemy.rect):
