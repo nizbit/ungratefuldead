@@ -283,9 +283,6 @@ class PlayerStateMachine(StateMachine):
         temp = None
         #print self._character.getCurrentWeapon().getName()
         if self._character.getDirection() == "right":
-            print "Name: ", self._character.getCurrentWeapon().getName()
-            print "attackRun: ", attackRunKey[0]
-            
             if self._currentStates.has_key("runRight"):   
                 temp = self._currentStates["runRight"].getFrame("right")
                 temp = self._sprites[attackRunKey[0]][temp]
