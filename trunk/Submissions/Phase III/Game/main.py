@@ -388,12 +388,15 @@ class Game(object):
             
             
             if self.player.getDirection() == "left":
-                temp = pygame.Surface(self.player.rect.size)
-                temp.blit(self.level.image,self.player.rect)
-                temp = pygame.transform.flip(temp, True, False)
-                temp.blit(self.player.getSpriteSheet(),(0,0),self.player.getSpriteSheetCoord())
-                temp = pygame.transform.flip(temp, True, False)
-                self.level.image.blit(temp, self.player.rect)
+                #temp = pygame.Surface(self.player.rect.size)
+                #temp.blit(self.level.image,self.player.rect)
+                #temp.blit(temp,self.player.rect)
+                #temp = pygame.transform.flip(temp, True, False)
+                #temp.blit(self.player.getSpriteSheet(),(0,0),self.player.getSpriteSheetCoord())
+                #temp = pygame.transform.flip(temp, True, False)
+                #self.level.image.blit(temp, self.player.rect)
+                sprite = pygame.transform.flip(self.player.getSpriteSheet().subsurface(self.player.getSpriteSheetCoord()), True, False)
+                self.level.image.blit(sprite,self.player.rect)
             else:
                 self.level.image.blit(self.player.getSpriteSheet(),self.player.rect,self.player.getSpriteSheetCoord())
             
