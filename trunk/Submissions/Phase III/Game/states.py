@@ -224,7 +224,7 @@ class AttackingState(State):
         
         self._character.getCurrentPowerup().addPowerup(tempProjectile)
 #        pygame.time.wait(100)
-        self._character.getCurrentPowerup().addPowerup(tempProjectile2)
+#        self._character.getCurrentPowerup().addPowerup(tempProjectile2)
     
         
         
