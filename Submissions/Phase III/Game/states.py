@@ -201,13 +201,14 @@ class AttackingState(State):
             self._character.getCurrentWeapon().addProjectile(projectileTemp)
         
         # Testing for the powerUp safetyNet
+        """
         if self._counter == 0 and self._frameNum == 1:
             tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
             tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 90)
         
             self._character.getCurrentPowerup().addPowerup(tempProjectile)
             self._character.getCurrentPowerup().addPowerup(tempProjectile2)
-        
+        """
         
         
         
