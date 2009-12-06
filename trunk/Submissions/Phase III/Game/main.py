@@ -328,7 +328,8 @@ class Game(object):
                 self.player.handleCollision("object", platform)
 
             for projectiles in self.projectileListMain:
-                if platform.contains(projectiles.getRect()):
+                
+                if projectiles.getRect().colliderect(platform):
                     self.projectileListMain.remove(projectiles)
 
 
