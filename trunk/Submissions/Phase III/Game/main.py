@@ -89,10 +89,28 @@ class Game(object):
         self.projectileListMain = []
         self.powerUpListMain = []
         
+        """
+        -----------------------------------------------------------------------
+        Spawn
+        -----------------------------------------------------------------------
+        actions velocity spritesheet position
+        spritesheet actions velocity rect worldrect
+        self.level.platform
+        """
+        self.leftSpawnCounter = 0
+        self.rightSpawnCounter = 0
+        self.topSpawnCounter = 0
+        self.spawnIndex = 0
+        self.spawnList = []
         
-
-        
-        
+        info = self.loader.loadPlayer("Files/darkheartless.plr")
+        actions = info[0]
+        velocity = info[1]
+        spriteSheet = pygame.image.load(info[2]).convert_alpha()
+        temp = character.NPC(spriteSheet, actions, velocity, self.player.rect, self.level.platform[:])
+        temp.setSpriteSheetCoord(actions["right"]["right"])
+        temp.setPosition(0,0)
+        self.spawnList.append(temp)
         """
         Flags
         """
@@ -101,42 +119,8 @@ class Game(object):
         self.won = False
     def loadLevel(self, level):
         if level == 0:
-            solids = [pygame.Rect(0, 0, 40, 480),
-                      pygame.Rect(3790, 0, 10, 480),
-                      pygame.Rect(0, 103, 3800, 10),
-                      pygame.Rect(0, 367, 925, 113),
-                      pygame.Rect(1144, 367, 770, 113),
-                      pygame.Rect(2190, 367, 423, 113),
-                      pygame.Rect(2715, 367, 56, 113),
-                      pygame.Rect(2892, 367, 908, 113)]
-        
-            platform = [pygame.Rect(333, 343,117, 24),
-                        pygame.Rect(450, 289,116, 78),
-                        pygame.Rect(1518, 294,226, 73),
-                        pygame.Rect(1869, 244, 118, 23),
-                        pygame.Rect(2141, 244,118, 23),
-                        pygame.Rect(2487, 288, 116, 78),
-                        pygame.Rect(2994,244, 118,23)]
-            enemyBounds = [pygame.Rect(910, 320, 10, 40),
-                           pygame.Rect(1150, 320, 10, 40),
-                           pygame.Rect(1900, 320, 10, 40),
-                           pygame.Rect(2190, 320, 10, 40),
-                           pygame.Rect(2715, 320, 1, 40),
-                           pygame.Rect(2770, 320, 1, 40),
-                           pygame.Rect(2890, 320, 10, 20),
-                           pygame.Rect(1872, 216, 10, 40),
-                           pygame.Rect(1975, 216, 10, 40),
-                           pygame.Rect(2140, 216, 10, 40),
-                           pygame.Rect(2250, 216, 10, 40),
-                           pygame.Rect(3000, 216, 10, 40),
-                           pygame.Rect(3104, 216, 10, 40),
-                           pygame.Rect(336, 300, 10, 40),
-                           pygame.Rect(452, 240, 10, 40),
-                           pygame.Rect(560, 240, 10, 40),
-                           pygame.Rect(1512, 240, 10, 40),
-                           pygame.Rect(2488, 240, 10, 40),
-                           pygame.Rect(2595, 216, 10, 40)]
-            self.level = world.World("Images/level2.png", solids, platform, enemyBounds)
+            info = self.loader.loadLevel("Files/level2.zom")
+            
         elif level == 2:
             solids = [pygame.Rect(0, 0, 3800, 10),
                       pygame.Rect(0, 470, 3800, 10),
@@ -184,15 +168,15 @@ class Game(object):
             self.level = world.World("Images/bck.png", solids, platform, enemyBounds)
         elif level == 1:
             info = self.loader.loadLevel("Files/level3.zom")
-            platform = info[0][:]
-            enemyBounds = info[1][:]
-            image = info[2]
-            self.level = world.World(image,[],platform,enemyBounds)
-            self.vp = viewport.Viewport(pygame.Rect(info[4][0], info[4][1], \
-                                                    640, 480), self.player, \
-                                                    info[3],
-                                                    info[4][2], info[4][3], \
-                                                    info[4][4], info[4][5])
+        platform = info[0][:]
+        enemyBounds = info[1][:]
+        image = info[2]
+        self.level = world.World(image,[],platform,enemyBounds)
+        self.vp = viewport.Viewport(pygame.Rect(info[4][0], info[4][1], \
+                                                640, 480), self.player, \
+                                                info[3],
+                                                info[4][2], info[4][3], \
+                                                info[4][4], info[4][5])
             
     def handleEnemies(self, event):
         pass
@@ -375,6 +359,17 @@ class Game(object):
             
         self.vp.update()
         
+        """
+        *
+        *
+        Random Spawn of enemies
+        *
+        *
+        """
+        self.leftSpawnCounter += 1
+        if self.leftSpawnCounter > 10:
+            #temp = self.spawnList[s]
+            pass
         if self.running == False:
             self.reset()
         self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.player.getCurrentWeapon().getImage()) 
@@ -388,6 +383,7 @@ class Game(object):
             
             
             if self.player.getDirection() == "left":
+
                 #temp = pygame.Surface(self.player.rect.size)
                 #temp.blit(self.level.image,self.player.rect)
                 #temp.blit(temp,self.player.rect)
@@ -422,9 +418,12 @@ class Game(object):
             if self.player.HP <= 0:
                self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
                self.screen.blit(self.gameOverText, (250,250))
-                
+            """
+            for x in self.spawnList:
+                self.screen.blit(x.getSpriteSheet(),x.rect, x.getSpriteSheetCoord())   
+            """
             pygame.display.flip()
-        
+            
         
     def run(self):
         self.running = True
@@ -460,47 +459,16 @@ class Game(object):
             pygame.time.wait(3000)
                     
     def loadPlayer(self, level):
-        
+        info = self.loader.loadPlayer("Files/lupin.plr")
+        actions = info[0]
+        velocity = info[1]
+        spriteSheet = pygame.image.load(info[2]).convert_alpha()
+        self.player = character.Player(spriteSheet, actions, velocity)
+        self.player.setSpriteSheetCoord(actions["right"]["right"])
         if level == 1:
-            info = self.loader.loadPlayer("Files/lupin.plr")
-            actions = info[0]
-            velocity = info[1]
-            spriteSheet = pygame.image.load(info[2]).convert_alpha()
-            self.player = character.Player(spriteSheet, actions, velocity)
-            self.player.setSpriteSheetCoord(actions["right"]["right"])
             self.player.setPosition(250,684)
         else:
-            actions = {"right": {"right": pygame.Rect(15, 15, 35, 45)},
-                      "left": {"left": pygame.Rect(265, 20, 35, 45)},
-                      "run-right": {"right-run1": pygame.Rect(15, 70, 35, 45),
-                                    "right-run2": pygame.Rect(60, 70, 35, 45),
-                                    "right-run3": pygame.Rect(100, 70, 35, 45),
-                                    "right-run4": pygame.Rect(135, 70, 35, 45),
-                                    "right-run5": pygame.Rect(175, 70, 35, 45),
-                                    "right-run6": pygame.Rect(225, 70, 35, 45)},
-                      "run-left": {"left-run6": pygame.Rect(433, 59, 32, 45),
-                                   "left-run5": pygame.Rect(395, 59, 26, 45),
-                                   "left-run4": pygame.Rect(360, 70, 26, 45),
-                                   "left-run3": pygame.Rect(330, 70, 26, 45),
-                                   "left-run2": pygame.Rect(298, 70, 26, 45),
-                                   "left-run1": pygame.Rect(265, 70, 26, 45)},
-                      "attack-right": {"right-attack1": pygame.Rect(15, 130, 22, 45),
-                                       "right-attack2": pygame.Rect(52, 130, 44, 45),
-                                       "right-attack3": pygame.Rect(100, 130, 50, 45),
-                                       "right-attack4": pygame.Rect(160, 130, 67, 45),
-                                       "right-attack5": pygame.Rect(238, 130, 42, 45),
-                                       "right-attack6": pygame.Rect(295, 130, 76, 45)},
-                      "attack-left": {"left-attack1": pygame.Rect(577, 73, 22, 45),
-                                      "left-attack2": pygame.Rect(526, 62, 44, 45),
-                                      "left-attack3": pygame.Rect(471, 62, 50, 45),
-                                      "left-attack4": pygame.Rect(508, 121, 67, 45),
-                                      "left-attack5": pygame.Rect(459, 120, 42, 45),
-                                      "left-attack6": pygame.Rect(377, 127, 76, 45)}}
-            velocity = vector2d.Vector2D(4,12)
-            spriteSheet = pygame.image.load('Images/johnmorris.png').convert_alpha()
-            self.player = character.Player(spriteSheet, actions, velocity)
-            self.player.setSpriteSheetCoord(actions["right"]["right"])
-            self.player.setPosition(250,684)
+            self.player.setPosition(50, 200)
         
     def loadEnemies(self, level):
         zombieSpriteSheet = pygame.image.load('Images/zombie.png').convert_alpha()
@@ -573,21 +541,15 @@ class Game(object):
             self.enemies.append(character.NPC(zombieSpriteSheet,
                                               zombieActions,
                                               zombieVelocity,
-                                              "blah",
-                                              "a",
                                               self.player.rect,
-                                              tempWorldRects,
-                                              "a"))
+                                              tempWorldRects))
             #self.enemies[x].setSpriteSheetCoord(zombieActions["right"]["right"])
         for x in range(11,21,1):
             self.enemies.append(character.NPC(zombieSpriteSheet2, 
                                               zombieActions2, 
                                               zombieVelocity2, 
-                                              "blah",
-                                              "a", 
                                               self.player.rect,
-                                              tempWorldRects, 
-                                             "a"))
+                                              tempWorldRects))
             #self.enemies[x].setSpriteSheetCoord(zombieActions2["right"]["right"])
         
         for x in range(0,10,1):
