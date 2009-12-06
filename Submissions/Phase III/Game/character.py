@@ -224,6 +224,7 @@ class Player(Character):
         gun1Image = pygame.image.load("Images/weaponPic/handGun.png")
         gun2Image = pygame.image.load("Images/weaponPic/M16.png")
         testImage = pygame.image.load("Images/weaponPic/bazooka.png")
+        gun3Image = pygame.image.load("Images/weaponPic/gun1.png")
 
                 
        # gun1Projectile = item.Projectile(gun1Image, self._rect, "testProjectile", None, vector2d.Vector2D(1, 8))
@@ -233,10 +234,11 @@ class Player(Character):
         projectileImage3 = pygame.image.load("Images/bullet1.png")
         
         
-        gun1 = item.Weapon(gun1Image, self._rect, "pistol", None, None, projectileImage1)
-        gun2 = item.Weapon(gun2Image, self._rect, "machine", None, None, projectileImage2)
+        gun1 = item.Weapon(gun1Image, self._rect, "pistol", None, None, projectileImage1, 30, 11)
+        gun2 = item.Weapon(gun2Image, self._rect, "machine", None, None, projectileImage1)
         gun3 = item.Weapon(testImage, self._rect, "shotGun", None, None, projectileImage3)
-        
+        gun4 = item.Weapon(gun3Image, self._rect, "bazooka", None, None, projectileImage2)
+        gun5 = item.Weapon(gun3Image, self._rect, "snipe", None, None, projectileImage2)
 
         self._safetyNetImage = pygame.image.load("Images/weaponPic/blackBullet.png").convert()
             
@@ -253,6 +255,9 @@ class Player(Character):
         self._weaponsList.append(gun1)
         self._weaponsList.append(gun2)
         self._weaponsList.append(gun3)
+        self._weaponsList.append(gun4)
+        self._weaponsList.append(gun5)
+        
         
         self._currentWeapon = gun1
                 
