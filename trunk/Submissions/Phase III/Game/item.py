@@ -130,7 +130,7 @@ class Projectile(Item):
 
 
 class ProjectilePowerup(Item):
-    def __init__(self, image, rect, name, sound, velocity,angle, power=0, range=0):
+    def __init__(self, image, rect, name, sound, velocity, jcount, power=0, range=0):
         '''
         ** call base class constructor
         ** set projectile items velocity ==> Vector2D
@@ -147,14 +147,14 @@ class ProjectilePowerup(Item):
         self._velocity = velocity
         self._power = power
         self._range = range
-        self._jCounter = 10
-        self._angle = math.radians(angle)
+        self._jCounter = jcount
+        #self._angle = math.radians(angle)
         
         self._offSetx = 33
         self._offSety = -13
         self._rect = rect.move(self._offSetx,self._offSety)
         (self._previousX, self._previousY) = rect.center
-       
+        self._firstRun = True
             
     def getVelocity(self):
         return self._velocity
@@ -166,11 +166,15 @@ class ProjectilePowerup(Item):
         '''
         ** offset the projectile items rect by the current velocity
         '''
-        
+        #if self._firstRun:
+        #    self._firstRun = False
+        #else:
+        #if self._jCounter >= 0:
+        #    self._jCounter = 0
         self._jCounter += 10
         self._angle = math.radians(self._jCounter)
             
-        
+        #print self._jCounter
         (xT, yT) = rect.center
 
         xT += self._offSety
