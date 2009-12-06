@@ -145,7 +145,6 @@ class Projectile(Item):
         '''
         ** offset the projectile items rect by the current velocity
         '''
-        print self._rect.center
         if updateAngle != None:
             self._angle = updateAngle
         
