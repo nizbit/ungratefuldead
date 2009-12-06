@@ -342,7 +342,12 @@ class Game(object):
                 
                 if projectiles.getRect().colliderect(platform):
                     self.projectileListMain.remove(projectiles)
-
+                
+                if projectiles.getName() == "shotGunShit":
+                    tempx = abs(self.player.rect.centerx - projectiles.getRect().centerx)
+                    tempy = abs(self.player.rect.centery - projectiles.getRect().centery)
+                    if  tempx > 75 or tempy > 75:
+                        self.projectileListMain.remove(projectiles) 
 
 
         del killList[:]
