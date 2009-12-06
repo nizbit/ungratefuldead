@@ -19,7 +19,8 @@ class Item(object):
         ** set items sound              ==> pygame.mixer.Sound
         '''
         self._image = image
-        self._rect = rect
+        self._rect = image.get_rect()
+        self._rect.topleft = rect.topleft
         self._name = name
         self._sound = sound
     
@@ -48,7 +49,7 @@ class Item(object):
         
     
 class Weapon(Item):
-    def __init__(self, image, rect, name, sound, projectile = None, projectileImage = None):
+    def __init__(self, image, rect, name, sound, projectile = None, projectileImage = None, offSetx = None, offSety = None):
         '''
         ** call base class constructor
         ** set weapon items projectile ==> Projectile
@@ -63,9 +64,22 @@ class Weapon(Item):
             self._hasProjectileFlag = True
         else:
             self._hasProjectileFlag = False
+        if offSetx == None:
+            self._offSet_x = 0
+        else:
+            self._offSet_x = offSetx            
+        if offSety == None:
+            self._offSet_y = 0
+        else:
+            self._offSet_y = offSety
             
             
         self._projectileImage = projectileImage
+    
+    def getOffsetX(self):
+        return self._offSet_x
+    def getOffsetY(self):
+        return self._offSet_y
     
     def getProjectileImage(self):
         return self._projectileImage
@@ -89,7 +103,7 @@ class Weapon(Item):
         return self._projectileList
 
 class Projectile(Item):
-    def __init__(self, image, rect, name, sound, velocity, angle=None, power=0, range=0):
+    def __init__(self, image, rect, name, sound, velocity, angle=None, offSetx = None, offSety = None, power=0, range=0):
         '''
         ** call base class constructor
         ** set projectile items velocity ==> Vector2D
@@ -106,6 +120,16 @@ class Projectile(Item):
         self._velocity = velocity
         self._power = power
         self._range = range
+       
+        self._offSetx = 30
+        self._offSety = 11
+        if offSetx == None:
+            offSetx = 0
+        if offSety == None:
+            offSety = 0
+        
+        self._rect = rect.move(offSetx, offSety)
+
         if angle == None:
             self._angle = 0
         else:
@@ -121,6 +145,7 @@ class Projectile(Item):
         '''
         ** offset the projectile items rect by the current velocity
         '''
+        print self._rect.center
         if updateAngle != None:
             self._angle = updateAngle
         
