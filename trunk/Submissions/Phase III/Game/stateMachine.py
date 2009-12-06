@@ -272,12 +272,12 @@ class PlayerStateMachine(StateMachine):
             """
             NEED TO CHANGE!!!!!!!!!!!!!!!!!!!!!!!!!!!
             """
-            attackStandKey = ["pistol-right", "pistol-left"]
-            attackRunKey = ["pistol-run-right", "pistol-run-left"]
-            self._runningState.rightFrames = self._sprites["pistol-run-right"].keys()
-            self._runningState.leftFrames = self._sprites["pistol-run-left"].keys()
-            self._standingState.rightFrames = self._sprites["pistol-right"].keys()
-            self._standingState.leftFrames = self._sprites["pistol-left"].keys()
+            attackStandKey = ["right", "left"]
+            attackRunKey = ["run-right", "run-left"]
+            self._runningState.rightFrames = self._sprites["run-right"].keys()
+            self._runningState.leftFrames = self._sprites["run-left"].keys()
+            self._standingState.rightFrames = self._sprites["right"].keys()
+            self._standingState.leftFrames = self._sprites["left"].keys()
         
         temp = None
         #print self._character.getCurrentWeapon().getName()
@@ -383,7 +383,12 @@ class PlayerStateMachine(StateMachine):
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self._attackingState.direction = "up"
+                if event.key == pygame.K_DOWN:
+                    self._attackingState.direction = "down"
                 if event.key == pygame.K_RIGHT:
+                    self._attackingState.direction = "straight"
                     if not (self._character.getCurrentWeapon().getName() == "bazooka" or \
                     self._character.getCurrentWeapon().getName() == "sniper"):
                         if self._currentStates.has_key("runLeft"):
@@ -393,6 +398,7 @@ class PlayerStateMachine(StateMachine):
                         self._currentStates["runRight"] = self._runningState
                     
                 if event.key == pygame.K_LEFT:
+                    self._attackingState.direction = "straight"
                     if not (self._character.getCurrentWeapon().getName() == "bazooka" or \
                     self._character.getCurrentWeapon().getName() == "sniper"):
                         if self._currentStates.has_key("runRight"):
@@ -417,6 +423,9 @@ class PlayerStateMachine(StateMachine):
                     self._character.setPreviousWeapon()
                 
             elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_UP or \
+                event.key == pygame.K_DOWN:
+                    self._attackingState.direction = "straight"
                 if event.key == pygame.K_RIGHT:
                     if self._currentStates.has_key("runRight"):
                         del self._currentStates["runRight"]

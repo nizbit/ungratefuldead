@@ -1,14 +1,25 @@
 Actions
 right
-right 337 154 36 62
+right 414 1150 21 62
 ;
 run-right
-run-right1 261 4 42 65
-run-right2 328 7 44 61
-run-right3 417 6 33 63
-run-right4 264 83 41 61
-run-right5 329 85 46 65
-run-right6 414 89 35 61
+run-right1 270 1120 28 61
+run-right2 334 1220 40 60
+run-right3 408 1220 31 62
+run-right4 262 1291 42 60
+run-right5 332 1292 42 58
+run-right6 410 1291 27 60
+run-right7 264 1360 39 61
+run-right8 334 1359 39 63
+run-right9 408 1362 33 57
+;
+crawl-right
+crawl-right1 248 1074 50 25
+crawl-right2 318 1074 51 25
+crawl-right3 384 1074 59 25
+crawl-right4 248 1114 52 25
+crawl-right5 316 1114 54 25
+crawl-right6 384 1115 58 25
 ;
 pistol-right
 pistol-right 337 154 36 62
@@ -92,7 +103,18 @@ machine-down
 machine-down-right 324 1012 51 51
 ;
 left
-left 337 154 36 62
+left 414 1150 21 62
+;
+run-left
+run-left1 270 1120 28 61
+run-left2 334 1220 40 60
+run-left3 408 1220 31 62
+run-left4 262 1291 42 60
+run-left5 332 1292 42 58
+run-left6 410 1291 27 60
+run-left7 264 1360 39 61
+run-left8 334 1359 39 63
+run-left9 408 1362 33 57
 ;
 run-left
 run-left1 261 4 42 65
@@ -101,6 +123,14 @@ run-left3 417 6 33 63
 run-left4 264 83 41 61
 run-left5 329 85 46 65
 run-left6 414 89 35 61
+;
+crawl-left
+crawl-left1 248 1074 50 25
+crawl-left2 318 1074 51 25
+crawl-left3 384 1074 59 25
+crawl-left4 248 1114 52 25
+crawl-left5 316 1114 54 25
+crawl-left6 384 1115 58 25
 ;
 pistol-left
 pistol-left 337 154 36 62
