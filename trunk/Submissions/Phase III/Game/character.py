@@ -318,52 +318,34 @@ class Player(Character):
         self._stateMachine.move()
         
 class NPC(Character):
-    def __init__(self, spriteSheet, sprites, MAX_VELOCITY, type, item,\
-                 playerRect, topographyRects, speechFile = None):
+    def __init__(self, spriteSheet, sprites, MAX_VELOCITY, playerRect, topographyRects):
                  
         """
         Call base class' __init__. Set class variables to corresponding
         arguments. Call loadSpeech(speechFile).
         """
         super(NPC, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
-        self._type = type
-        self._item = item
-        self.file = None
-        if speechFile is not None:
-            self.loadSpeech(speechFile)
         self._stateMachine = stateMachine.EnemyStateMachine(self, sprites, \
                                                             playerRect, topographyRects)
-    def loadSpeech(self, speechFile):
-        """
-        Load textual information from given argument file name. If the file
-        fails to load, throw an exception
-        """
-        
-        #try:
-        #    self.file = open(speechFile, 'r')
-        #except IOError:
-        #    print "Could not open file. Exiting program"
-        #    sys.exit()
-        pass
-    
-    def getType(self):
-        """
-        Return __type
-        """
-        return self._type
-    
+        self.playerRect = playerRect
+        self.topographyRects = topographyRects[:]
+    def getCopy(self):
+        return NPC(self._spriteSheet, self._sprites, self.MAX_VELOCITY, \
+                   self.playerRect, self.topographyRects)
     def setItem(self,item):
         """
         Set __item to item.
-        """
+        
         self._item = item
-    
+        """
+        pass
     def getItem(self):
         """
         Return __item
-        """
+        
         return self.__item
-    
+        """
+        pass
     def update(self):
         self._stateMachine.think()
         self._stateMachine.handleAnimation()
