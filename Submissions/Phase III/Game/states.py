@@ -35,6 +35,9 @@ class State(object):
         
         self._frameNum = 0
         self._counter = 0
+        self._jCounter = 0
+        self._jCounterPrevious = 0
+        
     def getFrame(self, frameSet):
         """
         Return the string that corresponds to a key in the character's sprite
@@ -191,8 +194,10 @@ class AttackingState(State):
             projectileAngle = 180  
         '''(basically adding a proj to the world)**This could be a power up ==> take the last two conditions out, it's like hyper mode**'''
         
-        
-        if self._counter == 0  and self._frameNum == 0:
+        # self.direction == up | staight | down 
+        self._counter += 1
+        print self._counter
+        if self._counter == 1:
  #           print "hit"
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
@@ -210,12 +215,16 @@ class AttackingState(State):
 
         
 #        if self._counter == 0 and self._frameNum == 1:
-#            tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
-#            tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 90)
 
         
-#        self._character.getCurrentPowerup().addPowerup(tempProjectile)
-#            self._character.getCurrentPowerup().addPowerup(tempProjectile2)
+        
+        tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
+        tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 180)
+
+        
+        self._character.getCurrentPowerup().addPowerup(tempProjectile)
+#        pygame.time.wait(100)
+        self._character.getCurrentPowerup().addPowerup(tempProjectile2)
     
         
         
