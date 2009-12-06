@@ -178,7 +178,7 @@ class AttackingState(State):
         self.hurtSound = pygame.mixer.Sound("Sounds/whip.wav")
         self.hurtSound.set_volume(.1)
         self._bulletImage = pygame.image.load('Images/bullets.png')
-        self._direction = "straight"
+        self.direction = "straight"
         
     def act(self):
         """
