@@ -90,6 +90,7 @@ class Game(object):
         self.powerUpListMain = []
         
         
+
         
         
         """
@@ -227,6 +228,10 @@ class Game(object):
             if not self.vp.rect.contains(projectiles.getRect()):
                 self.projectileListMain.remove(projectiles)            
         
+        for powerUp in self.player.getCurrentPowerup().getPowerupList():
+            self.powerUpListMain.append(powerUp)
+            self.player.getCurrentPowerup().getPowerupList().remove(powerUp)
+            
         
         """loop through the events"""
         temp = pygame.event.get()
@@ -253,6 +258,8 @@ class Game(object):
             self.player.update(temp)
             for projectile in self.projectileListMain:
                 projectile.update()
+            for powerUp in self.powerUpListMain:
+                powerUp.update(self.player.getRect())
   
 
         
@@ -370,6 +377,9 @@ class Game(object):
             '''blit the projectiles'''
             for projectile in self.projectileListMain:
                 self.level.image.blit(projectile.getImage(), projectile.getRect())
+                
+            for powerUp in self.powerUpListMain:
+                self.level.image.blit(powerUp.getImage(), powerUp.getRect())
 
             if self.vp.rect.inflate(50,0).contains(self.coinRect):
                 self.level.image.blit(self.coin,self.coinRect)

@@ -238,8 +238,16 @@ class Player(Character):
         gun3 = item.Weapon(testImage, self._rect, "shotGun", None, None, projectileImage3)
         
 
+        self._safetyNetImage = pygame.image.load("Images/weaponPic/blackBullet.png").convert()
+            
+        safetyNet1 = item.Powerups(self._safetyNetImage, self._rect, "safetyNet", None)    
         
         
+        
+        
+        self._powerupList = []
+        self._powerupList.append(safetyNet1)
+        self._currentPowerup = safetyNet1
         
         self._weaponsList = []
         self._weaponsList.append(gun1)
@@ -249,6 +257,11 @@ class Player(Character):
         self._currentWeapon = gun1
                 
         self._stateMachine = stateMachine.PlayerStateMachine(self, sprites)
+    def getSafetyNetImage(self):
+        return self._safetyNetImage
+    def getCurrentPowerup(self):
+        return self._currentPowerup
+    
     def getWeaponsList(self):
         return self._weaponsList
     

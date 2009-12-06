@@ -127,12 +127,86 @@ class Projectile(Item):
         xPos = math.cos(math.radians(self._angle)) * self._velocity   
         yPos = math.sin(math.radians(self._angle)) * self._velocity
         self._rect = self._rect.move(xPos, yPos)
+
+
+class ProjectilePowerup(Item):
+    def __init__(self, image, rect, name, sound, velocity,angle, power=0, range=0):
+        '''
+        ** call base class constructor
+        ** set projectile items velocity ==> Vector2D
+        ** set projectile items power    ==> int
+        ** set projectile items range    ==> int
+        Note: Angle::
+                270
+            225     315
+        180             0
+            135     45
+                90    
+        '''
+        super(ProjectilePowerup, self).__init__(image, rect, name, sound)
+        self._velocity = velocity
+        self._power = power
+        self._range = range
+        self._jCounter = 10
+        self._angle = math.radians(angle)
+        
+        self._offSetx = 33
+        self._offSety = -13
+        self._rect = rect.move(self._offSetx,self._offSety)
+        (self._previousX, self._previousY) = rect.center
+       
+            
+    def getVelocity(self):
+        return self._velocity
+    
+    def setVelocity(self, velocity):
+        self._velocity = velocity
+        
+    def update(self, rect):
+        '''
+        ** offset the projectile items rect by the current velocity
+        '''
+        
+        self._jCounter += 10
+        self._angle = math.radians(self._jCounter)
+            
+        
+        (xT, yT) = rect.center
+
+        xT += self._offSety
+        yT += self._offSety
+        xPos = math.cos(self._angle) * 10  
+        yPos = math.sin(self._angle) * 10 
+
+        xTemp = xT - self._previousX 
+        yTemp =  yT - self._previousY
+        
+        xPos = math.trunc(xPos)
+        yPos = math.trunc(yPos)
+        
+        self._rect.move_ip(xPos + xTemp, yPos + yTemp)
+        
+        (self._previousX, self._previousY) = rect.center
+        self._previousX += self._offSety
+        self._previousY += self._offSety
+        
         
         
 
 class SafetyNet(Item):
     def __init__(self, image, rect, name, sound):
-        super(SafetyNet, self).__init__(image, rect, name, sound)
+       super(SafetyNet, self).__init__(image, rect, name, sound)
+       #safetyNetImage = pygame.image.load("/Images/weaponPic/blackBullet.png").convert()
+        
+        
+       #     def __init__(self, image, rect, name, sound, velocity, angle=None, power=0, range=0):
+    #  safetyNetProjectile = item.Projectile(image, rect, "safetyNetProj", None, 3,  
+        
+     #  projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
+      #                                    self._character.rect,"randomShit", None,
+      #                                    9, projectileAngle)
+        
+        
         
     def update(self):
         pass
@@ -145,6 +219,16 @@ class Powerups(Item):
         ** call base class constructor
         '''
         super(Powerups, self).__init__(image, rect, name, sound)
+        
+        self._powerUpList = []
+        
+    def addPowerup(self, thing):
+        self._powerUpList.append(thing)
+    def removePowerup(self, thing):
+        self._powerUpList.remove(thing)
+    def getPowerupList(self):
+        return self._powerUpList
+    
 
 class BoostHP(Powerups):
     def __init__(self, image, rect, name, sound, amount=0):
