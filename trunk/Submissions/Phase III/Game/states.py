@@ -220,9 +220,10 @@ class AttackingState(State):
         
         tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
         tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 180)
+       
+#        self._character.getCurrentPowerup().addPowerup(tempProjectile)
 
-        
-        self._character.getCurrentPowerup().addPowerup(tempProjectile)
+
 #        pygame.time.wait(100)
 #        self._character.getCurrentPowerup().addPowerup(tempProjectile2)
     
