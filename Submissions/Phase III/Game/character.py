@@ -263,6 +263,11 @@ class Player(Character):
         self._currentWeapon = gun1
                 
         self._stateMachine = stateMachine.PlayerStateMachine(self, sprites)
+    def setCurrentWeapon(self, name):
+        for weapon in self._weaponsList:
+            if weapon.getName() == name:
+                self._currentWeapon = weapon
+    
     def getSafetyNetImage(self):
         return self._safetyNetImage
     def getCurrentPowerup(self):
