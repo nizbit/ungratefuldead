@@ -49,7 +49,7 @@ class Item(object):
         
     
 class Weapon(Item):
-    def __init__(self, image, rect, name, sound, projectile = None, projectileImage = None, offSetx = None, offSety = None):
+    def __init__(self, image, rect, name, sound, projectile = None, projectileImage = None, offSetx = None, offSety = None, power = None):
         '''
         ** call base class constructor
         ** set weapon items projectile ==> Projectile
@@ -72,6 +72,10 @@ class Weapon(Item):
             self._offSet_y = 0
         else:
             self._offSet_y = offSety
+        if power == None:
+            self._power = 50
+        else:
+            self._power = power
             
             
         self._projectileImage = projectileImage
@@ -103,7 +107,7 @@ class Weapon(Item):
         return self._projectileList
 
 class Projectile(Item):
-    def __init__(self, image, rect, name, sound, velocity, angle=None, offSetx = None, offSety = None, power=0, range=0):
+    def __init__(self, image, rect, name, sound, velocity, angle=None, offSetx = None, offSety = None, power = None, range=0):
         '''
         ** call base class constructor
         ** set projectile items velocity ==> Vector2D
@@ -118,11 +122,14 @@ class Projectile(Item):
         '''
         super(Projectile, self).__init__(image, rect, name, sound)
         self._velocity = velocity
-        self._power = power
+        if power == None:
+            self._power =  1
+        else:
+            self._power = power
         self._range = range
        
-        self._offSetx = 30
-        self._offSety = 11
+        #self._offSetx = 30
+        #self._offSety = 11
         if offSetx == None:
             offSetx = 0
         if offSety == None:
@@ -134,7 +141,10 @@ class Projectile(Item):
             self._angle = 0
         else:
             self._angle = angle 
-            
+    
+    def getPower(self):
+        return self._power
+    
     def getVelocity(self):
         return self._velocity
     
