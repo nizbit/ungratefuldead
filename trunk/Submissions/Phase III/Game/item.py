@@ -79,6 +79,8 @@ class Weapon(Item):
             
             
         self._projectileImage = projectileImage
+    def getPower(self):
+        return self._power
     
     def getOffsetX(self):
         return self._offSet_x
@@ -127,9 +129,7 @@ class Projectile(Item):
         else:
             self._power = power
         self._range = range
-       
-        #self._offSetx = 30
-        #self._offSety = 11
+
         if offSetx == None:
             offSetx = 0
         if offSety == None:
