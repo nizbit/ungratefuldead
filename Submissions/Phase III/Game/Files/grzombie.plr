@@ -46,7 +46,7 @@ left-attack5 73 353 51 43
 left-attack6 7 355 53 40
 ;
 Velocity
-6 7
+2 7
 SpriteSheet
 Images/GR-Zombie.png
 Position

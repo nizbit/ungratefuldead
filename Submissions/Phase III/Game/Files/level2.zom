@@ -22,8 +22,8 @@ EnemyBounds
 1150 320 10 40
 1900 320 10 40
 2190 320 10 40
-2715 320 1 40
-2770 320 1 40
+2715 320 10 40
+2770 320 10 40
 2890 320 10 20
 1872 216 10 40
 1975 216 10 40
@@ -38,26 +38,26 @@ EnemyBounds
 2488 240 10 40
 2595 216 10 40
 Enemies
-zombie 200 200
-zombie 388 300
-grzombie 488 244
-grzombie 594 296
-grzombie 692 196
-zombie 1544 184
-zombie 1600 176
-grzombie 1672 176
-grzombie 1764 240
-zombie 2168 144
-grzombie 2248 280
-zombie 2300 308
-grzombie 2508 188
-zombie 2612 160
-zombie 2948 260
-grzombie 3056 140
-zombie 3056 280
-grzombie 3100 200
-zombie 3200 200
-grzombie 300 300
+zombie 200 200  left
+zombie 388 300 left
+grzombie 488 244 left
+grzombie 594 296 left
+grzombie 692 196 left
+zombie 1544 184 left
+zombie 1600 176 left
+grzombie 1672 176 left
+grzombie 1764 240 left
+zombie 2168 144 left
+grzombie 2248 280 left
+zombie 2300 308 left
+grzombie 2508 188 left
+zombie 2612 160 left
+zombie 2948 260 left
+grzombie 3056 140 left
+zombie 3056 280 left
+grzombie 3100 200 left
+zombie 3200 200 left
+grzombie 300 300 left
 Image
 Images/level2.png
 Viewport

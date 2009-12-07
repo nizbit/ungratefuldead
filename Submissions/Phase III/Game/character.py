@@ -338,8 +338,8 @@ class NPC(Character):
         return self.__item
         """
         pass
-    def update(self):
-        self._stateMachine.think()
+    def update(self, rect):
+        self._stateMachine.think(rect)
         self._stateMachine.handleAnimation()
         self._stateMachine.move()
         
