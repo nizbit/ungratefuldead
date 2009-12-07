@@ -201,6 +201,7 @@ class AttackingState(State):
         tempY = self._character.getCurrentWeapon().getOffsetY()
         
         weaponName = self._character.getCurrentWeapon().getName()
+        weaponPower = self._character.getCurrentWeapon().getPower()
         
         if self._counter == 1:
             if self.direction == "up":
@@ -226,7 +227,7 @@ class AttackingState(State):
                     
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
-                                          9, tempProjAngle, tempX, tempY)
+                                          9, tempProjAngle, tempX, tempY, weaponPower)
             
             angleList = []
             #angleList.append(324)
@@ -246,7 +247,7 @@ class AttackingState(State):
                 for i in range(0, 5, 1):
                     projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
-                                          9, tempProjAngle + i, tempX, tempY)
+                                          9, tempProjAngle + i, tempX, tempY, weaponPower)
                     self._character.getCurrentWeapon().addProjectile(projectileTemp)
             elif weaponName == "shotGun":
                 for angle in angleList:
@@ -259,7 +260,7 @@ class AttackingState(State):
                             angle -= 90 
                     projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"shotGunShit", None,
-                                          9, angle, tempX, tempY)
+                                          9, angle, tempX, tempY, weaponPower)
                     self._character.getCurrentWeapon().addProjectile(projectileTemp)
             else:
                 self._character.getCurrentWeapon().addProjectile(projectileTemp)
@@ -277,16 +278,15 @@ class AttackingState(State):
 #        if self._counter == 0 and self._frameNum == 1:
 
         
-        """               
+        #if self._counter == 1 or self._counter == 2 or self._counter == 3 :         
         tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
-        for i in range(0, 5, 1):
-            self._character.getCurrentPowerup().addPowerup(tempProjectile)
-        """
-
-#        pygame.time.wait(100)
-#        self._character.getCurrentPowerup().addPowerup(tempProjectile2)
-    
         
+# Working version of the saftyNet        
+#        if self._counter == 1:
+#            for i in range(0, 10, 1):
+#                self._character.getCurrentPowerup().addPowerup(tempProjectile)
+    
+
         
         
         
