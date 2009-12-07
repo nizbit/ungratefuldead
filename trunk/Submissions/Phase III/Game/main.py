@@ -72,12 +72,12 @@ class Game(object):
         self.bckMusic = pygame.mixer.music   
         if level == 0:  
             self.bckMusic.load("HouseSounds/gamesong4.ogg")
-            self.bckMusic.set_volume(.95)
+            self.bckMusic.set_volume(.15)
             self.bckMusic.play()
 
         elif level == 1:
             self.bckMusic.load("HouseSounds/gamesong2.ogg")
-            self.bckMusic.set_volume(.95)
+            self.bckMusic.set_volume(.15)
             self.bckMusic.play()
         
         """
@@ -208,6 +208,7 @@ class Game(object):
                     loop = 0
 
     def update(self):
+            
         #print "player velocity: ", self.player.x_velocity
         
         #======================================================
@@ -245,7 +246,7 @@ class Game(object):
             self.screen.blit(self.deadImage, self.deadImage.get_rect())
             pygame.display.flip()
             
-            for projetile in self.projectileListMain:
+            for projectile in self.projectileListMain:
                 self.projectileListMain.remove(projectile)
             for powerUp in self.powerUpListMain:
                 self.powerUpListMain.remove(powerUp)
@@ -286,26 +287,16 @@ class Game(object):
                         killList.append(enemy)
                         self.killSound.play()
                         self.score += 100 + self.player.HP + self.player.lives * 100
-
-            if self.player.attacking is True and \
-            self.player.rect.colliderect(enemy.rect):
-                if enemy.HP > 1:
-                    enemy.HP -= 20
-                    coll = self.player.handleCollision("enemy", enemy.rect)
-                    self.player.getStateMachine().pushEnemy(enemy, coll)
-                else:
-                    killList.append(enemy)
-                    self.killSound.play()
-                    self.score += 100 + self.player.HP + self.player.lives * 100
                
-            elif self.player.rect.colliderect(enemy.rect):
+            if self.player.rect.colliderect(enemy.rect):
+                print "enemy: ", enemy.rect, " ", enemy
                 if self.player.HP > 1:
                     self.player.HP -= 1
                 else:
                     self.running = False
                     self.screen.blit(self.deadImage, self.deadImage.get_rect())
                     pygame.display.flip()
-                    for projetile in self.projectileListMain:
+                    for projectile in self.projectileListMain:
                         self.projectileListMain.remove(projectile)
                     for powerUp in self.powerUpListMain:
                         self.powerUpListMain.remove(powerUp)
@@ -368,6 +359,11 @@ class Game(object):
             
         self.vp.update()
         
+        
+        if self.running == False:
+            self.reset()
+        self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.player.getCurrentWeapon().getImage()) 
+
         """
         *
         *
@@ -376,14 +372,45 @@ class Game(object):
         *
         """
         self.leftSpawnCounter += 1
-        if self.leftSpawnCounter > 10:
-            #temp = self.spawnList[s]
-            pass
-        if self.running == False:
-            self.reset()
-        self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.player.getCurrentWeapon().getImage()) 
-
-        
+        self.rightSpawnCounter += 1
+        self.topSpawnCounter += 1
+        if len(self.enemies) < 6:
+            if self.rightSpawnCounter > 127:
+                self.rightSpawnCounter = 0
+                if self.spawnIndex < len(self.spawnList):
+                    temp = self.spawnList[self.spawnIndex].getCopy()
+                    temp.changeDirection()
+                    temp.rect.size = (50,50)
+                    temp.setPosition(self.vp.rect.right, self.vp.rect.top)
+                    temp.getStateMachine().handleAnimation()
+                    self.enemies.append(temp)
+                    self.spawnIndex += 1
+                else:
+                    self.spawnIndex = 0
+            if self.leftSpawnCounter > 227:
+                self.leftSpawnCounter = 0
+                if self.spawnIndex < len(self.spawnList):
+                    temp = self.spawnList[self.spawnIndex].getCopy()
+                    temp.changeDirection()
+                    temp.rect.size = (50,50)
+                    temp.setPosition(self.vp.rect.left, self.vp.rect.top)
+                    temp.getStateMachine().handleAnimation()
+                    self.enemies.append(temp)
+                    self.spawnIndex += 1
+                else:
+                    self.spawnIndex = 0
+            if self.topSpawnCounter > 313:
+                self.topSpawnCounter = 0
+                if self.spawnIndex < len(self.spawnList):
+                    temp = self.spawnList[self.spawnIndex].getCopy()
+                    temp.changeDirection()
+                    temp.rect.size = (50,50)
+                    temp.setPosition(self.vp.rect.x * .5, self.vp.rect.top)                    
+                    temp.getStateMachine().handleAnimation()
+                    self.enemies.append(temp)
+                    self.spawnIndex += 1
+                else:
+                    self.spawnIndex = 0
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
