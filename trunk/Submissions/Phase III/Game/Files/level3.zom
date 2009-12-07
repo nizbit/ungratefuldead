@@ -169,6 +169,31 @@ EnemyBounds
 13635 450 15 140
 13780 660 15 140
 Enemies
+zombie 828 550
+zombie 1647 550
+zombie 2676 550
+zombie 2828 550
+zombie 3710 687
+zombie 4072 700
+zombie 4526 777
+zombie 6174 554
+zombie 6820 610
+grzombie 6755 910
+grzombie 7915 605
+grzombie 8225 150
+grzombie 8920 72
+zombie 9000 355
+zombie 9585 65
+grzombie 10275 195
+grzombie 11120 648
+grzombie 11805 688
+zombie 11124 848
+grzombie 11932 794
+grzombie 12470 560
+grzombie 12500 735
+grzombie 13000 560
+grzombie 13545 760
+zombie 13910 680
 Image
 Images/level3.png
 Viewport
