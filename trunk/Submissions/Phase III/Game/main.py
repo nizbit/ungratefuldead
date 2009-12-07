@@ -297,7 +297,7 @@ class Game(object):
                             self.score += 100 + self.player.HP + self.player.lives * 100
                    
                 if self.player.rect.colliderect(enemy.rect):
-                    print "enemy: ", enemy.rect, " ", enemy
+                    #print "enemy: ", enemy.rect, " ", enemy
                     if self.player.HP > 1:
                         self.player.HP -= 1
                     else:
@@ -320,7 +320,7 @@ class Game(object):
             
         for enemy in self.enemies:
             if self.vp.rect.colliderect(enemy.getRect()):
-                enemy.update()
+                enemy.update(self.player.rect)
         
         for solid in self.level.solids:
             if self.player.rect.colliderect(solid):

@@ -551,11 +551,26 @@ class EnemyStateMachine(StateMachine):
             self._currentStates["runRight"] = self._runningState
         self._character.velocity.x = 0
         
-    def think(self):
+    def think(self, rect):
         """
         Based on the character's type, currentState, and level topography,
         change currentState to a different state
         """
+        sepx = self._character.rect.centerx - rect.centerx
+        print sepx
+        if sepx > 0:
+            if self._character.getDirection() == "right" and \
+            "runRight" in self._currentStates:
+                
+                self.turnAround()
+        elif sepx < 0:
+            if self._character.getDirection() == "left" and \
+            "runLeft" in self._currentStates:
+                
+                self.turnAround()
+        else:
+            print "fucker"
+                
         for state in self._currentStates:
             self._currentStates[state].act()
         if self._currentStates.has_key("jump"):
