@@ -506,7 +506,10 @@ class EnemyStateMachine(StateMachine):
         Call the parent class' __init__
         """
         super(EnemyStateMachine, self).__init__(character, sprites)
-        self._currentStates["runRight"] = self._runningState
+        if self._character.getDirection() == "right":
+            self._currentStates["runRight"] = self._runningState
+        else:
+            self._currentStates["runLeft"] = self._runningState
         self._currentStates["falling"] = self._fallingState
         self.counter = 0
         self.tRects = []

@@ -9,6 +9,8 @@ class Loader(object):
         self.platforms = []
         self.enemyBounds = [] 
         self.sections = []
+        self.enemies = []
+        
     def loadLevel(self, fileName):
         try:
             levelFile = open(fileName, 'r')
@@ -20,20 +22,25 @@ class Loader(object):
         levelFile.close()
         p = fileInfo.find("Platforms")
         s = fileInfo.find("Sections")
-        e = fileInfo.find("EnemyBounds")
+        eb = fileInfo.find("EnemyBounds")
+        e = fileInfo.find("Enemies")
         i = fileInfo.find("Image")
         v = fileInfo.find("Viewport")
         temp = fileInfo[p:s].splitlines()
         temp.pop(0)
         self.loadPlatforms(temp)
         
-        temp = fileInfo[s:e].splitlines()
+        temp = fileInfo[s:eb].splitlines()
         temp.pop(0)
         self.loadSections(temp)
         
-        temp = fileInfo[e:i].splitlines()
+        temp = fileInfo[eb:e].splitlines()
         temp.pop(0)
         self.loadEnemyBounds(temp)
+        
+        temp = fileInfo[e:i].splitlines()
+        temp.pop(0)
+        self.loadEnemies(temp)
         
         temp = fileInfo[i:v].splitlines()
         temp.pop(0)
@@ -44,9 +51,15 @@ class Loader(object):
         viewport = [int(temp[0]), int(temp[1]), int(temp[2]), \
                     int(temp[3]), int(temp[4]), int(temp[5])]
         
-        return [self.platforms, self.enemyBounds, image, self.sections, viewport]
+        return [self.platforms, self.enemyBounds, image, self.sections, viewport, self.enemies]
         
-    
+    def loadEnemies(self, elist):
+        
+        for y in elist:
+            if y == "":
+                continue
+            self.enemies.append(y.split())
+        
     def loadPlatforms(self, platList):
 
         for y in platList:
