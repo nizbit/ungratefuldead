@@ -135,8 +135,8 @@ class Projectile(Item):
         if offSety == None:
             offSety = 0
         
-        self._rect = self._rect.move(offSetx, offSety)
-
+        #self._rect = self._rect.move(offSetx, offSety)
+        self._rect.move_ip(offSetx, offSety)
         if angle == None:
             self._angle = 0
         else:
@@ -160,7 +160,8 @@ class Projectile(Item):
         
         xPos = math.cos(math.radians(self._angle)) * self._velocity   
         yPos = math.sin(math.radians(self._angle)) * self._velocity
-        self._rect = self._rect.move(xPos, yPos)
+        #self._rect = self._rect.move(xPos, yPos)
+        self._rect.move_ip(xPos, yPos)
 
 
 class ProjectilePowerup(Item):
