@@ -1,0 +1,37 @@
+Actions
+right
+right 120 4 40 80
+;
+left
+left 838 5 40 80
+;
+run-right
+right-run1 163 4 45 76
+right-run2 208 4 45 76
+right-run3 257 4 50 76
+right-run4 314 4 45 76
+right-run5 365 4 40 76
+right-run6 405 4 40 76
+right-run7 450 4 40 76
+;
+run-left
+left-run1 793 7 45 76
+left-run2 745 7 45 76
+left-run3 688 7 50 76
+left-run4 636 7 45 76
+left-run5 594 7 40 76
+left-run6 551 7 40 76
+left-run7 508 7 40 76
+;
+attack-right
+right 120 4 40 80
+;
+attack-left
+left 838 5 40 80
+;
+Velocity
+1 5
+SpriteSheet
+Images/zombie.png
+Position
+4630 400
