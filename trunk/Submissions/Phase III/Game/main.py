@@ -215,7 +215,7 @@ class Game(object):
                     loop = 0
 
     def update(self):
-            
+        
         #print "player velocity: ", self.player.x_velocity
         
         #======================================================
@@ -285,33 +285,33 @@ class Game(object):
                             killList.append(enemy)
                             self.killSound.play()
                             self.score += 100 + self.player.HP + self.player.lives * 100
-            # Note: check if safetyNet collides with enemies
-            for powerUp in self.powerUpListMain:
-                if powerUp.getRect().colliderect(enemy.rect):
-                    if enemy.HP > 1:
-                        enemy.HP -= 20
-                        self.powerUpListMain.remove(powerUp)
+                # Note: check if safetyNet collides with enemies
+                for powerUp in self.powerUpListMain:
+                    if powerUp.getRect().colliderect(enemy.rect):
+                        if enemy.HP > 1:
+                            enemy.HP -= 20
+                            self.powerUpListMain.remove(powerUp)
+                        else:
+                            killList.append(enemy)
+                            self.killSound.play()
+                            self.score += 100 + self.player.HP + self.player.lives * 100
+                   
+                if self.player.rect.colliderect(enemy.rect):
+                    print "enemy: ", enemy.rect, " ", enemy
+                    if self.player.HP > 1:
+                        self.player.HP -= 1
                     else:
-                        killList.append(enemy)
-                        self.killSound.play()
-                        self.score += 100 + self.player.HP + self.player.lives * 100
-               
-            if self.player.rect.colliderect(enemy.rect):
-                print "enemy: ", enemy.rect, " ", enemy
-                if self.player.HP > 1:
-                    self.player.HP -= 1
-                else:
-                    self.running = False
-                    self.screen.blit(self.deadImage, self.deadImage.get_rect())
-                    pygame.display.flip()
-                    for projectile in self.projectileListMain:
-                        self.projectileListMain.remove(projectile)
-                    for powerUp in self.powerUpListMain:
-                        self.powerUpListMain.remove(powerUp)
-
-                    pygame.time.wait(3000)
-                coll = self.player.handleCollision("enemy", enemy.rect)
-                self.player.getStateMachine().pushEnemy(enemy, coll)             
+                        self.running = False
+                        self.screen.blit(self.deadImage, self.deadImage.get_rect())
+                        pygame.display.flip()
+                        for projectile in self.projectileListMain:
+                            self.projectileListMain.remove(projectile)
+                        for powerUp in self.powerUpListMain:
+                            self.powerUpListMain.remove(powerUp)
+    
+                        pygame.time.wait(3000)
+                    coll = self.player.handleCollision("enemy", enemy.rect)
+                    self.player.getStateMachine().pushEnemy(enemy, coll)             
                 
         for enemy in killList:
             if enemy in self.enemies:
@@ -319,7 +319,8 @@ class Game(object):
                 enemy = None
             
         for enemy in self.enemies:
-            enemy.update()
+            if self.vp.rect.colliderect(enemy.getRect()):
+                enemy.update()
         
         for solid in self.level.solids:
             if self.player.rect.colliderect(solid):
@@ -345,12 +346,13 @@ class Game(object):
         del killList[:]
         
         for enemy in self.enemies:
-            kill = True
-            for section in self.vp.sections:
-                if section.colliderect(enemy.rect):
-                    kill = False
-            if kill:
-                killList.append(enemy)
+            if self.vp.rect.colliderect(enemy.getRect()):
+                kill = True
+                for section in self.vp.sections:
+                    if section.colliderect(enemy.rect):
+                        kill = False
+                if kill:
+                    killList.append(enemy)
                 
         
         for enemy in killList:
