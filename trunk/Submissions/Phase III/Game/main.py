@@ -136,6 +136,7 @@ class Game(object):
         self.running = True
         self.hackyQuit = False
         self.won = False
+        
     
     def loadLevel(self, level):
         self.bckMusic = pygame.mixer.music
@@ -494,7 +495,7 @@ class Game(object):
             if self.levelNum >= 2:
                 menu3 = menu.Menu('Images/ingamemenu.png','Images/mask.png')
                 menu3.displayCredits()
-        
+         
         elif self.player.lives > 1 and not self.hackyQuit:
             self.player.HP = 100
             self.player.lives -= 1
