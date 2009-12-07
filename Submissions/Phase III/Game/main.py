@@ -63,7 +63,7 @@ class Game(object):
         """
         self.heartSound = pygame.mixer.Sound("Sounds/heart.wav")
         self.hurtSound = pygame.mixer.Sound("Sounds/hit.wav")
-        self.killSound = pygame.mixer.Sound("Sounds/killSound.wav")
+        self.killSound = pygame.mixer.Sound("HouseSounds/enemySound.ogg")
         self.coinSound = pygame.mixer.Sound("Sounds/coinSound.wav")
         self.gameOverSound = pygame.mixer.Sound("Sounds/tpirhorns.ogg")
         self.gameOverSound.set_volume(.1)
