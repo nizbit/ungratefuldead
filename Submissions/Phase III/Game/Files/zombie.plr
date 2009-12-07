@@ -30,7 +30,7 @@ attack-left
 left 838 5 40 80
 ;
 Velocity
-1 5
+1 7
 SpriteSheet
 Images/zombie.png
 Position
