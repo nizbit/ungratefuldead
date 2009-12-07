@@ -15,6 +15,7 @@ import vector2d
 
 import status
 import loader
+import random
 
 class Game(object):
     def __init__(self, level):
@@ -72,15 +73,19 @@ class Game(object):
         self.coinSound.set_volume(.05)
         self.killSound.set_volume(.25)
         self.bckMusic = pygame.mixer.music   
-        if level == 0:  
-            self.bckMusic.load("HouseSounds/gamesong4.ogg")
-            self.bckMusic.set_volume(.15)
-            self.bckMusic.play()
+        
+        """
+        # can be deleted later-from here to Text
+        """
+        #if level == 0:  
+        #    self.bckMusic.load("HouseSounds/gamesong4.ogg")
+        #    self.bckMusic.set_volume(.15)
+        #    self.bckMusic.play()
 
-        elif level == 1:
-            self.bckMusic.load("HouseSounds/gamesong2.ogg")
-            self.bckMusic.set_volume(.15)
-            self.bckMusic.play()
+        #elif level == 1:
+        #    self.bckMusic.load("HouseSounds/gamesong2.ogg")
+        #    self.bckMusic.set_volume(.15)
+        #    self.bckMusic.play()
         
         """
         Text
@@ -92,7 +97,7 @@ class Game(object):
         self.HPText = self.font.render("HP: ", 1, (255,255,255))
         
         
-        
+
         
         self.projectileListMain = []
         self.powerUpListMain = []
@@ -128,12 +133,41 @@ class Game(object):
     
     def loadLevel(self, level):
         self.bckMusic = pygame.mixer.music
-        if level == 0: 
+        splash = None
+        randNum = random.randrange(1,10000) % 3
+        if level == 0:
+            x = 20
+            if randNum == 0: 
+                splash = pygame.image.load("Images/splash.png")
+            elif randNum == 1:
+                splash = pygame.image.load("Images/splash2.png")
+            elif randNum == 2:
+                splash = pygame.image.load("Images/splash3.png")
+            while x > 0:
+                self.screen.blit(splash, (0,0))
+                pygame.display.update()
+                x -= 1
+             
             self.bckMusic.load("HouseSounds/gamesong5.ogg")
+            self.bckMusic.set_volume(.15)
+            self.bckMusic.play()
             info = self.loader.loadLevel("Files/level2.zom")
             
         elif level == 1:
+            x = 50
+            if randNum == 0: 
+                splash = pygame.image.load("Images/splash.png")
+            elif randNum == 1:
+                splash = pygame.image.load("Images/splash2.png")
+            elif randNum == 2:
+                splash = pygame.image.load("Images/splash3.png")
+            while x > 0:
+                self.screen.blit(splash, (0,0))
+                pygame.display.update()
+                x -= 1
             self.bckMusic.load("HouseSounds/gamesong4.ogg")
+            self.bckMusic.set_volume(.15)
+            self.bckMusic.play()
             info = self.loader.loadLevel("Files/level3.zom")
         platform = info[0][:]
         enemyBounds = info[1][:]
