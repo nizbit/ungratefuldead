@@ -22,7 +22,7 @@ class Game(object):
         pygame.init()
         pygame.mixer.init()
         self.screen = pygame.display.set_mode((640,480))
-        pygame.display.set_caption("Rapid Prototype")
+        pygame.display.set_caption("Ungrateful Dead")
         self.clock = pygame.time.Clock()
         self.loader = loader.Loader()
         
@@ -69,10 +69,16 @@ class Game(object):
         self.gameOverSound.set_volume(.1)
         self.coinSound.set_volume(.05)
         self.killSound.set_volume(.25)
-        #self.bckMusic = pygame.mixer.music 
-        #self.bckMusic.load("Sounds/music.ogg")
-        self.bckMusic.set_volume(.95)
-        self.bckMusic.play()
+        self.bckMusic = pygame.mixer.music   
+        if level == 0:  
+            self.bckMusic.load("HouseSounds/gamesong4.ogg")
+            self.bckMusic.set_volume(.95)
+            self.bckMusic.play()
+
+        elif level == 1:
+            self.bckMusic.load("HouseSounds/gamesong2.ogg")
+            self.bckMusic.set_volume(.95)
+            self.bckMusic.play()
         
         """
         Text
