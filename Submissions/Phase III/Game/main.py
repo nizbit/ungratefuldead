@@ -285,9 +285,17 @@ class Game(object):
                 '''check projectiles against enemies'''
                 for projectile in self.projectileListMain:
                     if projectile.getRect().colliderect(enemy.rect):
-                        if enemy.HP > 1:
+                        ''' your mother likes it when i touch her here --->'''
+                        if enemy.HP >= 0:
+                            print "-----> " + str(projectile.getPower())
+                            print "=====> " + str(enemy.HP)
                             enemy.HP -= projectile.getPower() #20
+                            print "******> " + str(enemy.HP)  
                             self.projectileListMain.remove(projectile)
+                            if enemy.HP <= 0:
+                                killList.append(enemy)
+                                self.killSound.play()
+                                self.score += 100 + self.player.HP + self.player.lives * 100
                         else:
                             killList.append(enemy)
                             self.killSound.play()
@@ -342,7 +350,7 @@ class Game(object):
                 
                 if projectiles.getRect().colliderect(platform):
                     self.projectileListMain.remove(projectiles)
-                
+                    print projectiles.getRect()
                 if projectiles.getName() == "shotGunShit":
                     tempx = abs(self.player.rect.centerx - projectiles.getRect().centerx)
                     tempy = abs(self.player.rect.centery - projectiles.getRect().centery)
