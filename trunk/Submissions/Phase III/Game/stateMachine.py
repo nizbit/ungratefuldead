@@ -448,18 +448,10 @@ class PlayerStateMachine(StateMachine):
 # =-==========================================================================================
                 elif event.key == pygame.K_1:
                     self._character.setNextWeapon()
-                    
-                    if self._character.getCurrentWeapon().getName() == "snipe" and \
-                    not self.isCrouching:
-                        self._character.setNextWeapon()
-                        
                     if "attack" in self._currentStates:
                         self._currentStates["attack"].direction = "straight"
                 elif event.key == pygame.K_2:
                     self._character.setPreviousWeapon()
-                    if self._character.getCurrentWeapon().getName() == "snipe" and \
-                    not self.isCrouching:
-                        self._character.setPreviousWeapon()
                     if "attack" in self._currentStates:
                         self._currentStates["attack"].direction = "straight"
                 elif event.key == pygame.K_z:
