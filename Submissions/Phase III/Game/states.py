@@ -203,7 +203,82 @@ class AttackingState(State):
         weaponName = self._character.getCurrentWeapon().getName()
         weaponPower = self._character.getCurrentWeapon().getPower()
         
+        print "Your mother likes it when i touch her here" + str(self._frameNum)
+        
+        
+        #print str(self._character.getDirection()) 
         if self._counter == 1:
+            if self._character.getDirection() == "right":           # right
+                tempProjAngle = 0
+                #tempY = 35
+                if weaponName == "snipe":
+                    tempY += 10
+
+                if self.direction == "down":        # right and down
+                    tempProjAngle = 45
+                    tempY += 25
+                    if weaponName == "machine":
+                        tempProjAngle = 35
+                        tempY += 5
+                    if weaponName == "snipe":
+                        tempY -= 25
+                        
+                
+                elif self.direction == "up":                               # right and up
+                    tempProjAngle = 270
+                    tempX = 8
+                    tempY = -2                               
+                    
+                    if weaponName == "machine":
+                        tempY -= 10
+                    
+                    if weaponName == "shotGun":
+                        tempY -= 15
+                        tempX += 3
+                
+                
+            else:   # left                          # left
+                tempProjAngle = 180  
+                tempX = 0
+                
+                if weaponName == "snipe":
+                        tempY += 10
+
+                if self.direction == "down":        # left and down
+                    tempProjAngle = 135
+                    tempY += 25
+                    if weaponName == "snipe":
+                        tempY -= 25
+                    if weaponName == "machine":
+                        tempProjAngle = 150
+                        tempY += 5
+                    if weaponName == "shotGun":
+                        #tempX = 33
+                        #tempY = 23
+                        pass
+                   # if weaponName == "snipe":
+                        #tempX += 10
+                        #tempY += -15
+                  #      pass
+            
+                elif self.direction == "up":                               # left and up
+                    tempProjAngle = 270
+                    tempX = 8
+                    tempY = -2
+                    
+                    if weaponName == "shotGun":
+                        tempY -= 15
+                        tempX -= 3
+                        
+
+
+            projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
+                                          self._character.rect,"randomShit", None,
+                                          9, tempProjAngle, tempX, tempY, weaponPower)
+            
+            
+            
+            """            
             if self.direction == "up":
                 tempProjAngle = 270
                 tempX = 8
@@ -212,8 +287,18 @@ class AttackingState(State):
                 if self._character.getDirection() == "right":
                     tempProjAngle = 45
                     tempY = 35
-                else:
+                    
+                    if weaponName == "shotGun":
+                        # down and right
+                
+                        pass
+                                            
                     tempProjAngle = 135
+                    # down and left
+                    if weaponName == "shotGun":
+                        tempX -= 33
+                        tempY += 23
+                        
                 if weaponName == "snipe":
                     tempX += 10
                     tempY += -15
@@ -223,18 +308,18 @@ class AttackingState(State):
                 else:
                     tempProjAngle = 180  
                     tempX += -30
-                    
+                                
                     
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
                                           9, tempProjAngle, tempX, tempY, weaponPower)
-            
+            """
             angleList = []
             #angleList.append(324)
             #angleList.append(333)
             #angleList.append(342)
             angleList.append(351)
-            angleList.append(0)
+            #angleList.append(0)
             angleList.append(9)
             angleList.append(18)
             #angleList.append(27)
@@ -242,30 +327,23 @@ class AttackingState(State):
             #angleList.append(45)
             
             
-            
+
             if weaponName == "machine":
                 for i in range(0, 5, 1):
                     projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
-                                          9, tempProjAngle + i, tempX, tempY, weaponPower)
+                                          9, tempProjAngle, tempX, tempY, weaponPower)
                     self._character.getCurrentWeapon().addProjectile(projectileTemp)
             elif weaponName == "shotGun":
                 for angle in angleList:
-                    if (self._character.getDirection() != "right"):
-                        angle -= 180
-                        if self.direction == "up":
-                            angle += 90
-                    else:
-                        if self.direction == "up":
-                            angle -= 90 
                     projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"shotGunShit", None,
-                                          9, angle, tempX, tempY, weaponPower)
+                                          9, angle + tempProjAngle, tempX, tempY, weaponPower)
                     self._character.getCurrentWeapon().addProjectile(projectileTemp)
             else:
                 self._character.getCurrentWeapon().addProjectile(projectileTemp)
                     
-        print str(self._counter)
+
         
         # Testing for the powerUp safetyNet
 
