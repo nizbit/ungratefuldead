@@ -194,7 +194,8 @@ class AttackingState(State):
         
         # self.direction == up | staight | down
         
-        tempProjAngle = 0 
+        tempProjAngle = 0
+        angle = 0 
         self._counter += 1
         tempX = self._character.getCurrentWeapon().getOffsetX()
         tempY = self._character.getCurrentWeapon().getOffsetY()
@@ -220,6 +221,9 @@ class AttackingState(State):
                     tempProjAngle = 0
                 else:
                     tempProjAngle = 180  
+                    tempX += -30
+                    
+                    
             projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
                                           9, tempProjAngle, tempX, tempY)
