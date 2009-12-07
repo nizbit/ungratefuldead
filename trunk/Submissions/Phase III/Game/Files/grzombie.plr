@@ -1,0 +1,53 @@
+Actions
+right
+right 856 70 41 53
+;
+left
+left 264 70 41 53
+;
+run-right
+right-run1 589 138 40 50
+right-run2 639 138 50 51
+right-run3 702 138 46 51
+right-run4 766 138 42 51
+right-run5 822 138 33 52
+right-run6 869 138 43 51
+right-run7 923 138 48 50
+right-run8 981 138 48 53
+right-run9 1044 138 41 53
+right-run10 1104 138 38 51
+;
+run-left
+left-run1 523 138 40 50
+left-run2 461 138 50 51
+left-run3 403 138 46 51
+left-run4 345 138 42 51
+left-run5 296 138 33 52
+left-run6 240 138 43 51
+left-run7 180 138 48 50
+left-run8 122 138 48 53
+left-run9 66 138 41 53
+left-run10 9 138 38 51
+;
+attack-right
+right-attack 813 342 32 53
+right-attack2 861  342  31  54
+right-attack3 914 342 32 51
+right-attack4 967 349 46 47
+right-attack5 1028 353 51 43
+right-attack6 1092 356 53 40
+;
+attack-left
+left-attack 307 342 32 53
+left-attack2 259 342 31 54
+left-attack3 203 342 32 51
+left-attack4 139  349 46 47
+left-attack5 73 353 51 43
+left-attack6 7 355 53 40
+;
+Velocity
+1 5
+SpriteSheet
+Images/GR-Zombie.png
+Position
+4630 400

@@ -34,6 +34,8 @@ class Game(object):
         self.player = None
         self.loadPlayer(level)
         
+        self.enemies = []
+        
         self.level = None
         self.vp = None
         self.loadLevel(level)
@@ -45,8 +47,8 @@ class Game(object):
             self.tempvp = pygame.image.load("Images/level3.png")
         else:
             self.tempvp = pygame.image.load("Images/bck.png")
-        self.enemies = []
-        self.loadEnemies(level)
+        
+        #self.loadEnemies(level)
         
         """
         Images
@@ -123,57 +125,13 @@ class Game(object):
         self.running = True
         self.hackyQuit = False
         self.won = False
+    
     def loadLevel(self, level):
         self.bckMusic = pygame.mixer.music
         if level == 0: 
             self.bckMusic.load("HouseSounds/gamesong5.ogg")
             info = self.loader.loadLevel("Files/level2.zom")
             
-        elif level == 2:
-            solids = [pygame.Rect(0, 0, 3800, 10),
-                      pygame.Rect(0, 470, 3800, 10),
-                      pygame.Rect(0, 0, 40, 470),
-                      pygame.Rect(3790, 0, 10, 470)]
-        
-            platform = [pygame.Rect(410, 398,100, 20),
-                        pygame.Rect(540, 382,100, 20),
-                        pygame.Rect(934, 408,100, 20),
-                        pygame.Rect(1450, 405,100, 20),
-                        pygame.Rect(1573, 377,100, 20),
-                        pygame.Rect(1705, 371,100, 20),
-                        pygame.Rect(2605, 407, 100, 20),
-                        pygame.Rect(2605,362, 100, 20),
-                        pygame.Rect(2605,319, 100, 20),
-                        pygame.Rect(2605,274, 100, 20),
-                        pygame.Rect(2605,223, 100, 20),
-                        pygame.Rect(2605,168, 100, 20),
-                        pygame.Rect(3161,192, 100, 20),
-                        pygame.Rect(3290,245, 100, 20),
-                        pygame.Rect(3295,372, 100, 20),
-                        pygame.Rect(3420,296, 100, 20),
-                        pygame.Rect(3550,343, 100, 20)]
-            enemyBounds = [pygame.Rect(412, 360, 10, 40),
-                           pygame.Rect(505, 360, 10, 40),
-                           pygame.Rect(540, 340, 10, 40),
-                           pygame.Rect(640, 340, 10, 40),
-                           pygame.Rect(930, 360, 10, 40),
-                           pygame.Rect(1030, 360, 10, 40),
-                           pygame.Rect(1450, 355, 10, 40),
-                           pygame.Rect(1550, 355, 10, 40),
-                           pygame.Rect(1570, 330, 10, 40),
-                           pygame.Rect(1670, 330, 10, 40),
-                           pygame.Rect(1705, 330, 10, 40),
-                           pygame.Rect(1805, 330, 10, 40),       
-                           pygame.Rect(3160, 150, 10, 40),
-                           pygame.Rect(3260, 150, 10, 40),
-                           pygame.Rect(3290, 200, 10, 40),
-                           pygame.Rect(3390, 200, 10, 40),
-                           pygame.Rect(3425, 240, 10, 40),
-                           pygame.Rect(3525, 240, 10, 40),
-                    
-                           pygame.Rect(3555, 280, 10, 40),
-                           pygame.Rect(3655, 280, 10, 40)]
-            self.level = world.World("Images/bck.png", solids, platform, enemyBounds)
         elif level == 1:
             self.bckMusic.load("HouseSounds/gamesong4.ogg")
             info = self.loader.loadLevel("Files/level3.zom")
@@ -186,6 +144,21 @@ class Game(object):
                                                 info[3],
                                                 info[4][2], info[4][3], \
                                                 info[4][4], info[4][5])
+        for enemy in info[5]:
+            x = None
+            if enemy[0] == "zombie":
+                x = self.loader.loadPlayer("Files/zombie.plr")
+            elif enemy[0] == "grzombie":
+                x = self.loader.loadPlayer("Files/grzombie.plr")
+            else:
+                x = self.loader.loadPlayer("Files/darkheartless.plr")
+            actions = x[0]
+            velocity = x[1]
+            spriteSheet = pygame.image.load(x[2]).convert_alpha()
+            temp = character.NPC(spriteSheet, actions, velocity, self.player.rect, self.level.platform[:])
+            temp.setSpriteSheetCoord(actions["right"]["right"])
+            temp.setPosition(int(enemy[1]), int(enemy[2]))
+            self.enemies.append(temp)
             
     def handleEnemies(self, event):
         pass
@@ -371,6 +344,7 @@ class Game(object):
         *
         *
         """
+        """
         self.leftSpawnCounter += 1
         self.rightSpawnCounter += 1
         self.topSpawnCounter += 1
@@ -399,18 +373,7 @@ class Game(object):
                     self.spawnIndex += 1
                 else:
                     self.spawnIndex = 0
-            if self.topSpawnCounter > 313:
-                self.topSpawnCounter = 0
-                if self.spawnIndex < len(self.spawnList):
-                    temp = self.spawnList[self.spawnIndex].getCopy()
-                    temp.changeDirection()
-                    temp.rect.size = (50,50)
-                    temp.setPosition(self.vp.rect.x * .5, self.vp.rect.top)                    
-                    temp.getStateMachine().handleAnimation()
-                    self.enemies.append(temp)
-                    self.spawnIndex += 1
-                else:
-                    self.spawnIndex = 0
+        """
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
@@ -505,143 +468,7 @@ class Game(object):
             self.player.setPosition(250,684)
         else:
             self.player.setPosition(50, 200)
-        
-    def loadEnemies(self, level):
-        zombieSpriteSheet = pygame.image.load('Images/zombie.png').convert_alpha()
-        zombieActions = {"right": {"right": pygame.Rect(120, 4, 40, 80)},
-                  "left": {"left": pygame.Rect(838, 5, 40, 80)},
-                  "run-right": {"right-run1": pygame.Rect(163, 4, 45, 76),
-                                "right-run2": pygame.Rect(208, 4, 45, 76),
-                                "right-run3": pygame.Rect(257, 4, 50, 76),
-                                "right-run4": pygame.Rect(314, 4, 45, 76),
-                                "right-run5": pygame.Rect(365, 4, 40, 76),
-                                "right-run6": pygame.Rect(405, 4, 40, 76),
-                                "right-run7": pygame.Rect(450, 4, 40, 76)},
-                  "run-left": {"left-run1": pygame.Rect(793, 7, 45, 76),
-                               "left-run2": pygame.Rect(745, 7, 45, 76),
-                               "left-run3": pygame.Rect(688, 7, 50, 76),
-                               "left-run4": pygame.Rect(636, 7, 45, 76),
-                               "left-run5": pygame.Rect(594, 7, 40, 76),
-                               "left-run6": pygame.Rect(551, 7, 40, 76),
-                               "left-run7": pygame.Rect(508, 7, 40, 76)},
-                  "attack-right": {"right": pygame.Rect(120, 4, 40, 80)},
-                  "attack-left": {"left": pygame.Rect(838, 5, 40, 80)}}
-        zombieVelocity = vector2d.Vector2D(1,5)
-        
-        zombieSpriteSheet2 = pygame.image.load('Images/GR-Zombie.png').convert_alpha()
-        zombieActions2 = {"right": {"right": pygame.Rect(856,70,41,53)},
-                           "left" : {"left": pygame.Rect(264,70,41,53)},
-                           "run-right": {"right-run1": pygame.Rect(589,138,40,50),
-                                         "right-run2": pygame.Rect(639,138,50,51),
-                                         "right-run3": pygame.Rect(702,138,46,51),
-                                         "right-run4": pygame.Rect(766,138,42,51),
-                                         "right-run5": pygame.Rect(822,138,33,52),
-                                         "right-run6": pygame.Rect(869,138,43,51),
-                                         "right-run7": pygame.Rect(923,138,48,50),
-                                         "right-run8": pygame.Rect(981,138,48,53),
-                                         "right-run9": pygame.Rect(1044,138,41,53),
-                                         "right-run10": pygame.Rect(1104,138,38,51)},
-                           "run-left": {"left-run1": pygame.Rect(523,138,40,50),
-                                         "left-run2": pygame.Rect(461,138,50,51),
-                                         "left-run3": pygame.Rect(403,138,46,51),
-                                         "left-run4": pygame.Rect(345,138,42,51),
-                                         "left-run5": pygame.Rect(296,138,33,52),
-                                         "left-run6": pygame.Rect(240,138,43,51),
-                                         "left-run7": pygame.Rect(180,138,48,50),
-                                         "left-run8": pygame.Rect(122,138,48,53),
-                                         "left-run9": pygame.Rect(66,138,41,53),
-                                         "left-run10": pygame.Rect(9,138,38,51)},
-                           "attack-right": {"right-attack": pygame.Rect(813, 342, 32, 53),
-                                            "right-attack2": pygame.Rect(861, 342, 31, 54),
-                                            "right-attack3": pygame.Rect(914, 342, 32, 51),
-                                            "right-attack4": pygame.Rect(967,349,46,47),
-                                            "right-attack5": pygame.Rect(1028,353,51,43),
-                                            "right-attack6": pygame.Rect(1092,356,53,40)},
-                           "attack-left":{"left-attack": pygame.Rect(307, 342,32,53),
-                                          "left-attack2": pygame.Rect(259, 342,31,54),
-                                          "left-attack3": pygame.Rect(203, 342,32,51),
-                                          "left-attack4": pygame.Rect(139, 349,46,47),
-                                          "left-attack5": pygame.Rect(73, 353,51,43),
-                                          "left-attack6": pygame.Rect(7, 355 ,53,40)}}
-        zombieVelocity2 = vector2d.Vector2D(1,5)
-        tempRect = pygame.Rect(0,0,0,0)
-        tempWorldRects = []
-        
-        for platform in self.level.solids:
-            tempWorldRects.append(platform)
-        for platform in self.level.platform:
-            tempWorldRects.append(platform)
-        for platform in self.level.enemyBounds:
-            tempWorldRects.append(platform)    
-        for x in range(0,10,1):
-            self.enemies.append(character.NPC(zombieSpriteSheet,
-                                              zombieActions,
-                                              zombieVelocity,
-                                              self.player.rect,
-                                              tempWorldRects))
-            #self.enemies[x].setSpriteSheetCoord(zombieActions["right"]["right"])
-        for x in range(11,21,1):
-            self.enemies.append(character.NPC(zombieSpriteSheet2, 
-                                              zombieActions2, 
-                                              zombieVelocity2, 
-                                              self.player.rect,
-                                              tempWorldRects))
-            #self.enemies[x].setSpriteSheetCoord(zombieActions2["right"]["right"])
-        
-        for x in range(0,10,1):
-            self.enemies[x].setSpriteSheetCoord(zombieActions["right"]["right"])
-        for x in range(10,20,1):
-            self.enemies[x].setSpriteSheetCoord(zombieActions2["right"]["right"])
-        
-        if level == 0:
-            pos = [(200,200),
-                   (388,300),
-                   (488,244),
-                   (594,296),
-                   (692,196),
-                   (1544,184),
-                   (1600,176),
-                   (1672,176),
-                   (1764,240),
-                   (2168,144),
-                   (2248,280),
-                   (2300,308),
-                   (2508,188),
-                   (2612,160),
-                   (2948,260),
-                   (3056,140),
-                   (3056,280),
-                   (3100,200),
-                   (3200,200),
-                   (300, 300)]
-            for x,y in zip(pos, self.enemies):
-                y.setPosition(x[0],x[1])
-        
-        else:
-            pos = [(460,352),
-                   (592,376),
-                   (960,390),
-                   (1500,390),
-                   (1620,372),
-                   (504,276),
-                   (3596,324),
-                   (3660,368),
-                   (972,450),
-                   (1020,350),
-                   (1100,350),
-                   (1250,350),
-                   (2000,350),
-                   (2200,350),
-                   (2450,350),
-                   (2600,350),
-                   (2750,350),
-                   (2800,350),
-                   (3000,350),
-                   (3300,350)]
-            for x,y in zip(pos, self.enemies):
-                y.setPosition(x[0],x[1])
-        
-                
+                        
 if __name__ == "__main__":
     while True:
         pygame.init()
