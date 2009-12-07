@@ -40,7 +40,7 @@ class Game(object):
         self.level = None
         self.vp = None
         self.loadLevel(level)
-        
+        print len(self.enemies)
         #MAY BE OVERKILL
         if level == 0:
             self.tempvp = pygame.image.load("Images/level2.png")
@@ -274,16 +274,17 @@ class Game(object):
         
         killList = []
         for enemy in self.enemies:
-            '''check projectiles against enemies'''
-            for projectile in self.projectileListMain:
-                if projectile.getRect().colliderect(enemy.rect):
-                    if enemy.HP > 1:
-                        enemy.HP -= 20
-                        self.projectileListMain.remove(projectile)
-                    else:
-                        killList.append(enemy)
-                        self.killSound.play()
-                        self.score += 100 + self.player.HP + self.player.lives * 100
+            if self.vp.rect.colliderect(enemy.getRect()):
+                '''check projectiles against enemies'''
+                for projectile in self.projectileListMain:
+                    if projectile.getRect().colliderect(enemy.rect):
+                        if enemy.HP > 1:
+                            enemy.HP -= 20
+                            self.projectileListMain.remove(projectile)
+                        else:
+                            killList.append(enemy)
+                            self.killSound.play()
+                            self.score += 100 + self.player.HP + self.player.lives * 100
             # Note: check if safetyNet collides with enemies
             for powerUp in self.powerUpListMain:
                 if powerUp.getRect().colliderect(enemy.rect):
@@ -344,7 +345,11 @@ class Game(object):
         del killList[:]
         
         for enemy in self.enemies:
-            if enemy.rect.top > self.vp.rect.bottom or enemy.rect.bottom < self.vp.rect.top:
+            kill = True
+            for section in self.vp.sections:
+                if section.colliderect(enemy.rect):
+                    kill = False
+            if kill:
                 killList.append(enemy)
                 
         
