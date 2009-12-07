@@ -37,6 +37,7 @@ class Game(object):
         
         self.enemies = []
         
+        self.levelNum = level
         self.level = None
         self.vp = None
         self.loadLevel(level)
@@ -58,9 +59,14 @@ class Game(object):
         self.gameOverImage = pygame.image.load("Images/gameover.png").convert()
         self.winImage = pygame.image.load("Images/win.png").convert()
         self.coin = pygame.image.load("Images/copperCoin.png").convert_alpha()
-        self.coinRect = self.coin.get_rect()
-        self.coinRect.top = 200
-        self.coinRect.left = 3600
+        if self.levelNum == 0:
+            self.coinRect = self.coin.get_rect()
+            self.coinRect.top = 200
+            self.coinRect.left = 3600
+        elif self.levelNum == 1:
+            self.coinRect = self.coin.get_rect()
+            self.coinRect.top = 795
+            self.coinRect.left = 14930
         """
         Sounds
         """
@@ -150,7 +156,7 @@ class Game(object):
              
             self.bckMusic.load("HouseSounds/gamesong5.ogg")
             self.bckMusic.set_volume(.15)
-            self.bckMusic.play()
+            self.bckMusic.play(-1)
             info = self.loader.loadLevel("Files/level2.zom")
             
         elif level == 1:
@@ -167,7 +173,7 @@ class Game(object):
                 x -= 1
             self.bckMusic.load("HouseSounds/gamesong4.ogg")
             self.bckMusic.set_volume(.15)
-            self.bckMusic.play()
+            self.bckMusic.play(-1)
             info = self.loader.loadLevel("Files/level3.zom")
         platform = info[0][:]
         enemyBounds = info[1][:]
@@ -475,10 +481,19 @@ class Game(object):
             self.update()
             self.render()
             self.clock.tick(60)
+
     def reset(self):
         self.bckMusic.stop()
+        """Handles level transition--needs more trans for levels"""
+        menu3 = None
         if self.won:
-            pass
+            self.levelNum += 1
+            if self.levelNum < 2:
+                game = Game(self.levelNum)
+                game.run()
+            if self.levelNum >= 2:
+                menu3 = menu.Menu('Images/ingamemenu.png','Images/mask.png')
+                menu3.displayCredits()
         
         elif self.player.lives > 1 and not self.hackyQuit:
             self.player.HP = 100
