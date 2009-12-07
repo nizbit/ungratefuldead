@@ -285,7 +285,7 @@ class Game(object):
                 for projectile in self.projectileListMain:
                     if projectile.getRect().colliderect(enemy.rect):
                         if enemy.HP > 1:
-                            enemy.HP -= 20
+                            enemy.HP -= projectile.getPower() #20
                             self.projectileListMain.remove(projectile)
                         else:
                             killList.append(enemy)
