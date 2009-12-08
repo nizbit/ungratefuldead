@@ -600,6 +600,232 @@ class EnemyStateMachine(StateMachine):
 #            if self._character.rect.colliderect(rect):
 #                self.handleCollision("object", rect)
         
+class TorsoStateMachine(StateMachine):
+    def __init__(self, character, sprites, playerRect, topographyRects):
+        """
         
+        ***NOTE***
+        WE MIGHT NEED TO RECIEVE ALL THE RECT'S FROM THE WORLD CLASS AS AN
+        ARGUMENT
+        **********
+        
+        Call the parent class' __init__
+        """
+        super(EnemyStateMachine, self).__init__(character, sprites)
+        if self._character.getDirection() == "right":
+            self._currentStates["runRight"] = self._runningState
+        else:
+            self._currentStates["runLeft"] = self._runningState
+        self._currentStates["falling"] = self._fallingState
+        self.counter = 0
+        self.tRects = []
+        self.projectileList = []
+        self.orbPic = pygame.image.load("Images/bullets.png").convert_alpha()
+        self.orbRect = self.orbPic.get_rect()
+        for rect in topographyRects:
+            self.tRects.append(rect)
+        
+        self.bulletWait = 53
+        self.bulletWait2 = self.bulletWait / 2 
+        self.numOfSpins = 0
+        self.gatherInfo = True
+        
+        self.movingLeft = True
+        self.pileDriver = False
+        self.pileDriver2 = False
+        self.movingRight = False
+        self.shooting = False
+        self.shooting2 = False
+        self.startx = 0
+        self.traveled = 0
+    def handleCollision(self, type, rect):
+        if type == "object":
+            typeOfColl = self.translate(rect)
+
+                
+        if type == "enemy":
+            if self._character.HP >= 1:
+                self._character.HP -= 1
+            else:
+                self._currentStates.clear()
+                self._currentStates["falling"] = self._fallingState
+                self._currentStates["dead"] = self._deadState
+
+            typeOfColl = self.translate(rect)
+                
+    def turnAround(self):
+        if self._character.getDirection() == "right":
+            self._character.setDirection("left")
+            if self._currentStates.has_key("runRight"):
+                del self._currentStates["runRight"]
+            self._currentStates["runLeft"] = self._runningState
+        else:
+            self._character.setDirection("right")
+            if self._currentStates.has_key("runLeft"):
+                del self._currentStates["runLeft"]
+            self._currentStates["runRight"] = self._runningState
+        self._character.velocity.x = 0
+    
+
+    def search(self, rect):
+        sepx = self._character.rect.centerx - rect.centerx
+        if sepx > 0:
+            if self._character.getDirection() == "right" and \
+            "runRight" in self._currentStates:
+                self.turnAround()
+        elif sepx < 0:
+            if self._character.getDirection() == "left" and \
+            "runLeft" in self._currentStates:
+        
+                self.turnAround()
+   
+    def think(self, rect):
+        """
+        Based on the character's type, currentState, and level topography,
+        change currentState to a different state
+        """
+        if self.gatherInfo:
+            self.startx = self._character.rect.centerx
+            #self.starty = self._character.rect.centery
+            self.gatherInfo = False
+            if self._character.getDirection() == "right":
+                self.turnAround()
+                
+        else:
+            for rect in self.tRects:
+                if self._character.rect.colliderect(rect):
+                    self.handleCollision("object", rect)
+            if self.movingLeft:
+                if self._character.rect.left - self.startx < -600:
+                    self.movingLeft = False
+                    self.pileDriver = True
+                elif self._character.rect.left - self.startx < -300:
+                    self._currentStates["jump"] = self._jumpingState
+            
+            elif self.pileDriver:
+                if self.numOfSpins > 30:
+                    self.numOfSpins = 0
+                    self.pileDriver = False
+                    self.shooting = True
+                    if self._character.getDirection() == "left":
+                        self.turnAround()
+                else:
+                    self.numOfSpins += 1
+                    self.turnAround()
+                    
+            elif self.shooting:
+                self._character.velocity.x = 0
+                if "runRight" in self._currentStates:
+                    del self._currentStates["runRight"]
+                if self.counter > 300:
+                    self.counter = 0
+                    self.shooting = False
+                    self.movingRight = True
+                    self._currentStates["runRight"] = self._runningState
+                else:
+                    if self.counter % self.bulletWait == 0:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, 9)
+                        self.projectileList.append(temp)
+                    elif self.counter % self.bulletWait == 1:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, 9)
+                        temp.getRect().y += 10
+                        self.projectileList.append(temp)
+                    elif self.counter % self.bulletWait == 4:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, 9)
+                        temp.getRect().y += 20
+                        self.projectileList.append(temp)
+                    if self.counter % self.bulletWait == 18:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, 9)
+                        temp.getRect().y += 110
+                        self.projectileList.append(temp)
+                    elif self.counter % self.bulletWait == 17:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, 9)
+                        temp.getRect().y += 130
+                        self.projectileList.append(temp)
+                    elif self.counter % self.bulletWait == 14:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, 9)
+                        temp.getRect().y += 120
+                        self.projectileList.append(temp)
+                    self.counter += 1
+            elif self.movingRight:
+                self._character.rect.right - self.startx
+                if self._character.rect.right - self.startx > 0:
+                    self.movingRight = False
+                    self.pileDriver2 = True
+                    self.turnAround()
+                
+                elif self._character.rect.right - self.startx > -600:
+                    self._currentStates["jump"] = self._jumpingState
+            
+            elif self.pileDriver2:
+                if self.numOfSpins > 30:
+                    self.numOfSpins = 0
+                    self.pileDriver2 = False
+                    self.shooting2 = True
+                    if self._character.getDirection() == "right":
+                        self.turnAround()
+                else:
+                    self.numOfSpins += 1
+                    self.turnAround()
+            elif self.shooting2:
+                self._character.velocity.x = 0
+                if "runLeft" in self._currentStates:
+                    del self._currentStates["runLeft"]
+                if self.counter > 300:
+                    self.counter = 0
+                    self.shooting2 = False
+                    self.movingLeft = True
+                    self._currentStates["runLeft"] = self._runningState
+                else:
+                    if self.counter % self.bulletWait == 0:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, -9)
+                        temp.getRect().y += 10
+                        self.projectileList.append(temp)
+                        
+                    elif self.counter % self.bulletWait == 1:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, -9)
+                        temp.getRect().y += 20
+                        self.projectileList.append(temp)
+                        
+                    elif self.counter % self.bulletWait == 4:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, -9)
+                        temp.getRect().y += 30
+                        self.projectileList.append(temp)
+                    if self.counter % self.bulletWait == 15:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, -9)
+                        temp.getRect().y += 140
+                        self.projectileList.append(temp)
+                    elif self.counter % self.bulletWait == 1:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, -9)
+                        temp.getRect().y += 150
+                        self.projectileList.append(temp)
+                    elif self.counter % self.bulletWait == 2:
+                        temp = item.Projectile(self.orbPic, self._character.rect,"orb",None, -9)
+                        #temp.getRect().y += 140
+                        self.projectileList.append(temp)
+                    self.counter += 1
+            """        
+            if self.actionCounter == 0:
+                if "runRight" in self._currentStates:
+                    self._character.setDirection("right")
+                    self.turnAround()
+            elif self.actionCounter == 50:
+                self._currentStates["jump"] = self._jumpingState
+                
+            elif self.actionCounter < 100:
+                self.turnAround()
+            elif self.actionCounter == 150:
+                if "runLeft" in self._currentStates:
+                    self._character.setDirection("left")
+                    self.turnAround()
+            if self.actionCounter == 200:
+                self.actionCounter = 0
+            else:
+                self.actionCounter += 1
+            """    
+            for state in self._currentStates:
+                self._currentStates[state].act()
+            if self._currentStates.has_key("jump"):
+                del self._currentStates["jump"]       
 if __name__ == "__main__":
     pass
