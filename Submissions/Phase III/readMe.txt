@@ -38,7 +38,7 @@ Requirements:
     1. Original Music/Sound Effects --
    
     2. Original Artwork -- Splash screens, heavily edited sprite sheets
-   
+                                                                         
     3. Unique Gameplay Mechanic -- Safetynet similar to MarioCart shells, Wall Jumping
        passing through platforms
    
