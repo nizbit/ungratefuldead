@@ -41,7 +41,7 @@ class Game(object):
         self.level = None
         self.vp = None
         self.loadLevel(level)
-        print len(self.enemies)
+        #print len(self.enemies)
         #MAY BE OVERKILL
         if level == 0:
             self.tempvp = pygame.image.load("Images/level2.png")
@@ -264,7 +264,7 @@ class Game(object):
                 self.projectileListMain.remove(projectile)
             for powerUp in self.powerUpListMain:
                 self.powerUpListMain.remove(powerUp)
-                print str(powerUp)
+                #print str(powerUp)
             pygame.time.wait(3000)
                       
         else:
@@ -287,10 +287,7 @@ class Game(object):
                     if projectile.getRect().colliderect(enemy.rect):
                         ''' your mother likes it when i touch her here --->'''
                         if enemy.HP >= 0:
-                            print "-----> " + str(projectile.getPower())
-                            print "=====> " + str(enemy.HP)
                             enemy.HP -= projectile.getPower() #20
-                            print "******> " + str(enemy.HP)  
                             self.projectileListMain.remove(projectile)
                             if enemy.HP <= 0:
                                 killList.append(enemy)
@@ -350,7 +347,6 @@ class Game(object):
                 
                 if projectiles.getRect().colliderect(platform):
                     self.projectileListMain.remove(projectiles)
-                    print projectiles.getRect()
                 if projectiles.getName() == "shotGunShit":
                     tempx = abs(self.player.rect.centerx - projectiles.getRect().centerx)
                     tempy = abs(self.player.rect.centery - projectiles.getRect().centery)
