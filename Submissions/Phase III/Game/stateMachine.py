@@ -389,6 +389,12 @@ class PlayerStateMachine(StateMachine):
         Jon Lutes Algorithm.
         """
         self._jCountFromLastPress += 1
+        if self._jCountFromLastPress <= self._character.getCurrentWeapon().getWait():
+            self._character.setReloadBool(True)
+            print "reloading"
+        else:
+            self._character.setReloadBool(False)
+            print "done"
         
         for event in events:
             if event.type == pygame.QUIT:
@@ -448,7 +454,12 @@ class PlayerStateMachine(StateMachine):
                 elif event.key == pygame.K_LSHIFT:
                     if self._jCountFromLastPress >= self._character.getCurrentWeapon().getWait():
                         self._jCountFromLastPress = 0
+                    
                         self._currentStates["attack"] = self._attackingState
+                        
+                        
+                        
+                        
                         if self._character.getCurrentWeapon().getName() == "snipe" and\
                         not self.isCrouching:
                             del self._currentStates["attack"]
