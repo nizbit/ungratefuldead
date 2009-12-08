@@ -9,6 +9,7 @@ Contents:
     InstaKill
 """
 import math
+import pygame
 
 class Item(object):
     def __init__(self, image, rect, name, sound):
@@ -23,6 +24,12 @@ class Item(object):
         self._rect.topleft = rect.topleft
         self._name = name
         self._sound = sound
+    
+    def setPosition(self, x, y):
+        self._rect.top = y
+        self._rect.left = x
+    def getPosition(self):
+        return (self._rect.left, self._rect.top)
     
     def getImage(self):
         return self._image
@@ -174,7 +181,7 @@ class Projectile(Item):
 
 
 class ProjectilePowerup(Item):
-    def __init__(self, image, rect, name, sound, velocity, jcount, power=0, range=0):
+    def __init__(self, image, rect, name, sound, velocity, jcount, power = None, range=0):
         '''
         ** call base class constructor
         ** set projectile items velocity ==> Vector2D
@@ -189,7 +196,11 @@ class ProjectilePowerup(Item):
         '''
         super(ProjectilePowerup, self).__init__(image, rect, name, sound)
         self._velocity = velocity
-        self._power = power
+        if power == None:
+            self_power = 10
+        else:
+            self._power = power
+            
         self._range = range
         self._jCounter = jcount
         #self._angle = math.radians(angle)
@@ -198,23 +209,21 @@ class ProjectilePowerup(Item):
         self._offSety = -13
         self._rect.move_ip(self._offSetx, self._offSety)
         (self._previousX, self._previousY) = rect.center
+        
         self._firstRun = True
             
     def getVelocity(self):
         return self._velocity
+    def getPower(self):
+        return self._power
     
     def setVelocity(self, velocity):
         self._velocity = velocity
         
     def update(self, rect):
-        '''
-        ** offset the projectile items rect by the current velocity
-        '''
-        #if self._firstRun:
-        #    self._firstRun = False
-        #else:
-        #if self._jCounter >= 0:
-        #    self._jCounter = 0
+
+        # offset the projectile items rect by the current velocity
+
         self._jCounter += 10
         self._angle = math.radians(self._jCounter)
             
@@ -240,28 +249,30 @@ class ProjectilePowerup(Item):
         
         
         
-
+'''
 class SafetyNet(Item):
-    def __init__(self, image, rect, name, sound):
-       super(SafetyNet, self).__init__(image, rect, name, sound)
-       #safetyNetImage = pygame.image.load("/Images/weaponPic/blackBullet.png").convert()
+    def __init__(self):
+       #super(SafetyNet, self).__init__(image, rect, name, sound)
+       self._safetyNetImage = pygame.image.load("Images/safetyNetPic2.png")
         
         
        #     def __init__(self, image, rect, name, sound, velocity, angle=None, power=0, range=0):
     #  safetyNetProjectile = item.Projectile(image, rect, "safetyNetProj", None, 3,  
+       #self._projectileTemp = Projectile(safetyNetImage, 
+#                                          character.rect,"randomShit", None,
+#                                          9, 0)
         
-     #  projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
-      #                                    self._character.rect,"randomShit", None,
-      #                                    9, projectileAngle)
-        
-        
+    def getProjectile(self):
+        return self._safetyNetImage 
         
     def update(self):
+
         pass
+'''    
         
 '''**base class for different types of powerups**'''
 class Powerups(Item):
-    def __init__(self, image, rect, name, sound):
+    def __init__(self, image, rect, name, sound = None):
         '''
         ** call base class constructor
         '''
