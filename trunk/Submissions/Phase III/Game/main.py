@@ -116,6 +116,10 @@ class Game(object):
             self.tempvp = pygame.image.load("Images/level4.png")
         elif level == 2:
             self.tempvp = pygame.image.load("Images/level3.png")
+        elif level == 11:
+            self.tempvp = pygame.image.load("Images/level3.png")
+        elif level == 12:
+            self.tempvp = pygame.image.load("Images/level2.png")
         else:
             self.tempvp = pygame.image.load("Images/bck.png")
         
@@ -128,6 +132,7 @@ class Game(object):
         self.gameOverImage = pygame.image.load("Images/gameover.png").convert()
         self.winImage = pygame.image.load("Images/win.png").convert()
         self.coin = pygame.image.load("Images/copperCoin.png").convert_alpha()
+        self.coinRect = None
         if self.levelNum == 0:
             self.coinRect = self.coin.get_rect()
             self.coinRect.top = 200
@@ -136,6 +141,16 @@ class Game(object):
             self.coinRect = self.coin.get_rect()
             self.coinRect.top = 795
             self.coinRect.left = 14930
+
+        elif self.levelNum == 11:
+            self.coinRect = self.coin.get_rect()
+            self.coinRect.top = 568
+            self.coinRect.left = 15142
+        elif self.levelNum == 12:
+            self.coinRect = self.coin.get_rect()
+            self.coinRect.top = 3680
+            self.coinRect.left = 152    
+
         elif self.levelNum == 2:
             self.coinRect = self.coin.get_rect()
             self.coinRect.top = 15000
@@ -277,11 +292,59 @@ class Game(object):
             self.bckMusic.set_volume(.15)
             self.bckMusic.play(-1)
             info = self.loader.loadLevel("Files/level3.zom")
+            
+        elif level == 11:
+            x = 70
+            if randNum == 0: 
+                splash = pygame.image.load("Images/splash.png")
+            elif randNum == 1:
+                splash = pygame.image.load("Images/splash2.png")
+            elif randNum == 2:
+                splash = pygame.image.load("Images/splash3.png")
+            while x > 0:
+                self.screen.blit(splash, (0,0))
+                pygame.display.update()
+                x -= 1
+            self.bckMusic.load("HouseSounds/gamesong4.ogg")
+            self.bckMusic.set_volume(.15)
+            self.bckMusic.play(-1)
+            info = self.loader.loadLevel("Files/level3.zom")
+            
+        elif level == 12:
+            x = 70
+            if randNum == 0: 
+                splash = pygame.image.load("Images/splash.png")
+            elif randNum == 1:
+                splash = pygame.image.load("Images/splash2.png")
+            elif randNum == 2:
+                splash = pygame.image.load("Images/splash3.png")
+            while x > 0:
+                self.screen.blit(splash, (0,0))
+                pygame.display.update()
+                x -= 1
+            self.bckMusic.load("HouseSounds/gamesong4.ogg")
+            self.bckMusic.set_volume(.15)
+            self.bckMusic.play(-1)
+            info = self.loader.loadLevel("Files/level2.zom")      
         platform = info[0][:]
         enemyBounds = info[1][:]
         image = info[2]
         self.level = world.World(image,[],platform,enemyBounds)
         self.vp = viewport.Viewport(pygame.Rect(info[4][0], info[4][1], \
+                                                640, 480), self.player, \
+                                                info[3],
+                                                info[4][2], info[4][3], \
+                                                info[4][4], info[4][5])
+        if level == 11:
+            self.player.setPosition(13822, 799)
+            self.vp = viewport.Viewport(pygame.Rect(14600, 500, \
+                                                640, 480), self.player, \
+                                                info[3],
+                                                info[4][2], info[4][3], \
+                                                info[4][4], info[4][5])
+        if level == 12:
+            self.player.setPosition(3200, 364)
+            self.vp = viewport.Viewport(pygame.Rect(3200, 0, \
                                                 640, 480), self.player, \
                                                 info[3],
                                                 info[4][2], info[4][3], \
@@ -520,8 +583,6 @@ class Game(object):
                 self.player.handleCollision("object", solid)
                 
         del killList[:]
-        
-            
         if self.player.rect.colliderect(self.coinRect):
             self.won = True
             self.coinSound.play()
@@ -731,6 +792,21 @@ if __name__ == "__main__":
         test = menu1.handle_event()
         if test == 2:
             game = Game(1)
+            game.run()
+        elif test == 11:
+            game = Game(11)
+            game.run()
+        elif test == 12:
+            game = Game(12)
+            game.run()
+        elif test == 13:
+            game = Game(13)
+            game.run()
+        elif test == 14:
+            game = Game(14)
+            game.run()
+        elif test == 15:
+            game = Game(15)
             game.run()
         elif test == 1:
             game = Game(0)
