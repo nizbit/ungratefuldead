@@ -30,7 +30,7 @@ class Game(object):
         self.loader = loader.Loader()
         
         """ powerUP shit"""
-        testImage = pygame.image.load("Images/weaponPic/gun1.png")
+        testImage = pygame.image.load("Images/shield.png")
         powerUpTest = item.Powerups(testImage, testImage.get_rect(), "safety")
         powerUpTest.setPosition(200, 768)
         powerUpTest2 = item.Powerups(testImage, testImage.get_rect(), "safety")
@@ -41,13 +41,13 @@ class Game(object):
         self._powerUpList1.append(powerUpTest)
         self._powerUpList1.append(powerUpTest2)
         
-        boostHpImage = pygame.image.load("Images/weaponPic/gun2.png")
+        boostHpImage = pygame.image.load("Images/healthBoost1.png")
         powerUpHPBoost = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
         powerUpHPBoost.setPosition(150, 600)
         
         self._powerUpList1.append(powerUpHPBoost)
         self._powerUpList0.append(powerUpHPBoost)
-        extraLifeImage = pygame.image.load("Images/weaponPic/mis.png")
+        extraLifeImage = pygame.image.load("Images/heart1.png")
         extraLife = item.Powerups(extraLifeImage, extraLifeImage.get_rect(), "extraLife")
         extraLife.setPosition(300, 600)
         
