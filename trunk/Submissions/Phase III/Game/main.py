@@ -37,12 +37,16 @@ class Game(object):
 
         self._powerUpList = []
         self._powerUpList.append(self._powerUpTest)
+        
+        
 
         
         testjjj = item.Powerups(testImage, testImage.get_rect(), "tes")
         testjjj.setPosition(4450, 830)
         self._powerUpList.append(testjjj)
         
+        test2 = (self._powerUpTest.getCopy().setPosition(150, 600))
+       # self._powerUpList.append(test2)
         self._safetyNetImage = pygame.image.load("Images/safetyNetPic2.png")
         
 
@@ -529,8 +533,8 @@ class Game(object):
                self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
                self.screen.blit(self.gameOverText, (250,250))
             
-            for x in self.spawnList:
-                self.screen.blit(x.getSpriteSheet(),x.rect, x.getSpriteSheetCoord())   
+#            for x in self.spawnList:
+#                self.screen.blit(x.getSpriteSheet(),x.rect, x.getSpriteSheetCoord())   
             
             pygame.display.flip()
             
