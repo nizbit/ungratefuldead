@@ -1,5 +1,20 @@
 Actions
+right
+right 23 311 130 165
+;
+run-right
+right 23 311 130 165
+;
+attack-right
+right 23 311 130 165
+;
 left
+left 23 311 130 165
+;
+run-left
+left 23 311 130 165
+;
+attack-left
 left 23 311 130 165
 ;
 Velocity

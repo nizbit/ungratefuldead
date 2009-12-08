@@ -48,7 +48,7 @@ class State(object):
         """
         self._counter += 1
 
-        if self._counter > 10:
+        if self._counter > 3:
             self._counter = 0
             self._frameNum += 1
         if frameSet == "right":
