@@ -329,18 +329,27 @@ class AttackingState(State):
             
 
             if weaponName == "machine":
+                self._character.machinegun.play()
                 for i in range(0, 5, 1):
                     projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"randomShit", None,
                                           9, tempProjAngle, tempX, tempY, weaponPower)
                     self._character.getCurrentWeapon().addProjectile(projectileTemp)
             elif weaponName == "shotGun":
+                self._character.shotgun.play()
                 for angle in angleList:
                     projectileTemp = item.Projectile(self._character.getCurrentWeapon().getProjectileImage(), 
                                           self._character.rect,"shotGunShit", None,
                                           9, angle + tempProjAngle, tempX, tempY, weaponPower)
                     self._character.getCurrentWeapon().addProjectile(projectileTemp)
+            elif weaponName == "bazooka":
+                self._character.bazooka.play()
+                self._character.getCurrentWeapon().addProjectile(projectileTemp)
+            elif weaponName == "handGun":
+                self._character.handgun.play()
+                self._character.getCurrentWeapon().addProjectile(projectileTemp)
             else:
+                self._character.sniper.play()
                 self._character.getCurrentWeapon().addProjectile(projectileTemp)
                     
 

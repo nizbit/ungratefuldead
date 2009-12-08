@@ -208,6 +208,12 @@ class Player(Character):
         super(Player, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
 
         # Images for the currentWeapon box
+        self.bazooka = pygame.mixer.Sound("HouseSounds/bazooka.ogg")
+        self.handgun = pygame.mixer.Sound("HouseSounds/handgun.ogg")
+        self.machinegun = pygame.mixer.Sound("HouseSounds/machineGun.ogg")
+        self.shotgun = pygame.mixer.Sound("HouseSounds/shotgun.ogg")
+        self.sniper = pygame.mixer.Sound("HouseSounds/sniper.ogg")
+        self.playerdeath = pygame.mixer.Sound("HouseSounds/PlayerDeath.ogg")
 
         gun1Image = pygame.image.load("Images/weaponPic/handGun.png")
         gun2Image = pygame.image.load("Images/weaponPic/M16.png")
