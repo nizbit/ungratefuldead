@@ -279,7 +279,10 @@ class Powerups(Item):
         super(Powerups, self).__init__(image, rect, name, sound)
         
         self._powerUpList = []
-        
+    
+    def getCopy(self):
+        return Powerups(self._image, self._rect, self._name, self._sound)
+    
     def addPowerup(self, thing):
         self._powerUpList.append(thing)
     def removePowerup(self, thing):
