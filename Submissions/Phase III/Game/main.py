@@ -231,7 +231,7 @@ class Game(object):
                 self.projectileListMain.append(projectile)
                 weaponElement.getProjectileList().remove(projectile)
         
-        # if it goes outside the viewport
+                #if it goes outside the viewport
         for projectiles in self.projectileListMain:
             if not self.vp.rect.contains(projectiles.getRect()):
                 self.projectileListMain.remove(projectiles)            
@@ -279,7 +279,8 @@ class Game(object):
         
         
         
-        killList = []
+        #killList = []
+        kill = True
         for enemy in self.enemies:
             if self.vp.rect.colliderect(enemy.getRect()):
                 '''check projectiles against enemies'''
@@ -290,11 +291,13 @@ class Game(object):
                             enemy.HP -= projectile.getPower() #20
                             self.projectileListMain.remove(projectile)
                             if enemy.HP <= 0:
-                                killList.append(enemy)
+                                self.enemies.remove(enemy)
+                                #killList.append(enemy)
                                 self.killSound.play()
                                 self.score += 100 + self.player.HP + self.player.lives * 100
                         else:
-                            killList.append(enemy)
+                            self.enemies.remove(enemy)
+                            #killList.append(enemy)
                             self.killSound.play()
                             self.score += 100 + self.player.HP + self.player.lives * 100
                 # Note: check if safetyNet collides with enemies
@@ -304,7 +307,8 @@ class Game(object):
                             enemy.HP -= 20
                             self.powerUpListMain.remove(powerUp)
                         else:
-                            killList.append(enemy)
+                            self.enemies.remove(enemy)
+                            #killList.append(enemy)
                             self.killSound.play()
                             self.score += 100 + self.player.HP + self.player.lives * 100
                    
@@ -324,27 +328,27 @@ class Game(object):
                         pygame.time.wait(3000)
                     coll = self.player.handleCollision("enemy", enemy.rect)
                     self.player.getStateMachine().pushEnemy(enemy, coll)             
-                
-        for enemy in killList:
-            if enemy in self.enemies:
-                self.enemies.remove(enemy)
-                enemy = None
-            
-        for enemy in self.enemies:
-            if self.vp.rect.colliderect(enemy.getRect()):
+                """
+                for section in self.vp.sections:
+                    if section.colliderect(enemy.rect):
+                        kill = False
+                if kill:
+                    killList.append(enemy)
+                else:
+                """
                 enemy.update(self.player.rect)
-        
-        for solid in self.level.solids:
-            if self.player.rect.colliderect(solid):
-                self.player.handleCollision("object", solid)
+                #kill = True
+#        for enemy in killList:
+#            if enemy in self.enemies:
+#                self.enemies.remove(enemy)
+#                enemy = None
 
-        
         for platform in self.level.platform:
-            if self.player.rect.colliderect(platform):
-                self.player.handleCollision("object", platform)
-
+            if platform.colliderect(self.vp.rect):
+                if self.player.rect.colliderect(platform):
+                    self.player.handleCollision("object", platform)
+    
             for projectiles in self.projectileListMain:
-                
                 if projectiles.getRect().colliderect(platform):
                     self.projectileListMain.remove(projectiles)
                 if projectiles.getName() == "shotGunShit":
@@ -354,21 +358,7 @@ class Game(object):
                         self.projectileListMain.remove(projectiles) 
 
 
-        del killList[:]
-        
-        for enemy in self.enemies:
-            if self.vp.rect.colliderect(enemy.getRect()):
-                kill = True
-                for section in self.vp.sections:
-                    if section.colliderect(enemy.rect):
-                        kill = False
-                if kill:
-                    killList.append(enemy)
-                
-        
-        for enemy in killList:
-            self.enemies.remove(enemy)
-            enemy = None
+        #del killList[:]
         
             
         if self.player.rect.colliderect(self.coinRect):
