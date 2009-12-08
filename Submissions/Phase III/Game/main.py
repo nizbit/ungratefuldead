@@ -446,7 +446,7 @@ class Game(object):
                     self.spawnIndex += 1
                 else:
                     self.spawnIndex = 0
-        """
+            """
     def render(self):
         #print "vp: ", self.vp.getViewportSize()
         #print self.viewport
@@ -493,10 +493,10 @@ class Game(object):
             if self.player.HP <= 0:
                self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
                self.screen.blit(self.gameOverText, (250,250))
-            """
+            
             for x in self.spawnList:
                 self.screen.blit(x.getSpriteSheet(),x.rect, x.getSpriteSheetCoord())   
-            """
+            
             pygame.display.flip()
             
         

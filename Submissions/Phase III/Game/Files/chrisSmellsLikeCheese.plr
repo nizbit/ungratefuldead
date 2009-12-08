@@ -1,0 +1,42 @@
+Actions
+right
+right 5 35 150 150
+;
+run-right  
+right-run1 5 35 150 150
+right-run2 170 42 154 146
+right-run3 496 46 158 140 
+right-run4 663 50 152 135 
+right-run5 823 50 163 140 
+right-run6 10 195 142 136 
+right-run7 165 185 158 143
+right-run8 338 190 158 143
+right-run9 497 816 164 145
+right-run10 674 185 148 138
+right-run11 830 187 154 140
+;
+die-right
+die-right1 820 338 160 137
+die-right2 662 340 157 141
+die-right3 518 345 125 130
+die-right4 355 355 126 123
+die-right5 195 355 125 123
+die-right6 32 355 125 123
+die-right7 857 508 119 116
+die-right8 690 507 131 115
+die-right9 527 505 123 119
+die-right10 356 509 135 113
+die-right11 196 505 124 127
+die-right12 30 508 123 118
+die-right13 860 660 129 114
+die-right14 690 664 149 103
+die-right15 123 675 154 94
+die-right16 354 684 161 85
+die-right17 175 680 168 87
+die-right18 12 690 161 79
+;
+Velocity
+4 30
+SpriteSheet
+Images/chrisSmellsLikeCheese.png
+Position
