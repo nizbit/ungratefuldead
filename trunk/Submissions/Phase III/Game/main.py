@@ -16,7 +16,7 @@ import vector2d
 import status
 import loader
 import random
-import stateMachine
+
 import item
 
 class Game(object):
@@ -31,55 +31,29 @@ class Game(object):
         
         """ powerUP shit"""
         testImage = pygame.image.load("Images/weaponPic/gun1.png")
-        boostHpImage = pygame.image.load("Images/healthBoost1.png")
-        extraLifeImage = pygame.image.load("Images/heart1.png")
-                
-        self._powerUpList0 = []
-        
-        powerUpHPBoost0 = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
-        powerUpHPBoost0.setPosition(2736, 327)
-        
-        self._powerUpList0.append(powerUpHPBoost0)
-
-        powerUpTest0 = item.Powerups(testImage, testImage.get_rect(), "safety")
-        powerUpTest0.setPosition(774, 306)        
-        
-        self._powerUpList0.append(powerUpTest0)
-        
-        
-        
-        self._powerUpList2 = [] 
-        
-        powerUpHPBoost2 = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
-        powerUpHPBoost2.setPosition(1572, 866)
-        
-        self._powerUpList2.append(powerUpHPBoost2)
-        
         powerUpTest = item.Powerups(testImage, testImage.get_rect(), "safety")
-        powerUpTest.setPosition(9464, 396)
-        #powerUpTest2 = item.Powerups(testImage, testImage.get_rect(), "safety")
-        #powerUpTest2.setPosition(4450, 830)    
+        powerUpTest.setPosition(200, 768)
+        powerUpTest2 = item.Powerups(testImage, testImage.get_rect(), "safety")
+        powerUpTest2.setPosition(4450, 830)        
         
-        self._powerUpList2.append(powerUpTest)
-        #self._powerUpList2.append(powerUpTest2)
+        self._powerUpList0 = []
+        self._powerUpList1 = []
+        self._powerUpList1.append(powerUpTest)
+        self._powerUpList1.append(powerUpTest2)
         
+        boostHpImage = pygame.image.load("Images/weaponPic/gun2.png")
         powerUpHPBoost = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
-        powerUpHPBoost.setPosition(150, 750)
+        powerUpHPBoost.setPosition(150, 600)
         
-        self._powerUpList2.append(powerUpHPBoost)
-        
+        self._powerUpList1.append(powerUpHPBoost)
+        self._powerUpList0.append(powerUpHPBoost)
+        extraLifeImage = pygame.image.load("Images/weaponPic/mis.png")
         extraLife = item.Powerups(extraLifeImage, extraLifeImage.get_rect(), "extraLife")
-        extraLife.setPosition(1572, 866)
+        extraLife.setPosition(300, 600)
         
-        self._powerUpList2.append(extraLife)
-
+        self._powerUpList1.append(extraLife)
         
-
-
         
-
-        
-
 
        # self._powerUpList.append(test2)
         self._safetyNetImage = pygame.image.load("Images/safetyNetPic2.png")
@@ -102,8 +76,7 @@ class Game(object):
         
         
         self.enemies = []
-        self.numOfPasses = 0
-        self.maxPass = 2
+        
         self.levelNum = level
         self.level = None
         self.vp = None
@@ -113,13 +86,7 @@ class Game(object):
         if level == 0:
             self.tempvp = pygame.image.load("Images/level2.png")
         elif level == 1:
-            self.tempvp = pygame.image.load("Images/level4.png")
-        elif level == 2:
             self.tempvp = pygame.image.load("Images/level3.png")
-        elif level == 11:
-            self.tempvp = pygame.image.load("Images/level3.png")
-        elif level == 12:
-            self.tempvp = pygame.image.load("Images/level2.png")
         else:
             self.tempvp = pygame.image.load("Images/bck.png")
         
@@ -132,7 +99,6 @@ class Game(object):
         self.gameOverImage = pygame.image.load("Images/gameover.png").convert()
         self.winImage = pygame.image.load("Images/win.png").convert()
         self.coin = pygame.image.load("Images/copperCoin.png").convert_alpha()
-        self.coinRect = None
         if self.levelNum == 0:
             self.coinRect = self.coin.get_rect()
             self.coinRect.top = 200
@@ -141,20 +107,6 @@ class Game(object):
             self.coinRect = self.coin.get_rect()
             self.coinRect.top = 795
             self.coinRect.left = 14930
-
-        elif self.levelNum == 11:
-            self.coinRect = self.coin.get_rect()
-            self.coinRect.top = 568
-            self.coinRect.left = 15142
-        elif self.levelNum == 12:
-            self.coinRect = self.coin.get_rect()
-            self.coinRect.top = 3680
-            self.coinRect.left = 152    
-
-        elif self.levelNum == 2:
-            self.coinRect = self.coin.get_rect()
-            self.coinRect.top = 15000
-            self.coinRect.left = 600
         """
         Sounds
         """
@@ -191,17 +143,8 @@ class Game(object):
         self.gameOverText = self.font.render("GAME OVER", 1, (255,255,255))
         self.HPText = self.font.render("HP: ", 1, (255,255,255))
         
-        self.boss = None
-        self.bossProjectiles = []
-        if self.levelNum == 2:
-            info = self.loader.loadPlayer("Files/torso.plr")
-            actions = info[0]
-            velocity = info[1]
-            spriteSheet = pygame.image.load(info[2]).convert_alpha()
-            self.boss = character.Boss(spriteSheet, actions, velocity, self.player.rect, self.level.platform[:])
-            
-            self.boss.setSpriteSheetCoord(actions["right"]["right"])
-            self.boss.setPosition(1500,700)
+        
+
         
         self.projectileListMain = []
         self.powerUpListMain = []
@@ -213,7 +156,6 @@ class Game(object):
         actions velocity spritesheet position
         spritesheet actions velocity rect worldrect
         self.level.platform
-        """
         """
         self.leftSpawnCounter = 0
         self.rightSpawnCounter = 0
@@ -229,7 +171,6 @@ class Game(object):
         temp.setSpriteSheetCoord(actions["right"]["right"])
         temp.setPosition(0,0)
         self.spawnList.append(temp)
-        """
         """
         Flags
         """
@@ -272,79 +213,15 @@ class Game(object):
                 self.screen.blit(splash, (0,0))
                 pygame.display.update()
                 x -= 1
-            self.bckMusic.load("HouseSounds/gamesong3.ogg")
-            self.bckMusic.set_volume(.15)
-            self.bckMusic.play(-1)
-            info = self.loader.loadLevel("Files/level4.zom")
-        elif level == 2:
-            x = 70
-            if randNum == 0: 
-                splash = pygame.image.load("Images/splash.png")
-            elif randNum == 1:
-                splash = pygame.image.load("Images/splash2.png")
-            elif randNum == 2:
-                splash = pygame.image.load("Images/splash3.png")
-            while x > 0:
-                self.screen.blit(splash, (0,0))
-                pygame.display.update()
-                x -= 1
             self.bckMusic.load("HouseSounds/gamesong4.ogg")
             self.bckMusic.set_volume(.15)
             self.bckMusic.play(-1)
             info = self.loader.loadLevel("Files/level3.zom")
-            
-        elif level == 11:
-            x = 70
-            if randNum == 0: 
-                splash = pygame.image.load("Images/splash.png")
-            elif randNum == 1:
-                splash = pygame.image.load("Images/splash2.png")
-            elif randNum == 2:
-                splash = pygame.image.load("Images/splash3.png")
-            while x > 0:
-                self.screen.blit(splash, (0,0))
-                pygame.display.update()
-                x -= 1
-            self.bckMusic.load("HouseSounds/gamesong4.ogg")
-            self.bckMusic.set_volume(.15)
-            self.bckMusic.play(-1)
-            info = self.loader.loadLevel("Files/level3.zom")
-            
-        elif level == 12:
-            x = 70
-            if randNum == 0: 
-                splash = pygame.image.load("Images/splash.png")
-            elif randNum == 1:
-                splash = pygame.image.load("Images/splash2.png")
-            elif randNum == 2:
-                splash = pygame.image.load("Images/splash3.png")
-            while x > 0:
-                self.screen.blit(splash, (0,0))
-                pygame.display.update()
-                x -= 1
-            self.bckMusic.load("HouseSounds/gamesong4.ogg")
-            self.bckMusic.set_volume(.15)
-            self.bckMusic.play(-1)
-            info = self.loader.loadLevel("Files/level2.zom")      
         platform = info[0][:]
         enemyBounds = info[1][:]
         image = info[2]
         self.level = world.World(image,[],platform,enemyBounds)
         self.vp = viewport.Viewport(pygame.Rect(info[4][0], info[4][1], \
-                                                640, 480), self.player, \
-                                                info[3],
-                                                info[4][2], info[4][3], \
-                                                info[4][4], info[4][5])
-        if level == 11:
-            self.player.setPosition(13822, 799)
-            self.vp = viewport.Viewport(pygame.Rect(14600, 500, \
-                                                640, 480), self.player, \
-                                                info[3],
-                                                info[4][2], info[4][3], \
-                                                info[4][4], info[4][5])
-        if level == 12:
-            self.player.setPosition(3200, 364)
-            self.vp = viewport.Viewport(pygame.Rect(3200, 0, \
                                                 640, 480), self.player, \
                                                 info[3],
                                                 info[4][2], info[4][3], \
@@ -355,8 +232,6 @@ class Game(object):
                 x = self.loader.loadPlayer("Files/zombie.plr")
             elif enemy[0] == "grzombie":
                 x = self.loader.loadPlayer("Files/grzombie.plr")
-            elif enemy[0] == "torso":
-                x = self.loader.loadPlayer("Files/torso.plr")
             else:
                 x = self.loader.loadPlayer("Files/darkheartless.plr")
             actions = x[0]
@@ -374,8 +249,8 @@ class Game(object):
         
         if self.levelNum == 0:
             self._tempList = self._powerUpList0
-        elif self.levelNum == 2:
-            self._tempList = self._powerUpList2
+        elif self.levelNum == 1:
+            self._tempList = self._powerUpList1
 
         else:
             self._tempList = self._emptyList 
@@ -403,14 +278,13 @@ class Game(object):
     def update(self):
         
         #print "player velocity: ", self.player.x_velocity
+        #tempList 
 
-        if self.level == 2:
-            self.bossProjectiles = self.boss.getStateMachine.projectileList
-
+            
         for pu in self._tempList:
+            print "*(*****" + str(pu.getName())
             if self.vp.rect.contains(pu.getRect()):
                 if pu.getRect().colliderect(self.player.getRect()):
-
                     self._tempList.remove(pu)
                     #self._powerUpList1.remove(pu)
                     if pu.getName() == "boostHP":
@@ -434,11 +308,8 @@ class Game(object):
                 #if it goes outside the viewport
         for projectiles in self.projectileListMain:
             if not self.vp.rect.contains(projectiles.getRect()):
-                self.projectileListMain.remove(projectiles)
-        if self.level == 2:            
-            for projectiles in self.bossProjectiles:
-                if not self.vp.rect.contains(projectiles.getRect()):
-                    self.bossProjectiles.remove(projectiles)
+                self.projectileListMain.remove(projectiles)            
+        
         for powerUp in self.player.getCurrentPowerup().getPowerupList():
             self.powerUpListMain.append(powerUp)
             self.player.getCurrentPowerup().getPowerupList().remove(powerUp)
@@ -467,7 +338,6 @@ class Game(object):
             
             for projectile in self.projectileListMain:
                 self.projectileListMain.remove(projectile)
-            del self.bossProjectiles[:]
             for powerUp in self.powerUpListMain:
                 self.powerUpListMain.remove(powerUp)
                 #print str(powerUp)
@@ -478,9 +348,6 @@ class Game(object):
             self.player.update(temp)
             for projectile in self.projectileListMain:
                 projectile.update()
-            if self.levelNum == 2:
-                for projectile in self.bossProjectiles:
-                    projectile.update()
             for powerUp in self.powerUpListMain:
                 powerUp.update(self.player.getRect())
                 
@@ -563,26 +430,27 @@ class Game(object):
                     killList.append(enemy)
                 else:
                 """
-                
                 enemy.update(self.player.rect, platformInVpList)
                 #kill = True
         for enemy in killList:
             if enemy in self.enemies:
                 self.enemies.remove(enemy)
                 enemy = None
-        """   
+            
         for enemy in self.enemies:
             if self.vp.rect.colliderect(enemy.getRect()):
                 for bound in self.level.enemyBounds:
                     if enemy.getRect().colliderect(bound):
                         enemy.handleCollision("object", bound)
                 enemy.update(self.player.rect, platformInVpList)
-        """
+        
         for solid in self.level.solids:
             if self.player.rect.colliderect(solid):
                 self.player.handleCollision("object", solid)
                 
         del killList[:]
+        
+            
         if self.player.rect.colliderect(self.coinRect):
             self.won = True
             self.coinSound.play()
@@ -595,22 +463,12 @@ class Game(object):
             self.running = False
             
         self.vp.update()
-        if self.levelNum == 1:
-            if self.numOfPasses > self.maxPass:
-                self.won = True
-                self.running = False
-                self.screen.blit(self.winImage, self.winImage.get_rect())
-                pygame.display.flip()
-                pygame.time.wait(3000)
-            if self.vp.rect.bottom == 3800:
-                self.numOfPasses += 1
-                self.vp.rect.top = 0
-                self.player.rect.bottom = 300 
+        
         
         if self.running == False:
             self.reset()
         self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.player.getCurrentWeapon().getImage(), self.player.getReloadBool()) 
-        
+
         """
         *
         *
@@ -708,10 +566,10 @@ class Game(object):
             if self.player.HP <= 0:
                self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.currentWeaponImage)
                self.screen.blit(self.gameOverText, (250,250))
-            """
+            
 #            for x in self.spawnList:
 #                self.screen.blit(x.getSpriteSheet(),x.rect, x.getSpriteSheetCoord())   
-            """
+            
             pygame.display.flip()
             
         
@@ -732,7 +590,7 @@ class Game(object):
         menu3 = None
         if self.won:
             self.levelNum += 1
-            if self.levelNum < 3:
+            if self.levelNum < 2:
                 game = Game(self.levelNum)
                 game.run()
             if self.levelNum >= 2:
@@ -746,19 +604,8 @@ class Game(object):
                 del self.player.getStateMachine().getCurrentStates()["dead"]
                 
             """BIG PROBLEM"""
-            if self.levelNum == 0:
-                x = self.vp.section.x + 20
-                y = self.vp.section.y + 200
-                self.player.setPosition(x, y)
-            elif self.levelNum == 1:
-                x = self.vp.section.x + 20
-                y = self.vp.section.y + 200
-                self.player.setPosition(x, y)
-            elif self.levelNum == 2:
-                x = self.vp.section.x + 20
-                y = self.vp.section.y + 200
-                self.player.setPosition(x, y)
-            self.vp.rect.topleft = self.vp.section.topleft
+            self.player.setPosition(90, 700)
+            self.vp.rect.left = 0
             self.running = True
             
             self.bckMusic.play()
@@ -776,11 +623,7 @@ class Game(object):
         self.player = character.Player(spriteSheet, actions, velocity)
         self.player.setSpriteSheetCoord(actions["right"]["right"])
         if level == 1:
-            self.player.setPosition(300,10)
-        elif level == 2:
             self.player.setPosition(250,684)
-        elif level == 0:
-            self.player.setPosition(20,300)
         else:
             self.player.setPosition(50, 200)
             
@@ -792,21 +635,6 @@ if __name__ == "__main__":
         test = menu1.handle_event()
         if test == 2:
             game = Game(1)
-            game.run()
-        elif test == 11:
-            game = Game(11)
-            game.run()
-        elif test == 12:
-            game = Game(12)
-            game.run()
-        elif test == 13:
-            game = Game(13)
-            game.run()
-        elif test == 14:
-            game = Game(14)
-            game.run()
-        elif test == 15:
-            game = Game(15)
             game.run()
         elif test == 1:
             game = Game(0)
