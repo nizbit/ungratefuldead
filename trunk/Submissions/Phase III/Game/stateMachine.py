@@ -577,7 +577,7 @@ class EnemyStateMachine(StateMachine):
         change currentState to a different state
         """
         sepx = self._character.rect.centerx - rect.centerx
-        print sepx
+        #print sepx
         if sepx > 0:
             if self._character.getDirection() == "right" and \
             "runRight" in self._currentStates:

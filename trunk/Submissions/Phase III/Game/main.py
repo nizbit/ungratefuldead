@@ -45,25 +45,25 @@ class Game(object):
         
         
         
-        self._powerUpList1 = [] 
+        self._powerUpList2 = [] 
         
         powerUpTest = item.Powerups(testImage, testImage.get_rect(), "safety")
         powerUpTest.setPosition(200, 768)
         powerUpTest2 = item.Powerups(testImage, testImage.get_rect(), "safety")
         powerUpTest2.setPosition(4450, 830)    
         
-        self._powerUpList1.append(powerUpTest)
-        self._powerUpList1.append(powerUpTest2)
+        self._powerUpList2.append(powerUpTest)
+        self._powerUpList2.append(powerUpTest2)
         
         powerUpHPBoost = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
         powerUpHPBoost.setPosition(150, 750)
         
-        self._powerUpList1.append(powerUpHPBoost)
+        self._powerUpList2.append(powerUpHPBoost)
         
         extraLife = item.Powerups(extraLifeImage, extraLifeImage.get_rect(), "extraLife")
         extraLife.setPosition(300, 600)
         
-        self._powerUpList1.append(extraLife)
+        self._powerUpList2.append(extraLife)
 
         
 
@@ -303,8 +303,8 @@ class Game(object):
         
         if self.levelNum == 0:
             self._tempList = self._powerUpList0
-        elif self.levelNum == 1:
-            self._tempList = self._powerUpList1
+        elif self.levelNum == 2:
+            self._tempList = self._powerUpList2
 
         else:
             self._tempList = self._emptyList 
@@ -335,9 +335,8 @@ class Game(object):
 
         if self.level == 2:
             self.bossProjectiles = self.boss.getStateMachine.projectileList
-        for pu in self._tempList:
-            
 
+        for pu in self._tempList:
             if self.vp.rect.contains(pu.getRect()):
                 if pu.getRect().colliderect(self.player.getRect()):
 
