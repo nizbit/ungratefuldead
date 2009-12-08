@@ -437,12 +437,12 @@ class Game(object):
                 self.enemies.remove(enemy)
                 enemy = None
             
-        for enemy in self.enemies:
-            if self.vp.rect.colliderect(enemy.getRect()):
-                for bound in self.level.enemyBounds:
-                    if enemy.getRect().colliderect(bound):
-                        enemy.handleCollision("object", bound)
-                enemy.update(self.player.rect, platformInVpList)
+#        for enemy in self.enemies:
+#            if self.vp.rect.colliderect(enemy.getRect()):
+#                for bound in self.level.enemyBounds:
+#                    if enemy.getRect().colliderect(bound):
+#                        enemy.handleCollision("object", bound)
+#                enemy.update(self.player.rect, platformInVpList)
         
         for solid in self.level.solids:
             if self.player.rect.colliderect(solid):
