@@ -13,7 +13,7 @@ class Status(object):
         self.font = self.myFont 
         
                     
-        self._reLoadImage = pygame.image.load("Images/weaponPic/gun1.png")
+        self._reLoadImage = pygame.image.load("Images/weaponPic/reLoad.png")
         
         self.hCord_x = 5
         self.hCord_y = 5
@@ -55,10 +55,10 @@ class Status(object):
     def upDate(self, healthPoints, score, lives, currentWeap, reLoadBool):
         
         self.currentHP = healthPoints
-       # if reLoadBool == True:
-       #     self.currentWeapon = self._reLoadImage
-       # else:
-        self.currentWeapon = currentWeap
+        if reLoadBool == True:
+            self.currentWeapon = self._reLoadImage
+        else:
+            self.currentWeapon = currentWeap
         
         
         #currentWeapon.set_colorkey((255,255,255), RLEACCEL)
