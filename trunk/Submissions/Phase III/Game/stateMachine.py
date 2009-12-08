@@ -356,12 +356,16 @@ class PlayerStateMachine(StateMachine):
             if self._character.attacking:
                 if coll == "right":
                     rect.left += amount
+                    
                 elif coll == "left":
                     rect.right -= amount
+                """
                 elif coll == "top":
                     rect.bottom -= amount
+                    
                 else:
                     rect.top += amount
+                """
         return coll
         """
         if self._character.HP >= 1:
