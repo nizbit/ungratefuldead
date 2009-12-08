@@ -43,6 +43,16 @@ class Menu(object):
                     elif event.key == pygame.K_UP:
                         self.ycord -= 25
                     elif event.key == pygame.K_F1:
+                        return 11
+                    elif event.key == pygame.K_F2:
+                        return 12
+                    elif event.key == pygame.K_F3:
+                        return 13
+                    elif event.key == pygame.K_F4:
+                        return 14
+                    elif event.key == pygame.K_F5:
+                        return 15
+                    elif event.key == pygame.K_F12:
                         self.displayCredits()
                     elif event.key == pygame.K_RETURN:
                         if self.ycord == 200:
@@ -90,7 +100,7 @@ class Menu(object):
                 #run = False
         while self.y > -2000:
             pygame.time.wait(10)
-            self.screen.blit(self.cred, (0,self.y))
+            self.screen.blit(self.cred, (60,self.y))
             pygame.display.flip()
             self.y -= 1
         
