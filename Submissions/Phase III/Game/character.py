@@ -355,7 +355,39 @@ class NPC(Character):
         self._stateMachine.think(rect, vpPlatformList)
         self._stateMachine.handleAnimation()
         self._stateMachine.move()
+class Boss(Character):
+    def __init__(self, spriteSheet, sprites, MAX_VELOCITY, playerRect, topographyRects):
+                 
+        """
+        Call base class' __init__. Set class variables to corresponding
+        arguments. Call loadSpeech(speechFile).
+        """
+        super(Boss, self).__init__(spriteSheet, sprites, MAX_VELOCITY)
+        self._stateMachine = stateMachine.TorsoStateMachine(self, sprites, \
+                                                            playerRect, topographyRects)
+        self.playerRect = playerRect
+        self.topographyRects = topographyRects[:]
+    def getCopy(self):
+        return Boss(self._spriteSheet, self._sprites, self.MAX_VELOCITY, \
+                   self.playerRect, self.topographyRects)
+    def setItem(self,item):
+        """
+        Set __item to item.
         
+        self._item = item
+        """
+        pass
+    def getItem(self):
+        """
+        Return __item
+        
+        return self.__item
+        """
+        pass
+    def update(self, rect, vpPlatformList):
+        self._stateMachine.think(rect, vpPlatformList)
+        self._stateMachine.handleAnimation()
+        self._stateMachine.move()        
 if __name__ == "__main__":
     while(True):
         pygame.init()

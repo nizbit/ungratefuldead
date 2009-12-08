@@ -16,7 +16,7 @@ import vector2d
 import status
 import loader
 import random
-
+import stateMachine
 import item
 
 class Game(object):
@@ -168,8 +168,17 @@ class Game(object):
         self.gameOverText = self.font.render("GAME OVER", 1, (255,255,255))
         self.HPText = self.font.render("HP: ", 1, (255,255,255))
         
-        
-
+        self.boss = None
+        self.bossProjectiles = []
+        if self.levelNum == 2:
+            info = self.loader.loadPlayer("Files/torso.plr")
+            actions = info[0]
+            velocity = info[1]
+            spriteSheet = pygame.image.load(info[2]).convert_alpha()
+            self.boss = character.Boss(spriteSheet, actions, velocity, self.player.rect, self.level.platform[:])
+            
+            self.boss.setSpriteSheetCoord(actions["right"]["right"])
+            self.boss.setPosition(1500,700)
         
         self.projectileListMain = []
         self.powerUpListMain = []
@@ -323,11 +332,12 @@ class Game(object):
     def update(self):
         
         #print "player velocity: ", self.player.x_velocity
-        #tempList 
 
-            
+        if self.level == 2:
+            self.bossProjectiles = self.boss.getStateMachine.projectileList
         for pu in self._tempList:
-            print "*(*****" + str(pu.getName())
+            
+
             if self.vp.rect.contains(pu.getRect()):
                 if pu.getRect().colliderect(self.player.getRect()):
 
@@ -354,8 +364,11 @@ class Game(object):
                 #if it goes outside the viewport
         for projectiles in self.projectileListMain:
             if not self.vp.rect.contains(projectiles.getRect()):
-                self.projectileListMain.remove(projectiles)            
-        
+                self.projectileListMain.remove(projectiles)
+        if self.level == 2:            
+            for projectiles in self.bossProjectiles:
+                if not self.vp.rect.contains(projectiles.getRect()):
+                    self.bossProjectiles.remove(projectiles)
         for powerUp in self.player.getCurrentPowerup().getPowerupList():
             self.powerUpListMain.append(powerUp)
             self.player.getCurrentPowerup().getPowerupList().remove(powerUp)
@@ -384,6 +397,7 @@ class Game(object):
             
             for projectile in self.projectileListMain:
                 self.projectileListMain.remove(projectile)
+            del self.bossProjectiles[:]
             for powerUp in self.powerUpListMain:
                 self.powerUpListMain.remove(powerUp)
                 #print str(powerUp)
@@ -394,6 +408,9 @@ class Game(object):
             self.player.update(temp)
             for projectile in self.projectileListMain:
                 projectile.update()
+            if self.levelNum == 2:
+                for projectile in self.bossProjectiles:
+                    projectile.update()
             for powerUp in self.powerUpListMain:
                 powerUp.update(self.player.getRect())
                 
@@ -477,7 +494,7 @@ class Game(object):
                 else:
                 """
                 
-                #enemy.update(self.player.rect, platformInVpList)
+                enemy.update(self.player.rect, platformInVpList)
                 #kill = True
         for enemy in killList:
             if enemy in self.enemies:

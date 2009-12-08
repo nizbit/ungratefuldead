@@ -347,7 +347,7 @@ class PlayerStateMachine(StateMachine):
         new state's act() method is then called.
         """
         coll = "n/a"
-        amount = 50
+        amount = 10
         if type == "object":
             self.translate(rect)
         if type == "enemy":
@@ -615,7 +615,7 @@ class TorsoStateMachine(StateMachine):
         
         Call the parent class' __init__
         """
-        super(EnemyStateMachine, self).__init__(character, sprites)
+        super(TorsoStateMachine, self).__init__(character, sprites)
         if self._character.getDirection() == "right":
             self._currentStates["runRight"] = self._runningState
         else:
