@@ -143,7 +143,7 @@ class Game(object):
         splash = None
         randNum = random.randrange(1,10000) % 3
         if level == 0:
-            x = 20
+            x = 70
             if randNum == 0: 
                 splash = pygame.image.load("Images/splash.png")
             elif randNum == 1:
@@ -161,7 +161,7 @@ class Game(object):
             info = self.loader.loadLevel("Files/level2.zom")
             
         elif level == 1:
-            x = 50
+            x = 70
             if randNum == 0: 
                 splash = pygame.image.load("Images/splash.png")
             elif randNum == 1:
