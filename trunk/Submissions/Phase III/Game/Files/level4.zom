@@ -4,10 +4,11 @@ Platforms
 460 640 180 3800
 175 3790 285 9
 Sections
-0 0 640 3700
+0 0 640 3800
 EnemyBounds
 Enemies
+zombie 250 0 left
 Image
 Images/level4.png
 Viewport
-0 0 500 300 640 3800
+0 0 200 200 640 3800
