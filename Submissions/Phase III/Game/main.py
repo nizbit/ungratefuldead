@@ -330,7 +330,7 @@ class Game(object):
             print "*(*****" + str(pu.getName())
             if self.vp.rect.contains(pu.getRect()):
                 if pu.getRect().colliderect(self.player.getRect()):
-<<<<<<< .mine
+
                     self._tempList.remove(pu)
                     #self._powerUpList1.remove(pu)
                     if pu.getName() == "boostHP":
@@ -345,12 +345,6 @@ class Game(object):
                     
 #        for p in self._powerUpBoostHP:
 #            print ")))))))" + str(p.getName())
-=======
-                    self._powerUpList.remove(pu)
-                    for i in range(0, 5, 1):
-                        self.powerUpListMain.append(self._ppp)
-                    #print " powerup take effect"
->>>>>>> .r441
         
         for weaponElement in self.player.getWeaponsList():
             for projectile in weaponElement.getProjectileList():
