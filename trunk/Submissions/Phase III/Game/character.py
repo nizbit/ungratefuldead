@@ -231,12 +231,13 @@ class Player(Character):
         projectileImage1 = pygame.image.load("Images/weaponPic/blackBullet.png")
         projectileImage2 = pygame.image.load("Images/weaponPic/gun1.png")
         projectileImage3 = pygame.image.load("Images/bullet1.png")
+        projectileImage4 = pygame.image.load("Images/missile.png")
         
         
         gun1 = item.Weapon(gun1Image, self._rect, "pistol", None, None, projectileImage1, 30, 11, 10, 10)
         gun2 = item.Weapon(gun2Image, self._rect, "machine", None, None, projectileImage1, 48, 10, 20, 20)
         gun3 = item.Weapon(gun3Image, self._rect, "shotGun", None, None, projectileImage1, 35, 10, 50, 30)
-        gun4 = item.Weapon(gun4Image, self._rect, "bazooka", None, None, projectileImage1, 48, 10, 100, 50)
+        gun4 = item.Weapon(gun4Image, self._rect, "bazooka", None, None, projectileImage4, 48, 10, 100, 50)
         gun5 = item.Weapon(gun5Image, self._rect, "snipe", None, None, projectileImage1, 80, 0, 100, 30)
 
         self._safetyNetImage = pygame.image.load("Images/safetyNetPic2.png").convert_alpha()
