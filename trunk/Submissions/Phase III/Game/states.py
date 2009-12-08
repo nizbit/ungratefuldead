@@ -203,7 +203,7 @@ class AttackingState(State):
         weaponName = self._character.getCurrentWeapon().getName()
         weaponPower = self._character.getCurrentWeapon().getPower()
         
-        print "Your mother likes it when i touch her here" + str(self._frameNum)
+       # print "Your mother likes it when i touch her here" + str(self._frameNum)
         
         
         #print str(self._character.getDirection()) 
