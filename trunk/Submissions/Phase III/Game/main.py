@@ -36,24 +36,32 @@ class Game(object):
                 
         self._powerUpList0 = []
         
-        powerUpHPBoost2 = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
-        powerUpHPBoost2.setPosition(145, 217)
+        powerUpHPBoost0 = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
+        powerUpHPBoost0.setPosition(2736, 327)
         
-        self._powerUpList0.append(powerUpHPBoost2)
+        self._powerUpList0.append(powerUpHPBoost0)
+
+        powerUpTest0 = item.Powerups(testImage, testImage.get_rect(), "safety")
+        powerUpTest0.setPosition(774, 306)        
         
-        
+        self._powerUpList0.append(powerUpTest0)
         
         
         
         self._powerUpList2 = [] 
         
+        powerUpHPBoost2 = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
+        powerUpHPBoost2.setPosition(1572, 866)
+        
+        self._powerUpList2.append(powerUpHPBoost2)
+        
         powerUpTest = item.Powerups(testImage, testImage.get_rect(), "safety")
-        powerUpTest.setPosition(200, 768)
-        powerUpTest2 = item.Powerups(testImage, testImage.get_rect(), "safety")
-        powerUpTest2.setPosition(4450, 830)    
+        powerUpTest.setPosition(9464, 396)
+        #powerUpTest2 = item.Powerups(testImage, testImage.get_rect(), "safety")
+        #powerUpTest2.setPosition(4450, 830)    
         
         self._powerUpList2.append(powerUpTest)
-        self._powerUpList2.append(powerUpTest2)
+        #self._powerUpList2.append(powerUpTest2)
         
         powerUpHPBoost = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
         powerUpHPBoost.setPosition(150, 750)
@@ -61,7 +69,7 @@ class Game(object):
         self._powerUpList2.append(powerUpHPBoost)
         
         extraLife = item.Powerups(extraLifeImage, extraLifeImage.get_rect(), "extraLife")
-        extraLife.setPosition(300, 600)
+        extraLife.setPosition(1572, 866)
         
         self._powerUpList2.append(extraLife)
 
