@@ -359,32 +359,12 @@ class AttackingState(State):
         
         # Testing for the powerUp safetyNet
 
-    
-#        if self._counter == 0 and self._frameNum == 1:
-#        tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
-#            tempProjectile2 = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 180)
-
-        
-#        if self._counter == 0 and self._frameNum == 1:
-
-        
-        #if self._counter == 1 or self._counter == 2 or self._counter == 3 :         
-        tempProjectile = item.ProjectilePowerup(self._character.getSafetyNetImage(), self._character.rect, "safetyNet", None, 2, 0)
-        
 # Working version of the saftyNet        
 #        if self._counter == 1:
 #            for i in range(0, 10, 1):
 #                self._character.getCurrentPowerup().addPowerup(tempProjectile)
     
 
-        
-        
-        
-        
-        
-        
-        
-        
         if self._frameNum == len(self.leftFrames) - 3 and \
         self._counter == 0:
             self.hurtSound.play()
