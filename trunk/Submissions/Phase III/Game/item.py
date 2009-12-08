@@ -49,7 +49,7 @@ class Item(object):
         
     
 class Weapon(Item):
-    def __init__(self, image, rect, name, sound, projectile = None, projectileImage = None, offSetx = None, offSety = None, power = None):
+    def __init__(self, image, rect, name, sound, projectile = None, projectileImage = None, offSetx = None, offSety = None, power = None, wait = None):
         '''
         ** call base class constructor
         ** set weapon items projectile ==> Projectile
@@ -76,9 +76,17 @@ class Weapon(Item):
             self._power = 50
         else:
             self._power = power
+        if wait == None:
+            self._wait = 0
+        else:
+            self._wait = wait
+
             
             
         self._projectileImage = projectileImage
+    
+    def getWait(self):
+        return self._wait
     def getPower(self):
         return self._power
     
@@ -141,6 +149,7 @@ class Projectile(Item):
             self._angle = 0
         else:
             self._angle = angle 
+
     
     def getPower(self):
         return self._power
