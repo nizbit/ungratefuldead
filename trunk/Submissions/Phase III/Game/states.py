@@ -196,7 +196,7 @@ class AttackingState(State):
         
         tempProjAngle = 0
         angle = 0 
-
+        self._counter += 1
         tempX = self._character.getCurrentWeapon().getOffsetX()
         tempY = self._character.getCurrentWeapon().getOffsetY()
         
@@ -207,67 +207,68 @@ class AttackingState(State):
         
         
         #print str(self._character.getDirection()) 
-        if self._character.getDirection() == "right":           # right
-            tempProjAngle = 0
-            #tempY = 35
-            if weaponName == "snipe":
-                tempY += 10
-
-            if self.direction == "down":        # right and down
-                tempProjAngle = 45
-                tempY += 25
-                if weaponName == "machine":
-                    tempProjAngle = 35
-                    tempY += 5
+        if self._counter == 1:
+            if self._character.getDirection() == "right":           # right
+                tempProjAngle = 0
+                #tempY = 35
                 if weaponName == "snipe":
-                    tempY -= 25
-                    
-            
-            elif self.direction == "up":                               # right and up
-                tempProjAngle = 270
-                tempX = 8
-                tempY = -2                               
-                
-                if weaponName == "machine":
-                    tempY -= 10
-                
-                if weaponName == "shotGun":
-                    tempY -= 15
-                    tempX += 3
-            
-            
-        else:   # left                          # left
-            tempProjAngle = 180  
-            tempX = 0
-            
-            if weaponName == "snipe":
                     tempY += 10
 
-            if self.direction == "down":        # left and down
-                tempProjAngle = 135
-                tempY += 25
-                if weaponName == "snipe":
-                    tempY -= 25
-                if weaponName == "machine":
-                    tempProjAngle = 150
-                    tempY += 5
-                if weaponName == "shotGun":
-                    #tempX = 33
-                    #tempY = 23
-                    pass
-               # if weaponName == "snipe":
-                    #tempX += 10
-                    #tempY += -15
-              #      pass
-        
-            elif self.direction == "up":                               # left and up
-                tempProjAngle = 270
-                tempX = 8
-                tempY = -2
+                if self.direction == "down":        # right and down
+                    tempProjAngle = 45
+                    tempY += 25
+                    if weaponName == "machine":
+                        tempProjAngle = 35
+                        tempY += 5
+                    if weaponName == "snipe":
+                        tempY -= 25
+                        
                 
-                if weaponName == "shotGun":
-                    tempY -= 15
-                    tempX -= 3
+                elif self.direction == "up":                               # right and up
+                    tempProjAngle = 270
+                    tempX = 8
+                    tempY = -2                               
+                    
+                    if weaponName == "machine":
+                        tempY -= 10
+                    
+                    if weaponName == "shotGun":
+                        tempY -= 15
+                        tempX += 3
+                
+                
+            else:   # left                          # left
+                tempProjAngle = 180  
+                tempX = 0
+                
+                if weaponName == "snipe":
+                        tempY += 10
+
+                if self.direction == "down":        # left and down
+                    tempProjAngle = 135
+                    tempY += 25
+                    if weaponName == "snipe":
+                        tempY -= 25
+                    if weaponName == "machine":
+                        tempProjAngle = 150
+                        tempY += 5
+                    if weaponName == "shotGun":
+                        #tempX = 33
+                        #tempY = 23
+                        pass
+                   # if weaponName == "snipe":
+                        #tempX += 10
+                        #tempY += -15
+                  #      pass
+            
+                elif self.direction == "up":                               # left and up
+                    tempProjAngle = 270
+                    tempX = 8
+                    tempY = -2
+                    
+                    if weaponName == "shotGun":
+                        tempY -= 15
+                        tempX -= 3
                         
 
 
@@ -363,15 +364,15 @@ class AttackingState(State):
 #            for i in range(0, 10, 1):
 #                self._character.getCurrentPowerup().addPowerup(tempProjectile)
     
-        """
-        if self._frameNum == len(self.leftFrames) - 3: and \
+
+        if self._frameNum == len(self.leftFrames) - 3 and \
         self._counter == 0:
             self.hurtSound.play()
         if self._frameNum >= len(self.leftFrames) - 3:
             self._character.attacking = True
         else:
             self._character.attacking = False
-        """    
+            
     
     def __str__(self):
         return "AttackingState"
