@@ -17,6 +17,8 @@ import status
 import loader
 import random
 
+import item
+
 class Game(object):
     def __init__(self, level):
         """init pygame and the sound mixer"""
@@ -27,6 +29,27 @@ class Game(object):
         self.clock = pygame.time.Clock()
         self.loader = loader.Loader()
         
+        """ powerUP shit"""
+        testImage = pygame.image.load("Images/weaponPic/gun1.png")
+        self._powerUpTest = item.Powerups(testImage, testImage.get_rect(), "test")
+        self._powerUpTest.setPosition(200, 768)
+        
+
+        self._powerUpList = []
+        self._powerUpList.append(self._powerUpTest)
+
+        
+        testjjj = item.Powerups(testImage, testImage.get_rect(), "tes")
+        testjjj.setPosition(4450, 830)
+        self._powerUpList.append(testjjj)
+        
+        self._safetyNetImage = pygame.image.load("Images/safetyNetPic2.png")
+        
+
+        
+        
+        
+        
         """init the status bar"""
         self.statusBar = status.Status(self.screen, "Images/youmurdererbb_reg.ttf")
         self.currentWeaponImage = pygame.image.load("Images/currentWeaponTest.png")
@@ -34,6 +57,10 @@ class Game(object):
         """init the world and the characters"""
         self.player = None
         self.loadPlayer(level)
+        
+        #self._tempProjectile = item.ProjectilePowerup(.get self.player.rect, "safetyNet", None, 2, 0)
+        
+        
         
         self.enemies = []
         
@@ -202,6 +229,9 @@ class Game(object):
             temp.setPosition(int(enemy[1]), int(enemy[2]))
             self.enemies.append(temp)
             
+        ''' Johnathan don't forget about this or you will fail on the demo'''    
+        self._ppp = item.ProjectilePowerup(self._safetyNetImage, self.player.getRect(), "safetyNet", None, 2, 0, 100)
+            
     def handleEnemies(self, event):
         pass
     
@@ -226,7 +256,14 @@ class Game(object):
         
         #print "player velocity: ", self.player.x_velocity
         
-        #======================================================
+        for pu in self._powerUpList:
+            if self.vp.rect.contains(pu.getRect()):
+                if pu.getRect().colliderect(self.player.getRect()):
+                    self._powerUpList.remove(pu)
+                    for i in range(0, 5, 1):
+                        self.powerUpListMain.append(self._ppp)
+                    print " powerup take effect"
+        
         for weaponElement in self.player.getWeaponsList():
             for projectile in weaponElement.getProjectileList():
                 self.projectileListMain.append(projectile)
@@ -241,6 +278,8 @@ class Game(object):
             self.powerUpListMain.append(powerUp)
             self.player.getCurrentPowerup().getPowerupList().remove(powerUp)
             
+        for pu in self.powerUpListMain:
+            pu.update(self.player.getRect())
         
         """loop through the events"""
         temp = pygame.event.get()
@@ -311,12 +350,10 @@ class Game(object):
                             enemy.HP -= projectile.getPower() #20
                             self.projectileListMain.remove(projectile)
                             if enemy.HP <= 0:
-#                                self.enemies.remove(enemy)
                                 killList.append(enemy)
                                 self.killSound.play()
                                 self.score += 100 + self.player.HP + self.player.lives * 100
                         else:
-#                            self.enemies.remove(enemy)
                             killList.append(enemy)
                             self.killSound.play()
                             self.score += 100 + self.player.HP + self.player.lives * 100
@@ -324,10 +361,9 @@ class Game(object):
                 for powerUp in self.powerUpListMain:
                     if powerUp.getRect().colliderect(enemy.rect):
                         if enemy.HP > 1:
-                            enemy.HP -= 20
+                            enemy.HP -= powerUp.getPower()
                             self.powerUpListMain.remove(powerUp)
                         else:
-#                            self.enemies.remove(enemy)
                             killList.append(enemy)
                             self.killSound.play()
                             self.score += 100 + self.player.HP + self.player.lives * 100
@@ -374,21 +410,6 @@ class Game(object):
             if self.player.rect.colliderect(solid):
                 self.player.handleCollision("object", solid)
                 
-#        for platform in self.level.platform:
-#            if platform.colliderect(self.vp.rect):
-#                if self.player.rect.colliderect(platform):
-#                    self.player.handleCollision("object", platform)
-    
-#            for projectiles in self.projectileListMain:
-#                if projectiles.getRect().colliderect(platform):
-#                    self.projectileListMain.remove(projectiles)
-#                if projectiles.getName() == "shotGunShit":
-#                    tempx = abs(self.player.rect.centerx - projectiles.getRect().centerx)
-#                    tempy = abs(self.player.rect.centery - projectiles.getRect().centery)
-#                    if  tempx > 75 or tempy > 75:
-#                        self.projectileListMain.remove(projectiles) 
-
-
         del killList[:]
         
             
@@ -467,6 +488,21 @@ class Game(object):
                 self.level.image.blit(sprite,self.player.rect)
             else:
                 self.level.image.blit(self.player.getSpriteSheet(),self.player.rect,self.player.getSpriteSheetCoord())
+           
+            ''' display the powerUps that are in the vp '''
+            
+            
+            ''' power ups word to your mother '''            
+            for p in self._powerUpList:
+                if self.vp.rect.contains(p.getRect()):
+                    self.level.image.blit(p.getImage(), p.getPosition())
+                    
+            
+            
+            ''' powerUps effectivenessingerisms you know?'''
+            for pU in self.powerUpListMain:
+                self.level.image.blit(pU.getImage(), pU.getPosition()) 
+            
             
             '''blit the projectiles'''
             for projectile in self.projectileListMain:
@@ -474,9 +510,6 @@ class Game(object):
                     self.level.image.blit(pygame.transform.flip(projectile.getImage(), True, False), projectile.getRect())
                 else:
                     self.level.image.blit(projectile.getImage(), projectile.getRect())
-                
-            for powerUp in self.powerUpListMain:
-                self.level.image.blit(powerUp.getImage(), powerUp.getRect())
 
             if self.vp.rect.inflate(50,0).contains(self.coinRect):
                 self.level.image.blit(self.coin,self.coinRect)
@@ -485,9 +518,11 @@ class Game(object):
                 #print enemy.getSpriteSheetCoord()
                     self.level.image.blit(enemy.getSpriteSheet(),enemy.rect,enemy.getSpriteSheetCoord())
             
+            
+            
             self.screen.blit(self.level.image.subsurface(self.vp.rect),(0,0))        
             
-            
+           
             self.statusBar.render()
             
             if self.player.HP <= 0:
@@ -553,7 +588,7 @@ class Game(object):
             self.player.setPosition(250,684)
         else:
             self.player.setPosition(50, 200)
-                        
+            
 if __name__ == "__main__":
     while True:
         pygame.init()
