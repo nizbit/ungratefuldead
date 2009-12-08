@@ -44,5 +44,5 @@ Requirements:
    
     4. Unique AI -- Boss has AI
        
-All images and music are the works of others and Kernel Panic does not claim
+Most images and music are the works of others and Kernel Panic does not claim
 credit for their work
