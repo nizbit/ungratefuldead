@@ -52,6 +52,10 @@ class StateMachine(object):
         self.wallJump = False
         self.wallLeft = False
         self.wallRight = False
+        
+        self._jCountFromLastPress= 0
+        
+        
     def getCurrentStates(self):
         return self._currentStates
     def handleAnimation(self):
@@ -384,7 +388,8 @@ class PlayerStateMachine(StateMachine):
         Based on the event, set currentState and call act(). Variation of the
         Jon Lutes Algorithm.
         """
-
+        self._jCountFromLastPress += 1
+        
         for event in events:
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -441,10 +446,12 @@ class PlayerStateMachine(StateMachine):
                         
 
                 elif event.key == pygame.K_LSHIFT:
-                    self._currentStates["attack"] = self._attackingState
-                    if self._character.getCurrentWeapon().getName() == "snipe" and\
-                    not self.isCrouching:
-                        del self._currentStates["attack"]
+                    if self._jCountFromLastPress >= self._character.getCurrentWeapon().getWait():
+                        self._jCountFromLastPress = 0
+                        self._currentStates["attack"] = self._attackingState
+                        if self._character.getCurrentWeapon().getName() == "snipe" and\
+                        not self.isCrouching:
+                            del self._currentStates["attack"]
 # =-==========================================================================================
                 elif event.key == pygame.K_1:
                     self._character.setNextWeapon()
