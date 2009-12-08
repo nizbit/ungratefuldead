@@ -389,12 +389,11 @@ class PlayerStateMachine(StateMachine):
         Jon Lutes Algorithm.
         """
         self._jCountFromLastPress += 1
+        
         if self._jCountFromLastPress <= self._character.getCurrentWeapon().getWait():
             self._character.setReloadBool(True)
-            print "reloading"
         else:
             self._character.setReloadBool(False)
-            print "done"
         
         for event in events:
             if event.type == pygame.QUIT:
@@ -561,7 +560,7 @@ class EnemyStateMachine(StateMachine):
             self._currentStates["runRight"] = self._runningState
         self._character.velocity.x = 0
         
-    def think(self, rect):
+    def think(self, rect, vpPlatformList):
         """
         Based on the character's type, currentState, and level topography,
         change currentState to a different state
@@ -585,9 +584,14 @@ class EnemyStateMachine(StateMachine):
             self._currentStates[state].act()
         if self._currentStates.has_key("jump"):
             del self._currentStates["jump"]
-        for rect in self.tRects:
+        for rect in vpPlatformList:
             if self._character.rect.colliderect(rect):
                 self.handleCollision("object", rect)
+        
+#        for rect in self.tRects:
+#            print "count me"
+#            if self._character.rect.colliderect(rect):
+#                self.handleCollision("object", rect)
         
         
 if __name__ == "__main__":
