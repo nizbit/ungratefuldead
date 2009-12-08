@@ -274,12 +274,17 @@ class Game(object):
                 projectile.update()
             for powerUp in self.powerUpListMain:
                 powerUp.update(self.player.getRect())
-  
-
+  # ==============================================================================================
+        platformInVpList = []
+        for platform in self.level.platform:
+            if platform.colliderect(self.vp.rect):
+                platformInVpList.append(platform)
+                if self.player.rect.colliderect(platform):
+                    self.player.handleCollision("object", platform)
         
         
         
-        #killList = []
+        killList = []
         kill = True
         for enemy in self.enemies:
             if self.vp.rect.colliderect(enemy.getRect()):
@@ -291,13 +296,13 @@ class Game(object):
                             enemy.HP -= projectile.getPower() #20
                             self.projectileListMain.remove(projectile)
                             if enemy.HP <= 0:
-                                self.enemies.remove(enemy)
-                                #killList.append(enemy)
+#                                self.enemies.remove(enemy)
+                                killList.append(enemy)
                                 self.killSound.play()
                                 self.score += 100 + self.player.HP + self.player.lives * 100
                         else:
-                            self.enemies.remove(enemy)
-                            #killList.append(enemy)
+#                            self.enemies.remove(enemy)
+                            killList.append(enemy)
                             self.killSound.play()
                             self.score += 100 + self.player.HP + self.player.lives * 100
                 # Note: check if safetyNet collides with enemies
@@ -307,8 +312,8 @@ class Game(object):
                             enemy.HP -= 20
                             self.powerUpListMain.remove(powerUp)
                         else:
-                            self.enemies.remove(enemy)
-                            #killList.append(enemy)
+#                            self.enemies.remove(enemy)
+                            killList.append(enemy)
                             self.killSound.play()
                             self.score += 100 + self.player.HP + self.player.lives * 100
                    
@@ -336,17 +341,17 @@ class Game(object):
                     killList.append(enemy)
                 else:
                 """
-                enemy.update(self.player.rect)
+                enemy.update(self.player.rect, platformInVpList)
                 #kill = True
-#        for enemy in killList:
-#            if enemy in self.enemies:
-#                self.enemies.remove(enemy)
-#                enemy = None
+        for enemy in killList:
+            if enemy in self.enemies:
+                self.enemies.remove(enemy)
+                enemy = None
 
-        for platform in self.level.platform:
-            if platform.colliderect(self.vp.rect):
-                if self.player.rect.colliderect(platform):
-                    self.player.handleCollision("object", platform)
+#        for platform in self.level.platform:
+#            if platform.colliderect(self.vp.rect):
+#                if self.player.rect.colliderect(platform):
+#                    self.player.handleCollision("object", platform)
     
             for projectiles in self.projectileListMain:
                 if projectiles.getRect().colliderect(platform):
@@ -358,7 +363,7 @@ class Game(object):
                         self.projectileListMain.remove(projectiles) 
 
 
-        #del killList[:]
+        del killList[:]
         
             
         if self.player.rect.colliderect(self.coinRect):
