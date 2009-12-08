@@ -466,7 +466,10 @@ class Game(object):
             
             '''blit the projectiles'''
             for projectile in self.projectileListMain:
-                self.level.image.blit(projectile.getImage(), projectile.getRect())
+                if self.player.getDirection() == "right":
+                    self.level.image.blit(pygame.transform.flip(projectile.getImage(), True, False), projectile.getRect())
+                else:
+                    self.level.image.blit(projectile.getImage(), projectile.getRect())
                 
             for powerUp in self.powerUpListMain:
                 self.level.image.blit(powerUp.getImage(), powerUp.getRect())
