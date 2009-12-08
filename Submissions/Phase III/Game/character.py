@@ -344,8 +344,8 @@ class NPC(Character):
         return self.__item
         """
         pass
-    def update(self, rect):
-        self._stateMachine.think(rect)
+    def update(self, rect, vpPlatformList):
+        self._stateMachine.think(rect, vpPlatformList)
         self._stateMachine.handleAnimation()
         self._stateMachine.move()
         
