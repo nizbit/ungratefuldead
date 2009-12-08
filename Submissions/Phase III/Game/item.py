@@ -258,7 +258,6 @@ class SafetyNet(Item):
         
     def update(self):
         pass
-    
         
 '''**base class for different types of powerups**'''
 class Powerups(Item):
