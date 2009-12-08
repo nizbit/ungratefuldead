@@ -49,6 +49,7 @@ class StateMachine(object):
                                "left": self._standingState}
         self.isJumping = False
         self.isCrouching = False
+        self.isFalling = False
         self.wallJump = False
         self.wallLeft = False
         self.wallRight = False
@@ -138,10 +139,10 @@ class StateMachine(object):
             minx = right
         if abs(miny) > abs(minx):
             if abs(left) < abs(right):
-                self._character.rect.left = rect.right
+                self._character.rect.left = rect.right + 10
                 typeOfColl = "left"
             else:
-                self._character.rect.right = rect.left
+                self._character.rect.right = rect.left - 10
                 typeOfColl = "right"
             self.wallJump = True
             self._character.velocity.x = 0
@@ -155,7 +156,11 @@ class StateMachine(object):
             else:
                 self._character.rect.top = rect.bottom
                 typeOfColl = "top"
-            self._character.velocity.y = 0      
+            self._character.velocity.y = 0
+        if typeOfColl == "bottom":
+            self.isFalling = False
+        else:
+            self.isFalling = True     
         return typeOfColl
     
     def act(self):
@@ -434,6 +439,7 @@ class PlayerStateMachine(StateMachine):
                         self._currentStates["runLeft"] = self._runningState
                         
                 elif event.key == pygame.K_SPACE:
+                    #if not self.isFalling:
                     if not self.isJumping and not self.isCrouching and \
                     self._character.getCurrentWeapon().getName() != "bazooka":
                         self._currentStates["jump"] = self._jumpingState
@@ -503,6 +509,7 @@ class PlayerStateMachine(StateMachine):
                     self.isCrouching = False
         self.act()
         self.wallJump = False
+        self.isFalling = True
 class EnemyStateMachine(StateMachine):
     def __init__(self, character, sprites, playerRect, topographyRects):
         """
@@ -579,7 +586,7 @@ class EnemyStateMachine(StateMachine):
                 self.turnAround()
         else:
             print "fucker"
-                
+        
         for state in self._currentStates:
             self._currentStates[state].act()
         if self._currentStates.has_key("jump"):
