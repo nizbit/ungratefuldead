@@ -74,6 +74,7 @@ class Game(object):
         self.hurtSound = pygame.mixer.Sound("Sounds/hit.wav")
         self.killSound = pygame.mixer.Sound("HouseSounds/enemySound.ogg")
         self.coinSound = pygame.mixer.Sound("Sounds/coinSound.wav")
+        self.bazookaExplosion = pygame.mixer.Sound("HouseSounds/explosionCrumbling2.ogg")
         self.gameOverSound = pygame.mixer.Sound("Sounds/tpirhorns.ogg")
         self.gameOverSound.set_volume(.1)
         self.coinSound.set_volume(.05)
@@ -302,6 +303,9 @@ class Game(object):
                 '''check projectiles against enemies'''
                 for projectile in self.projectileListMain:
                     if projectile.getRect().colliderect(enemy.rect):
+                        '''check for bazooka for the explosion sound'''
+                        if projectile.getName() == "missile":
+                            self.bazookaExplosion.play()
                         ''' your mother likes it when i touch her here --->'''
                         if enemy.HP >= 0:
                             enemy.HP -= projectile.getPower() #20
