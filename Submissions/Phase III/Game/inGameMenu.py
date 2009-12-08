@@ -14,7 +14,8 @@ class InGame(menu.Menu):
             """loop through the events"""
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    #self.running = False
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
