@@ -191,7 +191,6 @@ grzombie 8225 150 left
 grzombie 8920 72 right
 zombie 9000 355 left
 zombie 9585 65 right
-grzombie 10275 195 right
 grzombie 11120 648 right
 grzombie 11805 688 left
 zombie 11124 848 left
@@ -237,10 +236,6 @@ zombie 9108 351 left
 zombie 8913 360 left
 zombie 9852 273 left
 grzombie 9975 276 right
-grzombie 10641 795 right
-grzombie 10543 795 left
-zombie 10443 795 left
-zombie 10400 795 right
 grzombie 11349 753 left
 zombie 11472 786 left
 zombie 11616 783 right
