@@ -387,7 +387,7 @@ class Game(object):
         
         if self.running == False:
             self.reset()
-        self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.player.getCurrentWeapon().getImage()) 
+        self.statusBar.upDate(self.player.HP, self.score, self.player.lives, self.player.getCurrentWeapon().getImage(), self.player.getReloadBool()) 
 
         """
         *
