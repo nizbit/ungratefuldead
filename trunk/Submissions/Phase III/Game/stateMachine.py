@@ -139,10 +139,10 @@ class StateMachine(object):
             minx = right
         if abs(miny) > abs(minx):
             if abs(left) < abs(right):
-                self._character.rect.left = rect.right + 10
+                self._character.rect.left = rect.right
                 typeOfColl = "left"
             else:
-                self._character.rect.right = rect.left - 10
+                self._character.rect.right = rect.left
                 typeOfColl = "right"
             self.wallJump = True
             self._character.velocity.x = 0
@@ -589,7 +589,7 @@ class EnemyStateMachine(StateMachine):
                 
                 self.turnAround()
         else:
-            print "fucker"
+            print "here"
         
         for state in self._currentStates:
             self._currentStates[state].act()
