@@ -31,21 +31,48 @@ class Game(object):
         
         """ powerUP shit"""
         testImage = pygame.image.load("Images/weaponPic/gun1.png")
-        self._powerUpTest = item.Powerups(testImage, testImage.get_rect(), "test")
-        self._powerUpTest.setPosition(200, 768)
+        boostHpImage = pygame.image.load("Images/healthBoost1.png")
+        extraLifeImage = pygame.image.load("Images/heart1.png")
+                
+        self._powerUpList0 = []
+        
+        powerUpHPBoost2 = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
+        powerUpHPBoost2.setPosition(145, 217)
+        
+        self._powerUpList0.append(powerUpHPBoost2)
+        
+        
+        
+        
+        
+        self._powerUpList1 = [] 
+        
+        powerUpTest = item.Powerups(testImage, testImage.get_rect(), "safety")
+        powerUpTest.setPosition(200, 768)
+        powerUpTest2 = item.Powerups(testImage, testImage.get_rect(), "safety")
+        powerUpTest2.setPosition(4450, 830)    
+        
+        self._powerUpList1.append(powerUpTest)
+        self._powerUpList1.append(powerUpTest2)
+        
+        powerUpHPBoost = item.Powerups(boostHpImage, boostHpImage.get_rect(), "boostHP")
+        powerUpHPBoost.setPosition(150, 750)
+        
+        self._powerUpList1.append(powerUpHPBoost)
+        
+        extraLife = item.Powerups(extraLifeImage, extraLifeImage.get_rect(), "extraLife")
+        extraLife.setPosition(300, 600)
+        
+        self._powerUpList1.append(extraLife)
+
         
 
-        self._powerUpList = []
-        self._powerUpList.append(self._powerUpTest)
+
         
+
         
-        
-        
-        testjjj = item.Powerups(testImage, testImage.get_rect(), "tes")
-        testjjj.setPosition(4450, 830)
-        self._powerUpList.append(testjjj)
-        
-        test2 = (self._powerUpTest.getCopy().setPosition(150, 600))
+
+
        # self._powerUpList.append(test2)
         self._safetyNetImage = pygame.image.load("Images/safetyNetPic2.png")
         
@@ -262,6 +289,16 @@ class Game(object):
             
         ''' Johnathan don't forget about this or you will fail on the demo'''    
         self._ppp = item.ProjectilePowerup(self._safetyNetImage, self.player.getRect(), "safetyNet", None, 2, 0, 100)
+        
+        self._emptyList = []
+        
+        if self.levelNum == 0:
+            self._tempList = self._powerUpList0
+        elif self.levelNum == 1:
+            self._tempList = self._powerUpList1
+
+        else:
+            self._tempList = self._emptyList 
             
     def handleEnemies(self, event):
         pass
@@ -286,14 +323,34 @@ class Game(object):
     def update(self):
         
         #print "player velocity: ", self.player.x_velocity
-        
-        for pu in self._powerUpList:
+        #tempList 
+
+            
+        for pu in self._tempList:
+            print "*(*****" + str(pu.getName())
             if self.vp.rect.contains(pu.getRect()):
                 if pu.getRect().colliderect(self.player.getRect()):
+<<<<<<< .mine
+                    self._tempList.remove(pu)
+                    #self._powerUpList1.remove(pu)
+                    if pu.getName() == "boostHP":
+                        self.player.HP = 100
+                    elif pu.getName() == "extraLife":
+                        self.player.lives += 1
+                    elif pu.getName() == "safety":
+                        for i in range(0, 5, 1):
+                            self.powerUpListMain.append(self._ppp)
+                    
+                    
+                    
+#        for p in self._powerUpBoostHP:
+#            print ")))))))" + str(p.getName())
+=======
                     self._powerUpList.remove(pu)
                     for i in range(0, 5, 1):
                         self.powerUpListMain.append(self._ppp)
                     #print " powerup take effect"
+>>>>>>> .r441
         
         for weaponElement in self.player.getWeaponsList():
             for projectile in weaponElement.getProjectileList():
@@ -345,6 +402,8 @@ class Game(object):
                 projectile.update()
             for powerUp in self.powerUpListMain:
                 powerUp.update(self.player.getRect())
+                
+                
   # ==============================================================================================
         platformInVpList = []
         for platform in self.level.platform:
@@ -423,7 +482,8 @@ class Game(object):
                     killList.append(enemy)
                 else:
                 """
-                enemy.update(self.player.rect, platformInVpList)
+                
+                #enemy.update(self.player.rect, platformInVpList)
                 #kill = True
         for enemy in killList:
             if enemy in self.enemies:
@@ -534,13 +594,13 @@ class Game(object):
             
             
             ''' power ups word to your mother '''            
-            for p in self._powerUpList:
+            for p in self._tempList:
                 if self.vp.rect.contains(p.getRect()):
                     self.level.image.blit(p.getImage(), p.getPosition())
                     
             
             
-            ''' powerUps effectivenessingerisms you know?'''
+            ''' powerUps effectivenessingerisms you know?  safetYnet'''
             for pU in self.powerUpListMain:
                 self.level.image.blit(pU.getImage(), pU.getPosition()) 
             
